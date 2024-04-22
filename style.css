@@ -43,18 +43,24 @@ body {
     background-color: gray;
 }
 
-.empty {
+.cell {
     transition: 250ms;
     border: 1px solid;
     background-color: green;
 }
-.empty:hover {
+
+.cell:hover {
     background-color: #ff0000;
 }
 
 .full {
     transition: 250ms;
+    border: 1px solid;
     background-color: darkred;
+}
+
+.full:hover {
+    background-color: rgb(0, 71, 0);
 }
 
 .nav {
