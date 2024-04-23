@@ -38,10 +38,6 @@ document.addEventListener("DOMContentLoaded", () => {
         dayHeader.textContent = weeks[i];
     }
 
-    // cells[0].classList.add('full');
-    // ^this is for making certain cells
-    // it should rotate with the weeks
-    // set date in JSON and compare with current date to do math
 
     const cells = document.querySelectorAll('.cell');
     cells.forEach(cell => {
@@ -49,11 +45,23 @@ document.addEventListener("DOMContentLoaded", () => {
             cell.classList.toggle('full');
         });
     });
-    const buttons = document.querySelectorAll('#btn')
-    const blurElements = document.querySelectorAll('.can-blur')
-    const popupDivs = document.querySelectorAll('.popup-div')
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
+
+    // const savedCells = {person: {nichlas: {optaget: [0,7,14,21]}}}
+    // for (let i = 0; i < savedCells.person.nichlas.optaget.length; i++) {
+    //     cells[savedCells.person.nichlas.optaget[i]].classList.add('full');
+    // }
+    
+    // cells[0].classList.add('full');
+    // ^this is for making certain cells
+    // it should rotate with the weeks
+    // set date in JSON and compare with current date to do math
+
+
+    const navButtons = document.querySelectorAll('.nav-btn')
+    const exitButton = document.querySelectorAll('.exit-popup')
+
+    exitButton.forEach(exitButton => {
+        exitButton.addEventListener('click', () => {
             blurElements.forEach(blurElement => {
                 blurElement.classList.toggle('blurred');
             })
@@ -62,4 +70,33 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         });
     });
+    const blurElements = document.querySelectorAll('.can-blur')
+    const popupDivs = document.querySelectorAll('.hidden-popup-div')
+    
+    navButtons.forEach(navButton => {
+        navButton.addEventListener('click', () => {
+            blurElements.forEach(blurElement => {
+                blurElement.classList.toggle('blurred');
+            })
+            popupDivs.forEach(popupDiv => {
+                popupDiv.classList.toggle('popup-div-display');
+            })
+            if (document.getElementById("budget-btn")) {
+                popupDiv.classList.toggle('')
+            }
+        });
+    });
+
+
+
+
+
+
+    // const hiddenExits = document.querySelectorAll('#hidden-exit')
+    // navButtons.forEach(navButton => {
+        
+    // });    
+    // document.getElementById('hidden-exit').addEventListener('click', () => {
+    //     console.log('WHAHAAT')
+    // });
 })

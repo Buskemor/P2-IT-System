@@ -5,19 +5,24 @@
     <title>DelOkønomi</title>
 </head>
 <body>
-    <div class="popup-div">
-        <h1>Indstillinger...</h1>
+    <div class="hidden-popup-div">
+        <button class="exit-popup">X</button>
+        <div id="budget-div">Budget div</div>
+        <div id="settings-div">Budget div</div>
+        <div class="feedback-div">Budget div</div>
+        <div class="support-div">Budget div</div>
     </div>
+    <!-- <div class="exit-popup" id="hidden-exit"></div> -->
     <div class="can-blur">
         <div class="nav">
-            <button class="nav-btn">Månedligt forbrug</button>
-            <button class="nav-btn">Settings</button>
-            <button class="nav-btn">Feedback</button>
-            <button class="nav-btn">Settings</button>
-            <button class="nav-btn">Log ud</button>
+            <img src="logo.png">
+            <button class="nav-btn" id="budget-btn">Månedligt forbrug</button>
+            <button class="nav-btn" id="settings-btn">Settings</button>
+            <button class="nav-btn" id="feedback-btn">Feedback</button>
+            <button class="nav-btn" id="support-btn">Support</button>
+            <button class="nav-btn" id="logout-btn">Log ud</button>
         </div>
         <div class="calendar-grid" id="cal-start"></div>
-    <button id="btn">Test</button>
     </div>
 </body>
 </html>
