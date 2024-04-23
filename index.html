@@ -1,8 +1,10 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <script defer src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <title>DelOkønomi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page and Button Switching Example</title>
+    <link rel="stylesheet" href="styles.css"> <!-- New stylesheet for button styles -->
 </head>
 <body>
     <div class="hidden-popup-div">
@@ -21,8 +23,33 @@
             <button class="nav-btn" id="feedback-btn">Feedback</button>
             <button class="nav-btn" id="support-btn">Support</button>
             <button class="nav-btn" id="logout-btn">Log ud</button>
+    <!-- Navigation Buttons -->
+    <button id="page1Btn" class="navBtn">Page 1</button>
+    <button id="page2Btn" class="navBtn">Page 2</button>
+    <button id="page3Btn" class="navBtn">Page 3</button>
+
+    <!-- Pages -->
+    <div id="page1" style="display: none;">
+        <h1>Welcome to Page 1</h1>
+        <p>This is the content of Page 1.</p>
+    </div>
+
+    <div id="page2" style="display: none;">
+        <h1>Welcome to Page 2</h1>
+        <p>This is the content of Page 2.</p>
+        <div id="textboxContainer">
+            <input type="text" id="textbox1" placeholder="Enter text 1">
+            <input type="text" id="textbox2" placeholder="Enter text 2">
         </div>
         <div class="calendar-grid" id="cal-start"></div>
     </div>
+
+    <div id="page3" style="display: none;">
+        <h1>Welcome to Page 3</h1>
+        <p>This is the content of Page 3.</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
