@@ -1,4 +1,3 @@
-
 const loginBtn = document.getElementById("loginBtn");
 const page2Div = document.getElementById("page2");
 const page3Div = document.getElementById("page3");
@@ -7,6 +6,7 @@ const textbox2 = document.getElementById("textbox2");
 
 
 loginBtn.addEventListener("click", function() {
+    window.location.href = "main.html"; //temporary just for development :P
     if (areTextBoxesFilled()) {
         window.location.href = "main.html";
     }

@@ -4,7 +4,18 @@
 }
 
 body {
-    background-color:#747dd3;
+    background-color: rgb(81, 87, 143);
     margin-top: 0px;
     margin-left: 0px;
+}
+
+.main-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.dark-blue {
+    color: darkblue;
 }

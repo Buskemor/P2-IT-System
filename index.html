@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Page and Button Switching Example</title>
+    <title>Deløkonomi login</title>
     <link rel="stylesheet" href="indexstyle.css">
     <script defer src="indexscript.js"></script>
 </head>
-<body>    
-    <button id="page2Btn" class="navBtn">Page 2 / LOGUD</button>
-    <button id="loginBtn" class="navBtn">Page 3 / LOGIN</button>
-    <div id="page2">
-        <h1>Welcome to Page 2</h1>
-        <p>This is the content of Page 2.</p>
-        <div id="textboxContainer">
-            <input type="text" id="textbox1" placeholder="Brugernavn">
-            <input type="text" id="textbox2" placeholder="Kodeord">
+<body>
+    <div class="main-container">
+        <div id="page2">
+            <img src="logo.png">
+            <h1>Velkommen til Jensens boligselvskab</h1>
+            <p>Log ind eller <a class="dark-blue" href="resetPassword.html">glemt kodeord</a></p>
+            <div id="textboxContainer">
+                <input type="text" id="textbox1" placeholder="Brugernavn">
+                <div></div>
+                <input type="text" id="textbox2" placeholder="Kodeord" style="margin-top: 10px;">
+            </div>
+            <button id="loginBtn" class="navBtn" style="margin-top: 10px;">Log ind</button>
         </div>
     </div>
 </body>
