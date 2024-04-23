@@ -1,55 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Page and Button Switching Example</title>
-    <link rel="stylesheet" href="styles.css"> <!-- New stylesheet for button styles -->
+    <link rel="stylesheet" href="indexstyle.css">
+    <script defer src="indexscript.js"></script>
 </head>
-<body>
-    <div class="hidden-popup-div">
-        <button class="exit-popup">X</button>
-        <div id="budget-div">Budget div</div>
-        <div id="settings-div">Budget div</div>
-        <div class="feedback-div">Budget div</div>
-        <div class="support-div">Budget div</div>
-    </div>
-    <!-- <div class="exit-popup" id="hidden-exit"></div> -->
-    <div class="can-blur">
-        <div class="nav">
-            <img src="logo.png">
-            <button class="nav-btn" id="budget-btn">Månedligt forbrug</button>
-            <button class="nav-btn" id="settings-btn">Settings</button>
-            <button class="nav-btn" id="feedback-btn">Feedback</button>
-            <button class="nav-btn" id="support-btn">Support</button>
-            <button class="nav-btn" id="logout-btn">Log ud</button>
-    <!-- Navigation Buttons -->
-    <button id="page1Btn" class="navBtn">Page 1</button>
-    <button id="page2Btn" class="navBtn">Page 2</button>
-    <button id="page3Btn" class="navBtn">Page 3</button>
-
-    <!-- Pages -->
-    <div id="page1" style="display: none;">
-        <h1>Welcome to Page 1</h1>
-        <p>This is the content of Page 1.</p>
-    </div>
-
-    <div id="page2" style="display: none;">
+<body>    
+    <button id="page2Btn" class="navBtn">Page 2 / LOGUD</button>
+    <button id="loginBtn" class="navBtn">Page 3 / LOGIN</button>
+    <div id="page2">
         <h1>Welcome to Page 2</h1>
         <p>This is the content of Page 2.</p>
         <div id="textboxContainer">
-            <input type="text" id="textbox1" placeholder="Enter text 1">
-            <input type="text" id="textbox2" placeholder="Enter text 2">
+            <input type="text" id="textbox1" placeholder="Brugernavn">
+            <input type="text" id="textbox2" placeholder="Kodeord">
         </div>
-        <div class="calendar-grid" id="cal-start"></div>
     </div>
-
-    <div id="page3" style="display: none;">
-        <h1>Welcome to Page 3</h1>
-        <p>This is the content of Page 3.</p>
-    </div>
-
-    <!-- JavaScript -->
-    <script src="script.js"></script>
 </body>
 </html>

@@ -109,6 +109,10 @@ body {
     display: none;
 }
 
+.display-none {
+    display: none;
+}
+
 .popup-div-display {
     transition: 250ms;
     display: block;
