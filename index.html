@@ -1,225 +1,38 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-    <script defer src="script.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <title>DelOkønomi</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page and Button Switching Example</title>
+    <link rel="stylesheet" href="styles.css"> <!-- New stylesheet for button styles -->
 </head>
 <body>
-    <div class="calendar-grid">
-        <div class="time-header"></div>
-        <div class="time">01:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">02:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">03:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">04:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">05:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">06:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">07:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">08:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">04:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">10:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">11:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">12:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">13:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">14:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">15:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">16:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">17:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">18:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">19:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">20:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">21:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">22:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">23:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="time">00:00</div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-            <div class="empty"></div>
-        <div class="day-header">Mandag
-            <div>08/04</div>
-        </div>
-        <div class="day-header">Tirsdag
-            <div>09/04</div>
-        </div>
-        <div class="day-header">Onsdag
-            <div>10/04</div>
-        </div>
-        <div class="day-header">Torsdag
-            <div>11/04</div>
-        </div>
-        <div class="day-header">Fredag
-            <div>12/04</div>
-        </div>
-        <div class="day-header">Lørdag
-            <div>13/04</div>
-        </div>
-        <div class="day-header">Søndag
-            <div>14/04</div>
+    <!-- Navigation Buttons -->
+    <button id="page1Btn" class="navBtn">Page 1</button>
+    <button id="page2Btn" class="navBtn">Page 2</button>
+    <button id="page3Btn" class="navBtn">Page 3</button>
+
+    <!-- Pages -->
+    <div id="page1" style="display: none;">
+        <h1>Welcome to Page 1</h1>
+        <p>This is the content of Page 1.</p>
+    </div>
+
+    <div id="page2" style="display: none;">
+        <h1>Welcome to Page 2</h1>
+        <p>This is the content of Page 2.</p>
+        <div id="textboxContainer">
+            <input type="text" id="textbox1" placeholder="Enter text 1">
+            <input type="text" id="textbox2" placeholder="Enter text 2">
         </div>
     </div>
+
+    <div id="page3" style="display: none;">
+        <h1>Welcome to Page 3</h1>
+        <p>This is the content of Page 3.</p>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
 </html>
