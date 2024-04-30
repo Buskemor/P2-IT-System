@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", () => {
         settings: false,
         feedback: false,
         support: false,
+        info: false,
     };
 
     navButtons.forEach(navButton => {
@@ -108,9 +109,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     document.getElementById('support-div').classList.toggle('display-none');
                     activePopup.support = true;
                     break;
+                case 'info-btn':
+                    document.getElementById('info-div').classList.toggle('display-none');
+                    activePopup.info = true;
+                    break;
                 case 'logout-btn':
                     window.location.href = "index.html";
-                    break;
+                    return;
             };
             blurElements.forEach(blurElement => {
                 blurElement.classList.toggle('blurred');
@@ -122,7 +127,20 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const exitButton = document.querySelectorAll('.exit-popup');
+    const submitButtons = document.querySelectorAll('.submit-btn')
+    submitButtons.forEach(submitButton => {
+        submitButton.addEventListener('click', () => {
 
+                document.getElementById(`feedback-div`).classList.toggle('display-none');
+                activePopup.feedback = false;
+            blurElements.forEach(blurElement => {
+                blurElement.classList.toggle('blurred');
+            });
+            popupDivs.forEach(popupDiv => {
+                popupDiv.classList.toggle('popup-div-display');
+            });
+        });
+    });
     exitButton.forEach(exitButton => {
         exitButton.addEventListener('click', () => {
             for (let key in activePopup) {
@@ -158,4 +176,26 @@ function showDiv(div) {
 
 function hideDiv(div) {
     div.classList.add("hidden");
+} 
+
+
+function submitFeedback() {
+
+    let message = document.getElementById("message-box").value;
+
+    console.log("Feedback Message:", message);
+    document.getElementById("message-box").value = "";
+    document.getElementById("popup-message").classList.toggle('display-none');
+    console.log('LMFAOOo')
+    let popupMessage = document.getElementById("popup-message");
+    popupMessage.textContent = "Tak for din feedback!";
+    popupMessage.style.display = "block";
+
+    setTimeout(function(){
+        popupMessage.style.display = "none";
+    }, 3000); 
+
+    // alert("Tak for din feedback!");
 }
+
+// document.getElementById("submit-button").addEventListener("click", submitFeedback);

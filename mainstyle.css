@@ -100,7 +100,7 @@ body {
 .hidden-popup-div {
     filter: drop-shadow(0px 0px 30px black);
     z-index: 1;
-    width: 400px;
+    width: 450px;
     height: 500px;
     background-color: #46a1dd;
     position: absolute;
@@ -149,3 +149,38 @@ body {
 #support-btn {
 
 } */
+
+textarea {
+    resize: none;
+    width: 100%;
+    height: auto;
+    box-sizing: border-box;    
+    margin: 0;
+}
+#feedback-div h2 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.test-container {
+    margin-left: 7px;
+    margin-right: 7px;
+}
+
+#support-div {
+    justify-content: center;
+    align-items: center;
+    
+}
+
+#popup-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border: 2px solid black;
+    z-index: 9999; /* Sørg for at pop-up'en vises over alt andet */
+}
