@@ -65,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         
       
-
     // const savedCells = {person: {nichlas: {optaget: [0,7,14,21]}}}
     // for (let i = 0; i < savedCells.person.nichlas.optaget.length; i++) {
     //     cells[savedCells.person.nichlas.optaget[i]].classList.add('full');
@@ -152,10 +151,56 @@ document.addEventListener("DOMContentLoaded", () => {
     // });
 })
 
-function showDiv(div) {
-    div.classList.remove("hidden");
+
+
+
+// Historikdata for hver måned
+var historyData = {
+    "010124": "Historik for januar 2024...",
+    "010224": "Historik for februar 2024...",
+    "010324": "Historik for marts 2024...",
+    "010424": "Historik for april 2024...",
+    "010524": "Historik for maj 2024...",
+    "010624": "Historik for juni 2024..."
+};
+
+// Funktion til at opdatere historikteksten baseret på den aktuelle måned
+function updateHistory() {
+    var currentMonth = document.getElementById('current-month').textContent;
+    var historyText = historyData[currentMonth.toLowerCase().replace(' ', '')];
+    document.getElementById('history-text').textContent = historyText || "Ingen historik tilgængelig for denne måned.";
 }
 
-function hideDiv(div) {
-    div.classList.add("hidden");
+function showHistory() {
+    document.getElementById('history-container').classList.remove('hidden');
+    updateHistory();
 }
+
+
+function hideHistory() {
+    document.getElementById('history-container').classList.add('hidden');
+}
+
+
+function showPreviousMonth() {
+    var currentMonthElement = document.getElementById('current-month');
+    var currentMonth = currentMonthElement.textContent;
+    var months = Object.keys(historyData);
+    var currentIndex = months.indexOf(currentMonth.toLowerCase().replace(' ', ''));
+    if (currentIndex > 0) {
+        currentMonthElement.textContent = months[currentIndex - 1].replace(/^(\d{2})(\d{2})(\d{2})$/, '$1.$2.$3');
+        updateHistory();
+    }
+}
+
+function showNextMonth() {
+    var currentMonthElement = document.getElementById('current-month');
+    var currentMonth = currentMonthElement.textContent;
+    var months = Object.keys(historyData);
+    var currentIndex = months.indexOf(currentMonth.toLowerCase().replace(' ', ''));
+    if (currentIndex < months.length - 1) {
+        currentMonthElement.textContent = months[currentIndex + 1].replace(/^(\d{2})(\d{2})(\d{2})$/, '$1.$2.$3');
+        updateHistory();
+    }
+}
+
