@@ -1,41 +1,59 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let hoursArray =[];
-    for (let i = 0; i < 24; i++) {
-        if (i <= 9) {
-            hoursArray[i] = '0' + i + ':00';
+    function generateCalendar() {
+        document.getElementById("cal-start").innerHTML = "";
+
+        const currentDate = new Date();
+        const currentDay = currentDate.getDay();
+    
+        let hoursArray =[];
+        for (let i = 0; i < 24; i++) {
+            if (i <= 9) {
+                hoursArray[i] = '0' + i + ':00';
         } else {
-            hoursArray[i] = i + ':00';
+                hoursArray[i] = i + ':00';
         }
-    };
+    }
 
     const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
 
     const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
     timeHeader.className = "time-header";
     timeHeader.textContent = "Uge xxx";
+
+    const currentDayIndex = currentDay === 0 ? 7 : currentDay;
+
+    const startDate = new Date(currentDate);
+    startDate.setDate(startDate.getDate() - currentDayIndex + 1);
+
+
     for (let i = 0; i < hoursArray.length; i++) {
         const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
         timeDiv.className = "time";
         timeDiv.textContent = hoursArray[i];
-    };
+    }
 
     const timeElements = document.querySelectorAll(".time");
 
-    timeElements.forEach((timeElement)=> {
+    timeElements.forEach((timeElement) => {
         for (let i = 0; i < weeks.length; i++) {
             const emptyCell = document.createElement("div");
             emptyCell.className = "cell";
             timeElement.parentNode.insertBefore(emptyCell, timeElement.nextSibling);
-        };
+        }
     });
 
     for (let i = 0; i < weeks.length; i++) {
         const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
         dayHeader.className = "day-header";
-        dayHeader.textContent = weeks[i];
+        const dayIndex = (currentDayIndex + i -1) % 7;
+        dayHeader.textContent = weeks[dayIndex];
     }
 
     const cells = document.querySelectorAll('.cell');
+
+    const currentHour = currentDate.getHours();
+    const currentSlotIndex = currentHour < 10 ? currentHour : currentHour - 1;
+    cells[currentSlotIndex].classList.add('current-time');
 
     let isMouseDown = false;
     let firstHeldClickCell;
@@ -59,6 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
             isMouseDown = false;
         });
     });
+}
+
+    generateCalendar();
+
+    function updateCalendar() {
+        generateCalendar();
+    }
+
+    setInterval(updateCalendar, 60 * 1000);
+    
 
     const navButtons = document.querySelectorAll('.nav-btn');
     const blurElements = document.querySelectorAll('.can-blur');
