@@ -106,6 +106,7 @@ document.addEventListener("DOMContentLoaded", () => {
     setInterval(updateCalendar, 60 * 1000);
 });
 
+
 const navButtons = document.querySelectorAll('.nav-btn');
 const blurElements = document.querySelectorAll('.can-blur');
 const popupDivs = document.querySelectorAll('.hidden-popup-div');
@@ -169,4 +170,40 @@ exitButton.forEach(exitButton => {
             popupDiv.classList.toggle('popup-div-display');
         });
     });
+});
+
+document.addEventListener('click', (event) => {
+    const isPopupTrigger = event.target.classList.contains('nav-btn');
+    const isPopupContent = event.target.classList.contains('popup-div') || event.target.closest('.popup-div');
+    if (!isPopupTrigger && !isPopupContent) {
+        for (let key in activePopup) {
+            if (activePopup[key] === true) {
+                document.getElementById(`${key}-div`).classList.add('display-none');
+                activePopup[key] = false;
+            }
+        }
+        blurElements.forEach(blurElement => {
+            blurElement.classList.remove('blurred');
+        });
+        popupDivs.forEach(popupDiv => {
+            popupDiv.classList.remove('popup-div-display');
+        });
+    }
+});
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' || event.keyCode === 27) {
+        for (let key in activePopup) {
+            if (activePopup[key] === true) {
+                document.getElementById(`${key}-div`).classList.add('display-none');
+                activePopup[key] = false;
+            }
+        }
+        blurElements.forEach(blurElement => {
+            blurElement.classList.remove('blurred');
+        });
+        popupDivs.forEach(popupDiv => {
+            popupDiv.classList.remove('popup-div-display');
+        });
+    }
 });
