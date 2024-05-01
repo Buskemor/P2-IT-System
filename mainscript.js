@@ -192,7 +192,7 @@ document.addEventListener('click', (event) => {
 });
 
 document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' || event.keyCode === 27) {
+    if (event.key === 'Escape' || event.keyCode === 27) { //Keycode 27 = is the number of Escape on a keyboard
         for (let key in activePopup) {
             if (activePopup[key] === true) {
                 document.getElementById(`${key}-div`).classList.add('display-none');
