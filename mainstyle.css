@@ -137,6 +137,9 @@ body {
     background-color: #992424;
 }
 
+.invisible-exit {
+    display: none;
+}
 /* #budget-btn {
 
 }

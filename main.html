@@ -7,20 +7,27 @@
 </head>
 <body>
     <div class="hidden-popup-div">
-        <button class="exit-popup">X</button>
-        <div class="display-none" id="budget-div">Budget div</div>
-        <div class="display-none" id="settings-div">Settings div</div>
-        <div class="display-none" id="feedback-div">
-            Har du problemer?
-            <button id="contact-btn" class="nav-btn">Kontakt os her</button>
-        </div>
-        <div class="display-none" id="support-div">Support div</div>
+        <div class="exit-popup invisible-exit"></div>
+        
+<button class="exit-popup visible-exit" data-popup="budget-div">X</button>
+<div class="display-none" id="budget-div">Budget div</div>
+
+
+<button class="exit-popup visible-exit" data-popup="settings-div">X</button>
+<div class="display-none" id="settings-div">Settings div</div>
+
+<button class="exit-popup visible-exit" data-popup="feedback-div">X</button>
+<div class="display-none" id="feedback-div">
+    Har du problemer?
+    <button id="contact-btn" class="nav-btn">Kontakt os her</button>
+</div>
+
+<button class="exit-popup visible-exit" data-popup="support-div">X</button>
+<div class="display-none" id="support-div">Support div</div>
     </div>
 
-    <!-- <div class="exit-popup" id="hidden-exit"></div> -->
     <div class="can-blur">
         <div class="nav">
-            
             <img src="logo.png">
             <button class="nav-btn" id="budget-btn">Månedligt forbrug</button>
             <button class="nav-btn" id="settings-btn">Settings</button>
