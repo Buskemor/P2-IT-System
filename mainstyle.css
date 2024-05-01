@@ -149,3 +149,22 @@ body {
 #support-btn {
 
 } */
+
+#contact-btn {
+    background-color: #ce1a41; 
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.red-button {
+    background-color: red;
+    color: white;
+}

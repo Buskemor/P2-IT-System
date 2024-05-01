@@ -9,7 +9,6 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
-    // later the weeks can be rotating, so the first is replaced by the last when each day passes by
 
     const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
     timeHeader.className = "time-header";
@@ -36,16 +35,14 @@ document.addEventListener("DOMContentLoaded", () => {
         dayHeader.textContent = weeks[i];
     }
 
-
     const cells = document.querySelectorAll('.cell');
 
     let isMouseDown = false;
     let firstHeldClickCell;
 
-
     cells.forEach(cell => {
         cell.addEventListener('click', () => {
-        firstHeldClickCell.classList.toggle('full')
+            cell.classList.toggle('full')
         });
         cell.addEventListener('mousedown', () => {
             isMouseDown = true;
@@ -63,22 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-        
-      
-
-    // const savedCells = {person: {nichlas: {optaget: [0,7,14,21]}}}
-    // for (let i = 0; i < savedCells.person.nichlas.optaget.length; i++) {
-    //     cells[savedCells.person.nichlas.optaget[i]].classList.add('full');
-    // }
-
-    // cells[0].classList.add('full');
-    // ^this is for making certain cells
-    // it should rotate with the weeks
-    // set date in JSON and compare with current date to do math
-
-
     const navButtons = document.querySelectorAll('.nav-btn');
-
     const blurElements = document.querySelectorAll('.can-blur');
     const popupDivs = document.querySelectorAll('.hidden-popup-div');
 
@@ -111,6 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 case 'logout-btn':
                     window.location.href = "index.html";
                     break;
+                case 'contact-btn':
+                    window.location.href = "kontaktos.html";
+                    break;
             };
             blurElements.forEach(blurElement => {
                 blurElement.classList.toggle('blurred');
@@ -139,18 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     });
-    // document.getElementById('feedback-btn').addEventListener('click', () => {
-    //     document.getElementById('feedback-div').classList.toggle("none");
-    // })
-
-    // const hiddenExits = document.querySelectorAll('#hidden-exit')
-    // navButtons.forEach(navButton => {
-        
-    // });    
-    // document.getElementById('hidden-exit').addEventListener('click', () => {
-    //     console.log('testing hidden exit')
-    // });
-})
+});
 
 function showDiv(div) {
     div.classList.remove("hidden");
