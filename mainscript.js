@@ -174,20 +174,28 @@ exitButton.forEach(exitButton => {
 
 document.addEventListener('click', (event) => {
     const isPopupTrigger = event.target.classList.contains('nav-btn');
-    const isPopupContent = event.target.classList.contains('popup-div') || event.target.closest('.popup-div');
+    const isPopupContent = event.target.classList.contains('popup-div');
     if (!isPopupTrigger && !isPopupContent) {
-        for (let key in activePopup) {
-            if (activePopup[key] === true) {
-                document.getElementById(`${key}-div`).classList.add('display-none');
-                activePopup[key] = false;
-            }
-        }
-        blurElements.forEach(blurElement => {
-            blurElement.classList.remove('blurred');
-        });
+        let isInsidePopup = false;
         popupDivs.forEach(popupDiv => {
-            popupDiv.classList.remove('popup-div-display');
+            if (popupDiv.contains(event.target)) {
+                isInsidePopup = true;
+            }
         });
+        if (!isInsidePopup) {
+            for (let key in activePopup) {
+                if (activePopup[key] === true) {
+                    document.getElementById(`${key}-div`).classList.add('display-none');
+                    activePopup[key] = false;
+                }
+            }
+            blurElements.forEach(blurElement => {
+                blurElement.classList.remove('blurred');
+            });
+            popupDivs.forEach(popupDiv => {
+                popupDiv.classList.remove('popup-div-display');
+            });
+        }
     }
 });
 
