@@ -150,7 +150,3 @@ document.addEventListener("DOMContentLoaded", () => {
     //     console.log('testing hidden exit')
     // });
 })
-
-
-
-

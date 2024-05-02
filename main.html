@@ -17,30 +17,47 @@
             <label class="content" for="monthly-budget">Månedligt budget:</label>
             <input type="number" id="monthly-budget" placeholder="Indtast beløb">
             <button onclick="setBudget()">Indstil</button>
-        </div>
-            
+        
 
 
             <h4 class="content">Nuværende saldo: <span id="current-balance">0</span> DKK</h4>
             <h4 class="content">Sidste periode: <span id="last-period">0</span> DKK</h4>
             <h4 class="content">Overskridelse: <span id= overskridelse>0</span> DKK</h4>
-    
-            
+        </div>
+
             <!-- Forbrugshistorik -->
             <button class="content" onclick="showHistory()">Se din historik</button>
             <ul id="history"></ul>
 
-        </div>
-        
-    <div>
-        <div class="display-none" id="settings-div">Settings div</div>
-        <div class="display-none" id="feedback-div">Feedback div</div>
-        <div class="display-none" id="support-div">Support div</div>
+
+
+
+            <div id="calendar-container" class="hidden">
+                <div class="navigation">
+                    <button id="prev-month-btn">&#9664;</button>
+                    <span id="current-month"></span>
+                    <span id="current-year"></span>
+                    <button id="next-month-btn">&#9654;</button>
+                </div>
+                <div id="calendar"></div>
+            </div>
+
+           
     </div>
+    <div class="display-none" id="settings-div">Settings div</div>
+    <div class="display-none" id="feedback-div">Feedback div</div>
+    <div class="display-none" id="support-div">Support div</div>
 
 </div>
 
+        </div>
 
+
+
+
+    </div>
+
+    
 
 
 
