@@ -1,13 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let currentDate;
+    let currentDate
+    let initialWeekNumber;
 
     function generateCalendar() {
         document.getElementById("cal-start").innerHTML = "";
-
-        currentDate = new Date();
+    
+        currentDate = currentDate || new Date();
         const currentDay = currentDate.getDay();
-
-        let hoursArray =[];
+    
+        let hoursArray = [];
         for (let i = 0; i < 24; i++) {
             if (i <= 9) {
                 hoursArray[i] = '0' + i + ':00';
@@ -15,51 +16,81 @@ document.addEventListener("DOMContentLoaded", () => {
                 hoursArray[i] = i + ':00';
             }
         }
-
+    
         const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
-
+    
         const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
         timeHeader.className = "time-header";
-        timeHeader.textContent = "Uge xxx";
-
-        const currentDayIndex = currentDay === 0 ? 7 : currentDay;
-
+        const currentWeek = getWeekNumber(currentDate);
+        if (!initialWeekNumber) initialWeekNumber =  currentWeek;
+        timeHeader.textContent = "Uge " + currentWeek;
+    
+        let currentDayIndex = currentDate.getDay();
+    
+        if (currentDayIndex === 0) {
+            currentDayIndex = 7;
+        }
+    
         const startDate = new Date(currentDate);
-        startDate.setDate(startDate.getDate() - currentDayIndex + 1);
-
-
+        let startDay;
+        if (currentWeek === getWeekNumber(new Date())) {
+            // Set startDay to current day
+            startDay = currentDate.getDate();
+        } else {
+            // Adjust start date to represent Monday of the current week
+            startDay = currentDate.getDate() - (currentDayIndex === 0 ? 6 : currentDayIndex - 1);
+        }
+        startDate.setDate(startDay); // Adjust start date
+    
         for (let i = 0; i < hoursArray.length; i++) {
             const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
             timeDiv.className = "time";
             timeDiv.textContent = hoursArray[i];
         }
-
+    
         const timeElements = document.querySelectorAll(".time");
-
+    
         timeElements.forEach((timeElement) => {
             for (let i = 0; i < weeks.length; i++) {
-                const emptyCell = document.createElement("div");
-                emptyCell.className = "cell";
-                timeElement.parentNode.insertBefore(emptyCell, timeElement.nextSibling);
+                const dayCell = document.createElement("div");
+                dayCell.className = "cell";
+                timeElement.parentNode.insertBefore(dayCell, timeElement.nextSibling);
             }
         });
-
+    
         for (let i = 0; i < weeks.length; i++) {
             const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
             dayHeader.className = "day-header";
-            const dayIndex = (currentDayIndex + i -1) % 7;
+            let dayIndex = (currentDayIndex + i - 1) % 7;
+            if (dayIndex < 0) dayIndex += 7; // Handling negative indices
+    
             dayHeader.textContent = weeks[dayIndex];
+    
+            const dateForDay = new Date(startDate);
+            dateForDay.setDate(dateForDay.getDate() + i); // Adjust date to represent previous weeks
+    
+            const formattedDate = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1)).slice(-2);
+    
+            const dateSpan = document.createElement("span");
+            dateSpan.className = "date";
+            dateSpan.textContent = formattedDate;
+            dayHeader.appendChild(dateSpan);
+    
+            // Highlight the current day
+            if (currentWeek === getWeekNumber(new Date()) && i === currentDayIndex - 1) {
+                dateSpan.classList.add("current-day");
+            }
         }
-
+    
         const cells = document.querySelectorAll('.cell');
-
+    
         const currentHour = currentDate.getHours();
         const currentSlotIndex = currentHour < 10 ? currentHour : currentHour - 1;
         cells[currentSlotIndex].classList.add('current-time');
-
+    
         let isMouseDown = false;
         let firstHeldClickCell;
-
+    
         cells.forEach(cell => {
             cell.addEventListener('click', () => {
                 cell.classList.toggle('full')
@@ -82,19 +113,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function updateCalendarPreviousWeek() {
-        /*console.log("Updateing calendar to previous week.."); */
-        currentDate.setDate(currentDate.getDate() - 7);
+        let newDate = new Date(currentDate);
+        const daysToSubtract = currentDate.getDay() === 0 ? 6 : (currentDate.getDay() - 1);
+        newDate.setDate(currentDate.getDate() - (daysToSubtract + 7)); 
+        newDate.setDate(newDate.getDate() - (newDate.getDay() === 0 ? 6 : newDate.getDay() - 1)); // Ensure Monday is the start of the week
+        currentDate = newDate;
+        if (initialWeekNumber && getWeekNumber(currentDate) === initialWeekNumber) {
+            currentDate = new Date(); // Reset to current date if returning to initial week
+        }
+        /*console.log("Updating calendar to previous week.."); */
         generateCalendar();
     }
 
     function updateCalendarNextWeek() {
-       /* console.log("Updating Calendar to next week..");*/
-        currentDate.setDate(currentDate.getDate() + 7);
+        /* console.log("Updating Calendar to next week..");*/
+        let newDate = new Date(currentDate);
+        newDate.setDate(currentDate.getDate() + (8 - currentDate.getDay()));
+        newDate.setDate(newDate.getDate() - (newDate.getDay() === 0 ? 6 : newDate.getDay() - 1)); // Ensure Monday is the start of the week
+        currentDate = newDate;
+        if (initialWeekNumber && getWeekNumber(currentDate) === initialWeekNumber) {
+            currentDate = new Date(); // Reset to current date if returning to initial week
+        }
         generateCalendar();
     }
 
     function updateCalendar() {
-       /* console.log("Updating  Calendar");*/
+        /* console.log("Updating  Calendar");*/
         generateCalendar();
     }
 
@@ -104,6 +148,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("next-week").addEventListener("click", updateCalendarNextWeek);
 
     setInterval(updateCalendar, 60 * 1000);
+
+    function getWeekNumber(date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
 });
 
 
@@ -120,7 +170,7 @@ const activePopup = {
 
 navButtons.forEach(navButton => {
     navButton.addEventListener('click', () => {
-        switch(navButton.id) {
+        switch (navButton.id) {
             case 'budget-btn':
                 document.getElementById('budget-div').classList.toggle('display-none');
                 activePopup.budget = true;
@@ -142,6 +192,9 @@ navButtons.forEach(navButton => {
                 break;
             case 'contact-btn':
                 window.location.href = "kontaktos.html";
+                break;
+            case 'tilbage-btn':
+                window.location.href = "main.html";
                 break;
         };
         blurElements.forEach(blurElement => {

@@ -50,6 +50,15 @@ body {
     border: 1px solid;
     text-align: center;
     background-color: gray;
+    position: relative;
+}
+
+.date {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
 }
 
 .cell {
@@ -140,6 +149,7 @@ body {
 .invisible-exit {
     display: none;
 }
+
 /* #budget-btn {
 
 }
@@ -171,3 +181,4 @@ body {
     background-color: red;
     color: white;
 }
+
