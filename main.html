@@ -25,24 +25,26 @@
             <h4 class="content">Overskridelse: <span id= overskridelse>0</span> DKK</h4>
         </div>
 
-            <!-- Forbrugshistorik -->
+            <!--Forbrugshistorik -->
             <button class="content" onclick="showHistory()">Se din historik</button>
             <ul id="history"></ul>
 
 
 
-
-            <div id="calendar-container" class="hidden">
+            <div id="history-popup" class="history-popup">
+                
+                <h2 id="current-month">Januar</h2>
                 <div class="navigation">
-                    <button id="prev-month-btn">&#9664;</button>
-                    <span id="current-month"></span>
-                    <span id="current-year"></span>
-                    <button id="next-month-btn">&#9654;</button>
+                    <button onclick="previousMonth()">Tilbage</button>
+                    <button onclick="nextMonth()">Frem</button>
                 </div>
-                <div id="calendar"></div>
-            </div>
+                <input type="text" id="money-info" placeholder=>
+               
 
-           
+            </div>
+        </div>
+
+
     </div>
     <div class="display-none" id="settings-div">Settings div</div>
     <div class="display-none" id="feedback-div">Feedback div</div>
@@ -58,8 +60,6 @@
     </div>
 
     
-
-
 
     <!-- <div class="exit-popup" id="hidden-exit"></div> -->
     <div class="can-blur">
