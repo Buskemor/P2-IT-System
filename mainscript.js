@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const currentWeek = getWeekNumber(currentDate);
         if (!initialWeekNumber) initialWeekNumber =  currentWeek;
         timeHeader.textContent = "Uge " + currentWeek;
-    
+        
         let currentDayIndex = currentDate.getDay();
     
         if (currentDayIndex === 0) {
@@ -251,7 +251,12 @@ document.addEventListener('keydown', (event) => {
         blurElements.forEach(blurElement => {
             blurElement.classList.remove('blurred');
         });
-    });
+        popupDivs.forEach(popupDiv => {
+            popupDiv.classList.remove('popup-div-display');
+        });
+    }
+})
+
     // document.getElementById('feedback-btn').addEventListener('click', () => {
     //     document.getElementById('feedback-div').classList.toggle("none");
     // })
@@ -263,7 +268,9 @@ document.addEventListener('keydown', (event) => {
     // document.getElementById('hidden-exit').addEventListener('click', () => {
     //     console.log('testing hidden exit')
     // });
-})
+
+   
+
 
 // Næste måned 
 function næsteMåned() {
@@ -280,8 +287,3 @@ function forrigeMåned() {
     var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
 }
-        popupDivs.forEach(popupDiv => {
-            popupDiv.classList.remove('popup-div-display');
-        });
-    }
-});

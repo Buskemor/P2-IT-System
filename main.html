@@ -8,6 +8,7 @@
 <body>
     <div class="hidden-popup-div">
         <button class="exit-popup">X</button>
+        <button class="exit-popup visible-exit" data-popup="budget-div">X</button>
         <div class="display-none" id="budget-div">
             <h1 class="content">Saldo</h1>
             <h3 class="content">Her får du overblik over dit forbrug</h3>
@@ -34,25 +35,16 @@
                 <textarea rows="4" cols="50" class="content"></textarea>
             </div>
         </div>
+        <button class="exit-popup visible-exit" data-popup="settings-div">X</button>
         <div class="display-none" id="settings-div">Settings div</div>
-        <div class="display-none" id="feedback-div">Feedback div</div>
+    
+        <button class="exit-popup visible-exit" data-popup="feedback-div">X</button>
+        <div class="display-none" id="feedback-div">Feedbacks div</div>
+    
+        <button class="exit-popup visible-exit" data-popup="support-div">X</button>
         <div class="display-none" id="support-div">Support div</div>
     </div>
-        <div class="exit-popup invisible-exit"></div>
-        
-<button class="exit-popup visible-exit" data-popup="budget-div">X</button>
-<div class="display-none" id="budget-div">Budget div</div>
-
-
-<button class="exit-popup visible-exit" data-popup="settings-div">X</button>
-<div class="display-none" id="settings-div">Settings div</div>
-
-<button class="exit-popup visible-exit" data-popup="feedback-div">X</button>
-<div class="display-none" id="feedback-div">Feedbacks div</div>
-
-<button class="exit-popup visible-exit" data-popup="support-div">X</button>
-<div class="display-none" id="support-div">Support div</div>
-    </div>
+    <div class="exit-popup invisible-exit"></div> 
     <div class="can-blur">
         <div class="nav">
             <img src="logo.png">
@@ -67,6 +59,5 @@
         <div class="calendar-grid" id="cal-start"></div>
         <button class="nav-btn" style="width: 650px; height: 50px; margin-top: 10px; margin-left: 20px;">Tilføj tidspunkter</button>
     </div>
-    
 </body>
 </html>
