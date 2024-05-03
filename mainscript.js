@@ -5,8 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     function generateCalendar() {
         document.getElementById("cal-start").innerHTML = "";
         currentDate = currentDate || new Date();
-        const currentDay = currentDate.getDay();
-    
+
         let hoursArray = [];
         for (let i = 0; i < 24; i++) {
             if (i <= 9) {
@@ -69,23 +68,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const dateForDay = new Date(startDate);
             dateForDay.setDate(dateForDay.getDate() + i); // Adjust date to represent previous weeks
     
-            const formattedDate = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1)).slice(-2);
+            const formattedDate = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1 /*because months start at 0 in js..*/)).slice(-2);
     
-            const dateSpan = document.createElement("span");
+            const dateSpan = document.createElement("div");
             dateSpan.className = "date";
             dateSpan.textContent = formattedDate;
             dayHeader.appendChild(dateSpan);
-    
-            // Highlight the current day
-            if (currentWeek === getWeekNumber(new Date()) && i === currentDayIndex - 1) {
-                dateSpan.classList.add("current-day");
-            }
         }
     
         const cells = document.querySelectorAll('.cell');
-        console.log(Array.from(cells))
-        console.log(JSON.stringify(cells))
-        // console.log(cells.0)
+
         const currentHour = currentDate.getHours();
         const currentSlotIndex = currentHour < 10 ? currentHour : currentHour - 1;
         cells[currentSlotIndex].classList.add('current-time');
@@ -145,17 +137,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-
-const navButtons = document.querySelectorAll('.nav-btn');
-const blurElements = document.querySelectorAll('.can-blur');
-const popupDivs = document.querySelectorAll('.hidden-popup-div');
-
 const activePopup = {
     budget: false,
     settings: false,
     feedback: false,
     support: false,
 };
+
+const navButtons = document.querySelectorAll('.nav-btn');
+const blurElements = document.querySelectorAll('.can-blur');
+const popupDivs = document.querySelectorAll('.hidden-popup-div');
 
 navButtons.forEach(navButton => {
     navButton.addEventListener('click', () => {
@@ -178,7 +169,7 @@ navButtons.forEach(navButton => {
                 break;
             case 'logout-btn':
                 window.location.href = "index.html";
-                break; 
+                return; //return so the popup doesn't flashbang you
         };
         blurElements.forEach(blurElement => {
             blurElement.classList.toggle('blurred');
@@ -189,8 +180,6 @@ navButtons.forEach(navButton => {
     });
 });
 
-
-              
     // const savedCells = {person: {nichlas: {optaget: [0,7,14,21]}}}
     // for (let i = 0; i < savedCells.person.nichlas.optaget.length; i++) {
     //     cells[savedCells.person.nichlas.optaget[i]].classList.add('full');
@@ -200,18 +189,7 @@ const exitButton = document.querySelectorAll('.exit-popup');
 
 exitButton.forEach(exitButton => {
     exitButton.addEventListener('click', () => {
-        for (let key in activePopup) {
-            if (activePopup[key] === true) {
-                document.getElementById(`${key}-div`).classList.toggle('display-none');
-                activePopup[key] = false;
-            }
-        }
-        blurElements.forEach(blurElement => {
-            blurElement.classList.toggle('blurred');
-        });
-        popupDivs.forEach(popupDiv => {
-            popupDiv.classList.toggle('popup-div-display');
-        });
+        removeActivePopup(activePopup)
     });
 });
 
@@ -226,52 +204,31 @@ document.addEventListener('click', (event) => {
             }
         });
         if (!isInsidePopup) {
-            for (let key in activePopup) {
-                if (activePopup[key] === true) {
-                    document.getElementById(`${key}-div`).classList.add('display-none');
-                    activePopup[key] = false;
-                }
-            }
-            blurElements.forEach(blurElement => {
-                blurElement.classList.remove('blurred');
-            });
-            popupDivs.forEach(popupDiv => {
-                popupDiv.classList.remove('popup-div-display');
-            });
+            removeActivePopup(activePopup)
         }
     }
 });
 
 document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' || event.keyCode === 27) { //Keycode 27 = is the number of Escape on a keyboard
-        for (let key in activePopup) {
-            if (activePopup[key] === true) {
-                document.getElementById(`${key}-div`).classList.add('display-none');
-                activePopup[key] = false;
-            }
-        }
-        blurElements.forEach(blurElement => {
-            blurElement.classList.remove('blurred');
-        });
-        popupDivs.forEach(popupDiv => {
-            popupDiv.classList.remove('popup-div-display');
-        });
+        removeActivePopup(activePopup)
     }
 })
 
-    // document.getElementById('feedback-btn').addEventListener('click', () => {
-    //     document.getElementById('feedback-div').classList.toggle("none");
-    // })
-
-    // const hiddenExits = document.querySelectorAll('#hidden-exit')
-    // navButtons.forEach(navButton => {
-        
-    // });    
-    // document.getElementById('hidden-exit').addEventListener('click', () => {
-    //     console.log('testing hidden exit')
-    // });
-
-   
+function removeActivePopup(activePopup) {
+    for (let key in activePopup) {
+        if (activePopup[key] === true) {
+            document.getElementById(`${key}-div`).classList.add('display-none');
+            activePopup[key] = false;
+        }
+    }
+    blurElements.forEach(blurElement => {
+        blurElement.classList.remove('blurred');
+    });
+    popupDivs.forEach(popupDiv => {
+        popupDiv.classList.remove('popup-div-display');
+    });
+}
 
 function submitFeedback() {
 
@@ -282,13 +239,11 @@ function submitFeedback() {
     document.getElementById("popup-message").classList.toggle('display-none');
     let popupMessage = document.getElementById("popup-message");
     popupMessage.textContent = "Tak for din feeback";
-    popupMessage.style.display = "block";
+    popupMessage.style.display = "block"; //so it displays something
 
     setTimeout(function(){
         popupMessage.style.display = "none";
     }, 3000); 
-
-    // alert("Tak for din feedback!");
 }
 function Sentfunction() {
     let message2 = document.getElementById("message-box").value;

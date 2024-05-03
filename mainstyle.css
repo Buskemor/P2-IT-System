@@ -233,3 +233,7 @@ width: 30px;
     margin-right: 5px; 
 }
 /* rahmos slut */
+
+.current-day {
+    background-color: #46a1dd;
+}
