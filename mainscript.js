@@ -151,18 +151,21 @@ document.addEventListener("DOMContentLoaded", () => {
     // });
 })
 
+
+
+
 // Næste måned 
-function nextMonth() {
-    var months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
-    var currentMonthIndex = months.indexOf(document.getElementById('current-month').textContent);
-    var nextMonthIndex = (currentMonthIndex + 1) % months.length;
-    document.getElementById('current-month').textContent = months[nextMonthIndex];
+function næsteMåned() {
+    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    var næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
+    document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
 }
 
-// Foregående måned
-function previousMonth() {
-    var months = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
-    var currentMonthIndex = months.indexOf(document.getElementById('current-month').textContent);
-    var previousMonthIndex = (currentMonthIndex - 1 + months.length) % months.length;
-    document.getElementById('current-month').textContent = months[previousMonthIndex];
+// Forrige måned
+function forrigeMåned() {
+    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
+    document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
 }
