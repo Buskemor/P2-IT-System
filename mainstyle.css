@@ -50,6 +50,15 @@ body {
     border: 1px solid;
     text-align: center;
     background-color: gray;
+    position: relative;
+}
+
+.date {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 18px;
 }
 
 .cell {
@@ -133,8 +142,9 @@ body {
     border: 2px solid;
 }
 
-.exit-popup:hover {
-    background-color: #992424;
+
+.invisible-exit {
+    display: none;
 }
 
 /* #budget-btn {
@@ -149,3 +159,23 @@ body {
 #support-btn {
 
 } */
+
+#contact-btn {
+    background-color: #ce1a41; 
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.red-button {
+    background-color: red;
+    color: white;
+}
+
