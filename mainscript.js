@@ -169,3 +169,5 @@ function forrigeMåned() {
     var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
 }
+
+
