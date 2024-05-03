@@ -83,7 +83,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     
         const cells = document.querySelectorAll('.cell');
-    
+        console.log(Array.from(cells))
+        console.log(JSON.stringify(cells))
+        // console.log(cells.0)
         const currentHour = currentDate.getHours();
         const currentSlotIndex = currentHour < 10 ? currentHour : currentHour - 1;
         cells[currentSlotIndex].classList.add('current-time');
@@ -271,6 +273,31 @@ document.addEventListener('keydown', (event) => {
 
    
 
+function submitFeedback() {
+
+    let message = document.getElementById("message-box").value;
+
+    console.log("Feedback Message:", message);
+    document.getElementById("message-box").value = "";
+    document.getElementById("popup-message").classList.toggle('display-none');
+    let popupMessage = document.getElementById("popup-message");
+    popupMessage.textContent = "Tak for din feeback";
+    popupMessage.style.display = "block";
+
+    setTimeout(function(){
+        popupMessage.style.display = "none";
+    }, 3000); 
+
+    // alert("Tak for din feedback!");
+}
+function Sentfunction() {
+    let message2 = document.getElementById("message-box").value;
+
+    console.log("Send Message2:", message2);
+    document.getElementById("message-box2").value = "";
+    document.getElementById("support-div").classList.toggle('display-none');
+    
+}
 
 // Næste måned 
 function næsteMåned() {

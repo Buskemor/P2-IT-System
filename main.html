@@ -39,10 +39,43 @@
         <div class="display-none" id="settings-div">Settings div</div>
     
         <button class="exit-popup visible-exit" data-popup="feedback-div">X</button>
-        <div class="display-none" id="feedback-div">Feedbacks div</div>
+        <div class="display-none" id="feedback-div">
+            <h1 class="content">Feedback</h1> 
+            <p class="content">Skriv din feedback nedenunder</p>
+            <textarea id="message-box" rows="4" placeholder="Skriv din feedback her" class="content"></textarea>
+            <div class="content">
+                <div class="rating">
+                    <input type="radio" id="rating1" value="1" name="radio">
+                    <label for="rating1" >1</label>
+                    <input type="radio" id="rating2" value="2" name="radio">
+                    <label for="rating2" >2</label>
+                    <input type="radio" id="rating3" value="3" name="radio">
+                    <label for="rating3" >3</label>
+                    <input type="radio" id="rating4" value="4" name="radio">
+                    <label for="rating4" >4</label>
+                    <input type="radio" id="rating5" value="5" name="radio">
+                    <label for="rating5" >5</label>
+                </div>
+            </div>
+            <div class="content">
+                <button class="submit-btn" onclick="submitFeedback()">Submit</button> 
+            </div>
+               
+        </div>
     
         <button class="exit-popup visible-exit" data-popup="support-div">X</button>
-        <div class="display-none" id="support-div">Support div</div>
+        <div class="display-none" id="support-div">
+            <h1 class="content">Kontakt informationer</h1>
+            <p class="content">Telefon: +45xxxxxxxx</p>
+            <p class="content">Email: <a href="mailto:Jensenboligselskabsupport@gmail.com">Jensenboligselskabsupport@gmail.com</a></p>
+            <p class="content">Adresse: xxxxxxxxxxxxx</p>
+            <p class="content" id="Skriv-til-visevaerter">Skriv til vicevært</p>
+            <textarea class="content" id="message-box2" rows="4" placeholder="Skriv til vicevært her" ></textarea>
+            <div class="content">
+                <button class="send-btn" onclick="sendFeedback()">Send</button>
+            </div>
+            </div>
+        </div>
     </div>
     <div class="exit-popup invisible-exit"></div> 
     <div class="can-blur">
