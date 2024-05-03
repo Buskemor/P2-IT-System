@@ -142,9 +142,6 @@ body {
     border: 2px solid;
 }
 
-.exit-popup:hover {
-    background-color: #992424;
-}
 
 .invisible-exit {
     display: none;

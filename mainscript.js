@@ -190,12 +190,6 @@ navButtons.forEach(navButton => {
             case 'logout-btn':
                 window.location.href = "index.html";
                 break;
-            case 'contact-btn':
-                window.location.href = "kontaktos.html";
-                break;
-            case 'tilbage-btn':
-                window.location.href = "main.html";
-                break;
         };
         blurElements.forEach(blurElement => {
             blurElement.classList.toggle('blurred');
