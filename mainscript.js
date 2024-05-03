@@ -1,10 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
     let currentDate
-    let initialWeekNumber;
+    let initialWeekNumber
 
     function generateCalendar() {
         document.getElementById("cal-start").innerHTML = "";
-    
         currentDate = currentDate || new Date();
         const currentDay = currentDate.getDay();
     
@@ -34,13 +33,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const startDate = new Date(currentDate);
         let startDay;
         if (currentWeek === getWeekNumber(new Date())) {
-            // Set startDay to current day
+            // Set startDay to the current date's day
             startDay = currentDate.getDate();
+        } else if (currentWeek < initialWeekNumber) {
+            startDay = currentDate.getDate() - 7 + currentDayIndex;
         } else {
-            // Adjust start date to represent Monday of the current week
-            startDay = currentDate.getDate() - (currentDayIndex === 0 ? 6 : currentDayIndex - 1);
+            // Otherwise, adjust start date to represent Monday of the next week
+            startDay = currentDate.getDate() + (7 - currentDayIndex);
         }
-        startDate.setDate(startDay); // Adjust start date
     
         for (let i = 0; i < hoursArray.length; i++) {
             const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
@@ -111,30 +111,17 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-
+    
     function updateCalendarPreviousWeek() {
-        let newDate = new Date(currentDate);
-        const daysToSubtract = currentDate.getDay() === 0 ? 6 : (currentDate.getDay() - 1);
-        newDate.setDate(currentDate.getDate() - (daysToSubtract + 7)); 
-        newDate.setDate(newDate.getDate() - (newDate.getDay() === 0 ? 6 : newDate.getDay() - 1)); // Ensure Monday is the start of the week
-        currentDate = newDate;
-        if (initialWeekNumber && getWeekNumber(currentDate) === initialWeekNumber) {
-            currentDate = new Date(); // Reset to current date if returning to initial week
-        }
-        /*console.log("Updating calendar to previous week.."); */
-        generateCalendar();
+        currentDate.setDate(currentDate.getDate() - 7); // Update the current date to the previous week
+        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
+        generateCalendar(); // Refresh the calendar
     }
-
+    
     function updateCalendarNextWeek() {
-        /* console.log("Updating Calendar to next week..");*/
-        let newDate = new Date(currentDate);
-        newDate.setDate(currentDate.getDate() + (8 - currentDate.getDay()));
-        newDate.setDate(newDate.getDate() - (newDate.getDay() === 0 ? 6 : newDate.getDay() - 1)); // Ensure Monday is the start of the week
-        currentDate = newDate;
-        if (initialWeekNumber && getWeekNumber(currentDate) === initialWeekNumber) {
-            currentDate = new Date(); // Reset to current date if returning to initial week
-        }
-        generateCalendar();
+        currentDate.setDate(currentDate.getDate() + 7); // Update the current date to the next week
+        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
+        generateCalendar(); // Refresh the calendar
     }
 
     function updateCalendar() {
@@ -189,7 +176,7 @@ navButtons.forEach(navButton => {
                 break;
             case 'logout-btn':
                 window.location.href = "index.html";
-                break;
+                break; 
         };
         blurElements.forEach(blurElement => {
             blurElement.classList.toggle('blurred');
