@@ -7,6 +7,37 @@
 </head>
 <body>
     <div class="hidden-popup-div">
+        <button class="exit-popup">X</button>
+        <div class="display-none" id="budget-div">
+            <h1 class="content">Saldo</h1>
+            <h3 class="content">Her får du overblik over dit forbrug</h3>
+
+            <!-- månedligt budget -->
+            <label class="content" for="monthly-budget">Månedligt budget:</label>
+            <input type="number" id="monthly-budget" placeholder="Indtast beløb">
+            <button onclick="setBudget()">Indstil</button>
+            <h4 class="content">Nuværende saldo: <span id="current-balance">0</span> DKK</h4>
+            <h4 class="content">Sidste periode: <span id="last-period">0</span> DKK</h4>
+            <h4 class="content">Overskridelse: <span id= overskridelse>0</span> DKK</h4>
+
+            <!--Forbrugshistorik -->
+            <button class="content" onclick="showHistory()">Se din historik</button>
+            <ul id="history"></ul>
+            <div id="history-popup" class="history-popup">
+                <h3 id="current-month" class="content">Januar</h3>               
+                <div class="navigation">
+                    <button id="prev-month-btn" class="content" onclick="forrigeMåned()">&#9664;</button>
+                    <span id="current-month"></span>
+                    <span id="current-year"></span>
+                    <button id="next-month-btn" class="content" onclick="næsteMåned()">&#9654;</button>
+                </div>
+                <textarea rows="4" cols="50" class="content"></textarea>
+            </div>
+        </div>
+        <div class="display-none" id="settings-div">Settings div</div>
+        <div class="display-none" id="feedback-div">Feedback div</div>
+        <div class="display-none" id="support-div">Support div</div>
+    </div>
         <div class="exit-popup invisible-exit"></div>
         
 <button class="exit-popup visible-exit" data-popup="budget-div">X</button>
@@ -22,7 +53,6 @@
 <button class="exit-popup visible-exit" data-popup="support-div">X</button>
 <div class="display-none" id="support-div">Support div</div>
     </div>
-
     <div class="can-blur">
         <div class="nav">
             <img src="logo.png">

@@ -187,6 +187,13 @@ navButtons.forEach(navButton => {
     });
 });
 
+
+              
+    // const savedCells = {person: {nichlas: {optaget: [0,7,14,21]}}}
+    // for (let i = 0; i < savedCells.person.nichlas.optaget.length; i++) {
+    //     cells[savedCells.person.nichlas.optaget[i]].classList.add('full');
+    // }
+
 const exitButton = document.querySelectorAll('.exit-popup');
 
 exitButton.forEach(exitButton => {
@@ -244,6 +251,35 @@ document.addEventListener('keydown', (event) => {
         blurElements.forEach(blurElement => {
             blurElement.classList.remove('blurred');
         });
+    });
+    // document.getElementById('feedback-btn').addEventListener('click', () => {
+    //     document.getElementById('feedback-div').classList.toggle("none");
+    // })
+
+    // const hiddenExits = document.querySelectorAll('#hidden-exit')
+    // navButtons.forEach(navButton => {
+        
+    // });    
+    // document.getElementById('hidden-exit').addEventListener('click', () => {
+    //     console.log('testing hidden exit')
+    // });
+})
+
+// Næste måned 
+function næsteMåned() {
+    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    var næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
+    document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
+}
+
+// Forrige måned
+function forrigeMåned() {
+    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
+    document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
+}
         popupDivs.forEach(popupDiv => {
             popupDiv.classList.remove('popup-div-display');
         });
