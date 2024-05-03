@@ -87,7 +87,6 @@ document.addEventListener("DOMContentLoaded", () => {
         settings: false,
         feedback: false,
         support: false,
-        info: false,
     };
 
     navButtons.forEach(navButton => {
@@ -108,10 +107,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 case 'support-btn':
                     document.getElementById('support-div').classList.toggle('display-none');
                     activePopup.support = true;
-                    break;
-                case 'info-btn':
-                    document.getElementById('info-div').classList.toggle('display-none');
-                    activePopup.info = true;
                     break;
                 case 'logout-btn':
                     window.location.href = "index.html";
@@ -178,7 +173,6 @@ function hideDiv(div) {
     div.classList.add("hidden");
 } 
 
-
 function submitFeedback() {
 
     let message = document.getElementById("message-box").value;
@@ -186,9 +180,8 @@ function submitFeedback() {
     console.log("Feedback Message:", message);
     document.getElementById("message-box").value = "";
     document.getElementById("popup-message").classList.toggle('display-none');
-    console.log('LMFAOOo')
     let popupMessage = document.getElementById("popup-message");
-    popupMessage.textContent = "Tak for din feedback!";
+    popupMessage.textContent = "Tak for din feeback";
     popupMessage.style.display = "block";
 
     setTimeout(function(){
@@ -197,5 +190,15 @@ function submitFeedback() {
 
     // alert("Tak for din feedback!");
 }
+function Sentfunction() {
+    let message2 = document.getElementById("message-box").value;
+
+    console.log("Send Message2:", message2);
+    document.getElementById("message-box2").value = "";
+    document.getElementById("support-div").classList.toggle('display-none');
+    
+}
+   
+
 
 // document.getElementById("submit-button").addEventListener("click", submitFeedback);

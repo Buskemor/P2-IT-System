@@ -184,3 +184,25 @@ textarea {
     border: 2px solid black;
     z-index: 9999; /* Sørg for at pop-up'en vises over alt andet */
 }
+
+.submit-btn {
+    background-color: red;
+    font-size: medium;
+    font-weight: 700;
+}
+
+#rating.class {
+    align-items: center;
+}
+p.Skriv-til-visevaerter{
+    font-size: large;
+    font-weight: 700;
+}
+.send-btn {
+    background-color: red;
+    font-size: small;
+    font-weight: 700;
+}
+.display-none {
+    display: none;
+}
