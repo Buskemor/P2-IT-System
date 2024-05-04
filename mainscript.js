@@ -1,11 +1,92 @@
+weekDifference = 0; //+1 is one week ahead. -1 is one week behind. 0 is current week.
+const weekDifferenceAndFullCells = {
+    otherUsers: {
+        0: [30, 37, 44],
+        1: [50,57,64],
+    },
+    currentUser: {
+        0: [10, 17, 24],
+        1: [],
+        2: [],
+        3: [],
+    }
+};
+
+// setInterval(() => {
+//     console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
+//     console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
+// }, 3000)
 document.addEventListener("DOMContentLoaded", () => {
     let currentDate
     let initialWeekNumber
 
-    function generateCalendar() {
-        document.getElementById("cal-start").innerHTML = "";
-        currentDate = currentDate || new Date();
+    generateCalendar(weekDifferenceAndFullCells, weekDifference);
 
+    document.getElementById("prev-week").addEventListener("click", updateCalendarPreviousWeek);
+    document.getElementById("next-week").addEventListener("click", updateCalendarNextWeek);
+    interactiveCells(weekDifferenceAndFullCells, weekDifference);
+
+    changes(weekDifferenceAndFullCells, weekDifference);
+
+    function changes(fullCells, weekDifference) {
+        console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
+        console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell, index) => {
+            try {
+                pushNewFullToCellArray(cell, index, fullCells, weekDifference);
+            } catch(error) {
+                console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
+            }   
+        })
+    }
+
+    function pushNewFullToCellArray(cell, index, fullCells, weekDifference) {
+        if (cell.classList.contains('full')) {
+            if (fullCells.currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
+            } else {
+                fullCells.currentUser[weekDifference].push(index)
+            }
+        } else {
+            for (let i = fullCells.currentUser[weekDifference].length - 1; i >= 0; i--) {
+                if (fullCells.currentUser[weekDifference].includes(index)) {
+                    fullCells.currentUser[weekDifference].splice(i, 1)
+                    console.log(fullCells.currentUser[weekDifference][i])
+                }
+            }
+        }
+    }
+    function updateCalendarPreviousWeek() {
+        weekDifference--;
+        currentDate.setDate(currentDate.getDate() - 7); // Update the current date to the previous week
+        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
+        changes(weekDifferenceAndFullCells, weekDifference+1);
+        console.log('week diff: ' + weekDifference)
+        generateCalendar(weekDifferenceAndFullCells, weekDifference); // Refresh the calendar
+        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+        
+    }
+    
+    function updateCalendarNextWeek() {
+        weekDifference++;
+        currentDate.setDate(currentDate.getDate() + 7); // Update the current date to the next week
+        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
+        changes(weekDifferenceAndFullCells, weekDifference-1)
+        console.log('week diff: ' + weekDifference)
+        generateCalendar(weekDifferenceAndFullCells, weekDifference); // Refresh the calendar
+        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+        
+    }
+
+    function getWeekNumber(date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+
+    function generateCalendar(fullCells, weekDifference) {
+        document.getElementById("cal-start").innerHTML = "";
+        currentDate = currentDate || new Date(); // in case we already set a date, it doesn't make a new one
         let hoursArray = [];
         for (let i = 0; i < 24; i++) {
             if (i <= 9) {
@@ -29,34 +110,58 @@ document.addEventListener("DOMContentLoaded", () => {
             currentDayIndex = 7;
         }
     
-        const startDate = new Date(currentDate);
-        let startDay;
-        if (currentWeek === getWeekNumber(new Date())) {
-            // Set startDay to the current date's day
-            startDay = currentDate.getDate();
-        } else if (currentWeek < initialWeekNumber) {
-            startDay = currentDate.getDate() - 7 + currentDayIndex;
-        } else {
-            // Otherwise, adjust start date to represent Monday of the next week
-            startDay = currentDate.getDate() + (7 - currentDayIndex);
-        }
     
         for (let i = 0; i < hoursArray.length; i++) {
             const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
             timeDiv.className = "time";
             timeDiv.textContent = hoursArray[i];
         }
-    
-        const timeElements = document.querySelectorAll(".time");
-    
-        timeElements.forEach((timeElement) => {
-            for (let i = 0; i < weeks.length; i++) {
-                const dayCell = document.createElement("div");
-                dayCell.className = "cell";
-                timeElement.parentNode.insertBefore(dayCell, timeElement.nextSibling);
+
+        addTimeElements(fullCells.otherUsers[weekDifference], fullCells.currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
+
+        function addTimeElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
+            const timeElements = document.querySelectorAll(".time");
+            timeElements.forEach((timeElement, index) => {
+                
+                for (let i = 0; i < weeks.length; i++) {
+                    const dayCell = document.createElement("div");
+                    dayCell.className = "cell";
+                    addLockedOrFullCells(fullCellsArrayCurrentUser, 'full')
+                    addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked')
+                    function addLockedOrFullCells(userCellArray, lockedOrFull) {
+                        if (userCellArray) { //only runs if there are cells in the week that has
+                            for (let j = 0; j < userCellArray.length; j++) {
+                                if (i == convertNumber(userCellArray[j]).i && index == convertNumber(userCellArray[j]).index) {
+                                    dayCell.classList.add(lockedOrFull);
+                                }
+                            }
+                        }
+                    }
+                    timeElement.parentNode.insertBefore(dayCell, timeElement.nextSibling);
+                }
+            });
+            function convertNumber(number) { //lowest number is 0. Highest is 167. 
+                //this function converts one number into an object with two numbers; i and index.
+                //the calendars row starts at 0 (from the top), and goes up to 23. This is result.i.
+                //the calendars column starts at 6 (from the left) and goes down to 0. This is result.index.
+                const result = {index: 0, i: 0}
+                if (number <= 6) {
+                    result.index = 0;
+                } else {
+                    result.index = Math.floor(number / 7);
+                }
+                let steps = -1;
+                for (let i = 6; i >= 0; i--) {
+                    steps++;
+                    if ((number - i) === (result.index * 7)) {
+                        result.i = steps;
+                        break;
+                    }
+                }
+                return result
             }
-        });
-    
+        }
+
         for (let i = 0; i < weeks.length; i++) {
             const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
             dayHeader.className = "day-header";
@@ -64,30 +169,36 @@ document.addEventListener("DOMContentLoaded", () => {
             if (dayIndex < 0) dayIndex += 7; // Handling negative indices
     
             dayHeader.textContent = weeks[dayIndex];
-    
-            const dateForDay = new Date(startDate);
+
+            const dateForDay = new Date(currentDate);
             dateForDay.setDate(dateForDay.getDate() + i); // Adjust date to represent previous weeks
     
             const formattedDate = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1 /*because months start at 0 in js..*/)).slice(-2);
     
-            const dateSpan = document.createElement("div");
-            dateSpan.className = "date";
-            dateSpan.textContent = formattedDate;
-            dayHeader.appendChild(dateSpan);
+            const dateDisplay = document.createElement("div");
+            dateDisplay.className = "date";
+            dateDisplay.textContent = formattedDate;
+            dayHeader.appendChild(dateDisplay);
         }
-    
-        const cells = document.querySelectorAll('.cell');
 
-        const currentHour = currentDate.getHours();
-        const currentSlotIndex = currentHour < 10 ? currentHour : currentHour - 1;
-        cells[currentSlotIndex].classList.add('current-time');
+        let allCells = document.querySelectorAll('.cell');
+        let allCellArray = [];
+        allCells.forEach(cell => {
+            let fullCell = cell.classList.contains('full');
+            allCellArray.push(fullCell)
+        });
+        // console.log(allCellArray);
+    }
+
+    function interactiveCells() {
+        const cells = document.querySelectorAll('.cell');
     
         let isMouseDown = false;
         let firstHeldClickCell;
-    
-        cells.forEach(cell => {
+        cells.forEach((cell, index) => {
             cell.addEventListener('click', () => {
                 cell.classList.toggle('full')
+                console.log(firstHeldClickCell, index)
             });
             cell.addEventListener('mousedown', () => {
                 isMouseDown = true;
@@ -96,46 +207,22 @@ document.addEventListener("DOMContentLoaded", () => {
             cell.addEventListener('mouseover', () => {
                 if (isMouseDown) {
                     cell.classList.toggle('full');
-                    firstHeldClickCell.classList.toggle('full');
+                    if (firstHeldClickCell) {
+                        firstHeldClickCell.classList.toggle('full');
+                        //the -7 is there because this one has some weird behavior. Uncomment the console log if you want to see. It does not work perfectly right now, but close.
+                        // console.log(firstHeldClickCell, index)
+                    }
                 }
-                firstHeldClickCell = undefined;
+                firstHeldClickCell = undefined
             })
             cell.addEventListener('mouseup', () => {
                 isMouseDown = false;
             });
-        });
-    }
-    
-    function updateCalendarPreviousWeek() {
-        currentDate.setDate(currentDate.getDate() - 7); // Update the current date to the previous week
-        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
-        generateCalendar(); // Refresh the calendar
-    }
-    
-    function updateCalendarNextWeek() {
-        currentDate.setDate(currentDate.getDate() + 7); // Update the current date to the next week
-        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
-        generateCalendar(); // Refresh the calendar
-    }
+        })
 
-    function updateCalendar() {
-        /* console.log("Updating  Calendar");*/
-        generateCalendar();
-    }
-
-    generateCalendar();
-
-    document.getElementById("prev-week").addEventListener("click", updateCalendarPreviousWeek);
-    document.getElementById("next-week").addEventListener("click", updateCalendarNextWeek);
-
-    setInterval(updateCalendar, 60 * 1000);
-
-    function getWeekNumber(date) {
-        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
-        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
 });
+
 
 const activePopup = {
     budget: false,
@@ -169,7 +256,7 @@ navButtons.forEach(navButton => {
                 break;
             case 'logout-btn':
                 window.location.href = "index.html";
-                return; //return so the popup doesn't flashbang you
+                return; //return so the popup doesn't flashbang you when you logout
         };
         blurElements.forEach(blurElement => {
             blurElement.classList.toggle('blurred');
@@ -179,11 +266,6 @@ navButtons.forEach(navButton => {
         });
     });
 });
-
-    // const savedCells = {person: {nichlas: {optaget: [0,7,14,21]}}}
-    // for (let i = 0; i < savedCells.person.nichlas.optaget.length; i++) {
-    //     cells[savedCells.person.nichlas.optaget[i]].classList.add('full');
-    // }
 
 const exitButton = document.querySelectorAll('.exit-popup');
 

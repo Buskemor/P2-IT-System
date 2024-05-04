@@ -1,6 +1,4 @@
 const loginBtn = document.getElementById("loginBtn");
-const page2Div = document.getElementById("page2");
-const page3Div = document.getElementById("page3");
 const textbox1 = document.getElementById("textbox1");
 const textbox2 = document.getElementById("textbox2");
 
