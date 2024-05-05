@@ -1,17 +1,65 @@
 weekDifference = 0; //+1 is one week ahead. -1 is one week behind. 0 is current week.
 const weekDifferenceAndFullCells = {
-    otherUsers: {
-        0: [30, 37, 44],
-        1: [50,57,64],
+    washingMachine: {
+        otherUsers: {
+            0: [50,57,60,63,67,70,86,93,94,99,101,105,106,110,112,117,143,147,148,150,153,154,155,160],
+            1: [92,93,98,99,100,105],
+            2: [],
+            3: [],
+        },
+        currentUser: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        }
     },
-    currentUser: {
-        0: [10, 17, 24],
-        1: [],
-        2: [],
-        3: [],
+    partyRoom: {
+        otherUsers: {
+            0: [66,73,80,87,94,99,101,106,113,120,127,134,141,148,155],
+            1: [110,111,117,118,124,125,131,132,138,139,145,146,152,153,159,160,166,167,5,6,12,13,19,20,26,27],
+            2: [],
+            3: [],
+        },
+        currentUser: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        }
+    },
+    drill: {
+        otherUsers: {
+            0: [55, 63, 71, 77, 89, 99, 112, 121, 125, 137],
+            1: [95, 97, 102, 105, 109, 112],
+            2: [],
+            3: [],
+        },
+        currentUser: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        }
+    },
+    vacumnCleaner: {
+        otherUsers: {
+            0: [45, 52, 59, 62, 65, 72, 84, 95, 97, 101, 102, 107, 109, 113, 116, 119, 140, 144, 149, 152, 155, 157, 162],
+            1: [90, 94, 97, 100, 103, 106],
+            2: [],
+            3: [],
+        },
+        currentUser: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        }
     }
 };
 
+let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner']
+let selectedItem = selectedItemArray[0]
 // setInterval(() => {
 //     console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
 //     console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
@@ -20,62 +68,67 @@ document.addEventListener("DOMContentLoaded", () => {
     let currentDate
     let initialWeekNumber
 
-    generateCalendar(weekDifferenceAndFullCells, weekDifference);
+    generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
 
     document.getElementById("prev-week").addEventListener("click", updateCalendarPreviousWeek);
     document.getElementById("next-week").addEventListener("click", updateCalendarNextWeek);
     interactiveCells(weekDifferenceAndFullCells, weekDifference);
 
-    changes(weekDifferenceAndFullCells, weekDifference);
+    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
 
-    function changes(fullCells, weekDifference) {
-        console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
-        console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
+    function pushUserChangesToObj(fullCells, weekDifference, selectedItem) {
+        // console.log(fullCells[selectedItem].currentUser[weekDifference])
+        // console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
+        // console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
         const cells = document.querySelectorAll('.cell');
         cells.forEach((cell, index) => {
+            // pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
             try {
-                pushNewFullToCellArray(cell, index, fullCells, weekDifference);
+                pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
             } catch(error) {
                 console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
             }   
         })
     }
 
-    function pushNewFullToCellArray(cell, index, fullCells, weekDifference) {
+    function pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem) {
+        // console.log(fullCells[selectedItem].currentUser[weekDifference])
+        // console.log(fullCells[selectedItem].currentUser[weekDifference])
         if (cell.classList.contains('full')) {
-            if (fullCells.currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
+            if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
             } else {
-                fullCells.currentUser[weekDifference].push(index)
+                fullCells[selectedItem].currentUser[weekDifference].push(index)
             }
         } else {
-            for (let i = fullCells.currentUser[weekDifference].length - 1; i >= 0; i--) {
-                if (fullCells.currentUser[weekDifference].includes(index)) {
-                    fullCells.currentUser[weekDifference].splice(i, 1)
-                    console.log(fullCells.currentUser[weekDifference][i])
+            for (let i = fullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
+                // console.log(fullCells[selectedItem].currentUser[weekDifference].length)
+                if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) {
+                    fullCells[selectedItem].currentUser[weekDifference].splice(i, 1)
+                    // console.log(fullCells.currentUser[weekDifference][i])
                 }
             }
         }
+        console.log(JSON.stringify(fullCells[selectedItem].currentUser[weekDifference]))
     }
     function updateCalendarPreviousWeek() {
         weekDifference--;
         currentDate.setDate(currentDate.getDate() - 7); // Update the current date to the previous week
         initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
-        changes(weekDifferenceAndFullCells, weekDifference+1);
         console.log('week diff: ' + weekDifference)
-        generateCalendar(weekDifferenceAndFullCells, weekDifference); // Refresh the calendar
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem);
+        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
         interactiveCells(weekDifferenceAndFullCells, weekDifference);
-        
     }
     
     function updateCalendarNextWeek() {
         weekDifference++;
         currentDate.setDate(currentDate.getDate() + 7); // Update the current date to the next week
         initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
-        changes(weekDifferenceAndFullCells, weekDifference-1)
-        console.log('week diff: ' + weekDifference)
-        generateCalendar(weekDifferenceAndFullCells, weekDifference); // Refresh the calendar
-        interactiveCells(weekDifferenceAndFullCells, weekDifference);
         
+        console.log('week diff: ' + weekDifference)
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem)
+        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
+        interactiveCells(weekDifferenceAndFullCells, weekDifference);
     }
 
     function getWeekNumber(date) {
@@ -84,7 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
 
-    function generateCalendar(fullCells, weekDifference) {
+    function generateCalendar(fullCells, weekDifference, selectedItem) {
         document.getElementById("cal-start").innerHTML = "";
         currentDate = currentDate || new Date(); // in case we already set a date, it doesn't make a new one
         let hoursArray = [];
@@ -117,7 +170,7 @@ document.addEventListener("DOMContentLoaded", () => {
             timeDiv.textContent = hoursArray[i];
         }
 
-        addTimeElements(fullCells.otherUsers[weekDifference], fullCells.currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
+        addTimeElements(fullCells[selectedItem].otherUsers[weekDifference], fullCells[selectedItem].currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
 
         function addTimeElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
@@ -190,36 +243,83 @@ document.addEventListener("DOMContentLoaded", () => {
         // console.log(allCellArray);
     }
 
-    function interactiveCells() {
+    function interactiveCells(weekDifference) {
         const cells = document.querySelectorAll('.cell');
     
         let isMouseDown = false;
         let firstHeldClickCell;
         cells.forEach((cell, index) => {
-            cell.addEventListener('click', () => {
-                cell.classList.toggle('full')
-                console.log(firstHeldClickCell, index)
-            });
-            cell.addEventListener('mousedown', () => {
-                isMouseDown = true;
-                firstHeldClickCell = cell;
-            })
-            cell.addEventListener('mouseover', () => {
-                if (isMouseDown) {
-                    cell.classList.toggle('full');
-                    if (firstHeldClickCell) {
-                        firstHeldClickCell.classList.toggle('full');
-                        //the -7 is there because this one has some weird behavior. Uncomment the console log if you want to see. It does not work perfectly right now, but close.
-                        // console.log(firstHeldClickCell, index)
+            if (!cell.classList.contains('locked') || (weekDifference < 0)) { //if it's locked or from last week then we can't edit it
+                cell.addEventListener('click', () => {
+                    cell.classList.toggle('full')
+                    // console.log(firstHeldClickCell, index)
+                });
+                cell.addEventListener('mousedown', () => {
+                    isMouseDown = true;
+                    firstHeldClickCell = cell;
+                })
+                cell.addEventListener('mouseover', () => {
+                    if (isMouseDown) {
+                        cell.classList.toggle('full');
+                        if (firstHeldClickCell) {
+                            firstHeldClickCell.classList.toggle('full');
+                        }
                     }
-                }
-                firstHeldClickCell = undefined
-            })
+                    firstHeldClickCell = undefined
+                })
+            } else {
+
+            }
+  
             cell.addEventListener('mouseup', () => {
                 isMouseDown = false;
             });
         })
 
+    }
+
+    sharedButtonsClick(generateCalendar);
+    function sharedButtonsClick () {
+        const sharedButtons = document.querySelectorAll('.shared-items-btn')
+        
+        sharedButtons.forEach(sharedButton => {
+            sharedButton.addEventListener('click', () => {
+                switch (sharedButton.id) {
+                    case 'washing-machine-btn':
+                        console.log('wash')
+                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        selectedItem = selectedItemArray[0]
+                        
+                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+                        break
+                    case 'party-room-btn':
+                        console.log('party')
+                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        selectedItem = selectedItemArray[1]
+                        
+                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+                        break
+                    case 'drill-btn':
+                        console.log('drill')
+                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        selectedItem = selectedItemArray[2]
+                        
+                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+                        break
+                    case 'vacumn-cleaner-btn':
+                        console.log('vacumn')
+                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        selectedItem = selectedItemArray[3]
+                        
+                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+                        break
+                }
+            })
+        })
     }
 });
 
@@ -274,6 +374,7 @@ exitButton.forEach(exitButton => {
         removeActivePopup(activePopup)
     });
 });
+
 
 document.addEventListener('click', (event) => {
     const isPopupTrigger = event.target.classList.contains('nav-btn');
