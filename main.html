@@ -60,9 +60,8 @@
             <div class="content">
                 <button class="submit-btn" onclick="submitFeedback()">Submit</button> 
             </div>
-               
         </div>
-    
+
         <button class="exit-popup visible-exit" data-popup="support-div">X</button>
         <div class="display-none" id="support-div">
             <h1 class="content">Kontakt informationer</h1>
@@ -74,7 +73,9 @@
             <div class="content">
                 <button class="send-btn" onclick="sendFeedback()">Send</button>
             </div>
-            </div>
+        </div>
+        <div class="display-none" id="order-div">
+            <h1>im adding times</h1>
         </div>
     </div>
     <div class="exit-popup invisible-exit"></div> 
@@ -88,9 +89,9 @@
             <button class="nav-btn" id="logout-btn">Log ud</button>
         </div>
         <div class="calendar-grid" id="cal-start"></div>
-        <button id="prev-week" class="arrow">◄</button>
-        <button id="next-week" class="arrow">►</button>
-        <button id="add-times" class="nav-btn">Tilføj tidspunkter</button>
+        <button class="arrow" id="prev-week">◄</button>
+        <button class="arrow" id="next-week">►</button>
+        <button class="nav-btn" id="order-btn">Tilføj tidspunkter</button>
         <div class="shared-items-container">
             <button class="shared-items-btn" id="washing-machine-btn">Vaskerum</button>
             <div class="shared-items-selected"></div>

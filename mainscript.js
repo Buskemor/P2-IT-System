@@ -1,5 +1,5 @@
 weekDifference = 0; //+1 is one week ahead. -1 is one week behind. 0 is current week.
-const weekDifferenceAndFullCells = {
+const weekDifferenceAndFullCells = { //THE SAME AS fullCells
     washingMachine: {
         otherUsers: {
             0: [50,57,60,63,67,70,86,93,94,99,101,105,106,110,112,117,143,147,148,150,153,154,155,160],
@@ -8,6 +8,12 @@ const weekDifferenceAndFullCells = {
             3: [],
         },
         currentUser: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        },
+        currentUserLocked: {
             0: [],
             1: [],
             2: [],
@@ -26,6 +32,12 @@ const weekDifferenceAndFullCells = {
             1: [],
             2: [],
             3: [],
+        },
+        currentUserLocked: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
         }
     },
     drill: {
@@ -36,6 +48,12 @@ const weekDifferenceAndFullCells = {
             3: [],
         },
         currentUser: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
+        },
+        currentUserLocked: {
             0: [],
             1: [],
             2: [],
@@ -54,6 +72,12 @@ const weekDifferenceAndFullCells = {
             1: [],
             2: [],
             3: [],
+        },
+        currentUserLocked: {
+            0: [],
+            1: [],
+            2: [],
+            3: [],
         }
     }
 };
@@ -64,6 +88,118 @@ let selectedItem = selectedItemArray[0]
 //     console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
 //     console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
 // }, 3000)
+
+
+function orderTimes(weekDifferenceAndFullCells, weekDifference, selectedItem) {
+    const userOrderedTimes = {
+        mandag: [],
+        tirsdag: [],
+        onsdag: [],
+        torsdag: [],
+        fredag: [],
+        lørdag: [],
+        søndag: []
+    }
+
+    let reversedWeeks = ['søndag', 'lørdag', 'fredag', 'torsdag', 'onsdag', 'tirsdag', 'mandag']
+    let displayHoursArray = [];
+
+    for (let i = 0; i < 24; i++) {
+        if (i <= 9) {
+            displayHoursArray[i] = '0' + i + ':00';
+        } else {
+            displayHoursArray[i] = i + ':00';
+        }
+    }
+    console.log(displayHoursArray[0])
+    let hoursArray = [];
+    for (let i = 0; i < 24; i++) {
+        hoursArray[i] = i + ':00';
+    }
+    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    
+    // console.log(JSON.stringify(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference]))
+
+    let displayDaysArray = []
+    for (let z = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; z >= 0; z--) {
+        // console.log(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][z]).i, convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][z]).index)
+        for (let j = 0; j < reversedWeeks.length; j++) {
+            if (convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][z]).i == j) {
+                // console.log(reversedWeeks[j])
+                if (!displayDaysArray.includes(reversedWeeks[j])) {
+                    displayDaysArray.push(reversedWeeks[j])   
+                }
+                for (let x = 0; x <= hoursArray.length; x++) {
+                    if (convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][x]).index == x) {
+                        console.log('yes! ' +x)
+                        if (!displayHoursArray.includes(hoursArray[x])) {
+                            displayHoursArray.push(hoursArray[x])   
+                        }
+                    }
+                }
+            }
+        }
+    }
+    // console.log(displayHoursArray)
+    // generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    // interactiveCells(weekDifferenceAndFullCells, weekDifference);
+}
+
+function pushUserChangesToObj(fullCells, weekDifference, selectedItem) {
+    // console.log(fullCells[selectedItem].currentUser[weekDifference])
+    // console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
+    // console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell, index) => {
+        // pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
+        try {
+            pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
+        } catch(error) {
+            console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
+        }   
+    })
+}
+
+function convertNumber(number) { //lowest number is 0. Highest is 167. 
+    //this function converts one number into an object with two numbers; i and index.
+    //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
+    //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
+    const result = {index: 0, i: 0}
+    if (number <= 6) {
+        result.index = 0;
+    } else {
+        result.index = Math.floor(number / 7);
+    }
+    let steps = -1;
+    for (let i = 6; i >= 0; i--) {
+        steps++;
+        if ((number - i) === (result.index * 7)) {
+            result.i = steps;
+            break;
+        }
+    }
+    return result
+}
+
+function pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem) {
+    // console.log(fullCells[selectedItem].currentUser[weekDifference])
+    // console.log(fullCells[selectedItem].currentUser[weekDifference])
+    if (cell.classList.contains('full')) {
+        if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
+        } else {
+            fullCells[selectedItem].currentUser[weekDifference].push(index)
+        }
+    } else {
+        for (let i = fullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
+            // console.log(fullCells[selectedItem].currentUser[weekDifference].length)
+            if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) {
+                fullCells[selectedItem].currentUser[weekDifference].splice(i, 1)
+                // console.log(fullCells.currentUser[weekDifference][i])
+            }
+        }
+    }
+    console.log(JSON.stringify(fullCells[selectedItem].currentUser[weekDifference]))
+}
 document.addEventListener("DOMContentLoaded", () => {
     let currentDate
     let initialWeekNumber
@@ -75,41 +211,11 @@ document.addEventListener("DOMContentLoaded", () => {
     interactiveCells(weekDifferenceAndFullCells, weekDifference);
 
     pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    sharedButtonsClick();
 
-    function pushUserChangesToObj(fullCells, weekDifference, selectedItem) {
-        // console.log(fullCells[selectedItem].currentUser[weekDifference])
-        // console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
-        // console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
-        const cells = document.querySelectorAll('.cell');
-        cells.forEach((cell, index) => {
-            // pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
-            try {
-                pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
-            } catch(error) {
-                console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
-            }   
-        })
-    }
 
-    function pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem) {
-        // console.log(fullCells[selectedItem].currentUser[weekDifference])
-        // console.log(fullCells[selectedItem].currentUser[weekDifference])
-        if (cell.classList.contains('full')) {
-            if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
-            } else {
-                fullCells[selectedItem].currentUser[weekDifference].push(index)
-            }
-        } else {
-            for (let i = fullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
-                // console.log(fullCells[selectedItem].currentUser[weekDifference].length)
-                if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) {
-                    fullCells[selectedItem].currentUser[weekDifference].splice(i, 1)
-                    // console.log(fullCells.currentUser[weekDifference][i])
-                }
-            }
-        }
-        console.log(JSON.stringify(fullCells[selectedItem].currentUser[weekDifference]))
-    }
+
+
     function updateCalendarPreviousWeek() {
         weekDifference--;
         currentDate.setDate(currentDate.getDate() - 7); // Update the current date to the previous week
@@ -193,26 +299,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     timeElement.parentNode.insertBefore(dayCell, timeElement.nextSibling);
                 }
             });
-            function convertNumber(number) { //lowest number is 0. Highest is 167. 
-                //this function converts one number into an object with two numbers; i and index.
-                //the calendars row starts at 0 (from the top), and goes up to 23. This is result.i.
-                //the calendars column starts at 6 (from the left) and goes down to 0. This is result.index.
-                const result = {index: 0, i: 0}
-                if (number <= 6) {
-                    result.index = 0;
-                } else {
-                    result.index = Math.floor(number / 7);
-                }
-                let steps = -1;
-                for (let i = 6; i >= 0; i--) {
-                    steps++;
-                    if ((number - i) === (result.index * 7)) {
-                        result.i = steps;
-                        break;
-                    }
-                }
-                return result
-            }
         }
 
         for (let i = 0; i < weeks.length; i++) {
@@ -233,14 +319,6 @@ document.addEventListener("DOMContentLoaded", () => {
             dateDisplay.textContent = formattedDate;
             dayHeader.appendChild(dateDisplay);
         }
-
-        let allCells = document.querySelectorAll('.cell');
-        let allCellArray = [];
-        allCells.forEach(cell => {
-            let fullCell = cell.classList.contains('full');
-            allCellArray.push(fullCell)
-        });
-        // console.log(allCellArray);
     }
 
     function interactiveCells(weekDifference) {
@@ -278,7 +356,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     }
 
-    sharedButtonsClick(generateCalendar);
+    
     function sharedButtonsClick () {
         const sharedButtons = document.querySelectorAll('.shared-items-btn')
         
@@ -288,7 +366,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     case 'washing-machine-btn':
                         console.log('wash')
                         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[0]
+                        selectedItem = selectedItemArray[0] //vaskerum
                         
                         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
                         interactiveCells(weekDifferenceAndFullCells, weekDifference);
@@ -296,7 +374,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     case 'party-room-btn':
                         console.log('party')
                         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[1]
+                        selectedItem = selectedItemArray[1] //festlokale
                         
                         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
                         interactiveCells(weekDifferenceAndFullCells, weekDifference);
@@ -304,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     case 'drill-btn':
                         console.log('drill')
                         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[2]
+                        selectedItem = selectedItemArray[2] //boremaskine
                         
                         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
                         interactiveCells(weekDifferenceAndFullCells, weekDifference);
@@ -312,7 +390,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     case 'vacumn-cleaner-btn':
                         console.log('vacumn')
                         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[3]
+                        selectedItem = selectedItemArray[3] //støvsuger
                         
                         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
                         interactiveCells(weekDifferenceAndFullCells, weekDifference);
@@ -322,85 +400,108 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 });
-
-
+const blurElements = document.querySelectorAll('.can-blur');
+const popupDivs = document.querySelectorAll('.hidden-popup-div');
 const activePopup = {
+    order: false,
     budget: false,
     settings: false,
     feedback: false,
     support: false,
 };
 
-const navButtons = document.querySelectorAll('.nav-btn');
-const blurElements = document.querySelectorAll('.can-blur');
-const popupDivs = document.querySelectorAll('.hidden-popup-div');
+activatePopup(activePopup, blurElements, popupDivs)
+deActivatePopup(activePopup, popupDivs)
+exitPopup(activePopup);
 
-navButtons.forEach(navButton => {
-    navButton.addEventListener('click', () => {
-        switch (navButton.id) {
-            case 'budget-btn':
-                document.getElementById('budget-div').classList.toggle('display-none');
-                activePopup.budget = true;
-                break;
-            case 'settings-btn':
-                document.getElementById('settings-div').classList.toggle('display-none');
-                activePopup.settings = true;
-                break;
-            case 'feedback-btn':
-                document.getElementById('feedback-div').classList.toggle('display-none');
-                activePopup.feedback = true;
-                break;
-            case 'support-btn':
-                document.getElementById('support-div').classList.toggle('display-none');
-                activePopup.support = true;
-                break;
-            case 'logout-btn':
-                window.location.href = "index.html";
-                return; //return so the popup doesn't flashbang you when you logout
-        };
-        blurElements.forEach(blurElement => {
-            blurElement.classList.toggle('blurred');
-        });
-        popupDivs.forEach(popupDiv => {
-            popupDiv.classList.toggle('popup-div-display');
+
+
+function activatePopup (activePopup, blurElements, popupDivs) {
+    const navButtons = document.querySelectorAll('.nav-btn');
+    navButtons.forEach(navButton => {
+        navButton.addEventListener('click', () => {
+            switch (navButton.id) {
+                case 'order-btn':
+                    document.getElementById('order-div').classList.toggle('display-none');
+                    orderTimes(weekDifferenceAndFullCells, weekDifference, selectedItem)
+                    activePopup.order = true;
+                    break;
+                case 'budget-btn':
+                    document.getElementById('budget-div').classList.toggle('display-none');
+                    activePopup.budget = true;
+                    break;
+                case 'settings-btn':
+                    document.getElementById('settings-div').classList.toggle('display-none');
+                    activePopup.settings = true;
+                    break;
+                case 'feedback-btn':
+                    document.getElementById('feedback-div').classList.toggle('display-none');
+                    activePopup.feedback = true;
+                    break;
+                case 'support-btn':
+                    document.getElementById('support-div').classList.toggle('display-none');
+                    activePopup.support = true;
+                    break;
+                case 'logout-btn':
+                    window.location.href = "index.html";
+                    return; //return so the popup doesn't flashbang you when you logout
+            };
+            blurElements.forEach(blurElement => {
+                blurElement.classList.toggle('blurred');
+            });
+            popupDivs.forEach(popupDiv => {
+                popupDiv.classList.toggle('popup-div-display');
+            });
         });
     });
-});
-
-const exitButton = document.querySelectorAll('.exit-popup');
-
-exitButton.forEach(exitButton => {
-    exitButton.addEventListener('click', () => {
-        removeActivePopup(activePopup)
-    });
-});
+}
 
 
-document.addEventListener('click', (event) => {
-    const isPopupTrigger = event.target.classList.contains('nav-btn');
-    const isPopupContent = event.target.classList.contains('popup-div');
-    if (!isPopupTrigger && !isPopupContent) {
-        let isInsidePopup = false;
-        popupDivs.forEach(popupDiv => {
-            if (popupDiv.contains(event.target)) {
-                isInsidePopup = true;
+
+
+
+
+
+function deActivatePopup(activePopup, popupDivs) {
+    document.addEventListener('click', (event) => {
+        const isPopupTrigger = event.target.classList.contains('nav-btn');
+        const isPopupContent = event.target.classList.contains('popup-div');
+        if (!isPopupTrigger && !isPopupContent) {
+            let isInsidePopup = false;
+            popupDivs.forEach(popupDiv => {
+                if (popupDiv.contains(event.target)) {
+                    isInsidePopup = true;
+                }
+            });
+            if (!isInsidePopup) {
+                removeActivePopup(activePopup)
             }
+        }
+    });
+}
+
+
+function exitPopup(activePopup) {
+    const exitButton = document.querySelectorAll('.exit-popup');
+
+    exitButton.forEach(exitButton => {
+        exitButton.addEventListener('click', () => {
+            removeActivePopup(activePopup)
         });
-        if (!isInsidePopup) {
+    });
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' || event.keyCode === 27) { //Keycode 27 = is the number of Escape on a keyboard
             removeActivePopup(activePopup)
         }
-    }
-});
+    })
+}
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' || event.keyCode === 27) { //Keycode 27 = is the number of Escape on a keyboard
-        removeActivePopup(activePopup)
-    }
-})
+
 
 function removeActivePopup(activePopup) {
     for (let key in activePopup) {
         if (activePopup[key] === true) {
+            console.log(key)
             document.getElementById(`${key}-div`).classList.add('display-none');
             activePopup[key] = false;
         }
