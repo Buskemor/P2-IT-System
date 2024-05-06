@@ -84,122 +84,20 @@ const weekDifferenceAndFullCells = { //THE SAME AS fullCells
 
 let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner']
 let selectedItem = selectedItemArray[0]
-// setInterval(() => {
-//     console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
-//     console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
-// }, 3000)
+const blurElements = document.querySelectorAll('.can-blur');
+const popupDivs = document.querySelectorAll('.hidden-popup-div');
+const activePopup = {
+    order: false,
+    budget: false,
+    settings: false,
+    feedback: false,
+    support: false,
+};
 
+activatePopup(activePopup, blurElements, popupDivs)
+deActivatePopup(activePopup, popupDivs)
+exitPopup(activePopup);
 
-function orderTimes(weekDifferenceAndFullCells, weekDifference, selectedItem) {
-    const userOrderedTimes = {
-        mandag: [],
-        tirsdag: [],
-        onsdag: [],
-        torsdag: [],
-        fredag: [],
-        lørdag: [],
-        søndag: []
-    }
-
-    let reversedWeeks = ['søndag', 'lørdag', 'fredag', 'torsdag', 'onsdag', 'tirsdag', 'mandag']
-    let displayHoursArray = [];
-
-    for (let i = 0; i < 24; i++) {
-        if (i <= 9) {
-            displayHoursArray[i] = '0' + i + ':00';
-        } else {
-            displayHoursArray[i] = i + ':00';
-        }
-    }
-    console.log(displayHoursArray[0])
-    let hoursArray = [];
-    for (let i = 0; i < 24; i++) {
-        hoursArray[i] = i + ':00';
-    }
-    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-    
-    // console.log(JSON.stringify(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference]))
-
-    let displayDaysArray = []
-    for (let z = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; z >= 0; z--) {
-        // console.log(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][z]).i, convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][z]).index)
-        for (let j = 0; j < reversedWeeks.length; j++) {
-            if (convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][z]).i == j) {
-                // console.log(reversedWeeks[j])
-                if (!displayDaysArray.includes(reversedWeeks[j])) {
-                    displayDaysArray.push(reversedWeeks[j])   
-                }
-                for (let x = 0; x <= hoursArray.length; x++) {
-                    if (convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][x]).index == x) {
-                        console.log('yes! ' +x)
-                        if (!displayHoursArray.includes(hoursArray[x])) {
-                            displayHoursArray.push(hoursArray[x])   
-                        }
-                    }
-                }
-            }
-        }
-    }
-    // console.log(displayHoursArray)
-    // generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
-    // interactiveCells(weekDifferenceAndFullCells, weekDifference);
-}
-
-function pushUserChangesToObj(fullCells, weekDifference, selectedItem) {
-    // console.log(fullCells[selectedItem].currentUser[weekDifference])
-    // console.log('0: '+weekDifferenceAndFullCells.currentUser[0])
-    // console.log('1:' +weekDifferenceAndFullCells.currentUser[1])
-    const cells = document.querySelectorAll('.cell');
-    cells.forEach((cell, index) => {
-        // pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
-        try {
-            pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem);
-        } catch(error) {
-            console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
-        }   
-    })
-}
-
-function convertNumber(number) { //lowest number is 0. Highest is 167. 
-    //this function converts one number into an object with two numbers; i and index.
-    //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
-    //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
-    const result = {index: 0, i: 0}
-    if (number <= 6) {
-        result.index = 0;
-    } else {
-        result.index = Math.floor(number / 7);
-    }
-    let steps = -1;
-    for (let i = 6; i >= 0; i--) {
-        steps++;
-        if ((number - i) === (result.index * 7)) {
-            result.i = steps;
-            break;
-        }
-    }
-    return result
-}
-
-function pushNewFullToCellArray(cell, index, fullCells, weekDifference, selectedItem) {
-    // console.log(fullCells[selectedItem].currentUser[weekDifference])
-    // console.log(fullCells[selectedItem].currentUser[weekDifference])
-    if (cell.classList.contains('full')) {
-        if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
-        } else {
-            fullCells[selectedItem].currentUser[weekDifference].push(index)
-        }
-    } else {
-        for (let i = fullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
-            // console.log(fullCells[selectedItem].currentUser[weekDifference].length)
-            if (fullCells[selectedItem].currentUser[weekDifference].includes(index)) {
-                fullCells[selectedItem].currentUser[weekDifference].splice(i, 1)
-                // console.log(fullCells.currentUser[weekDifference][i])
-            }
-        }
-    }
-    console.log(JSON.stringify(fullCells[selectedItem].currentUser[weekDifference]))
-}
 document.addEventListener("DOMContentLoaded", () => {
     let currentDate
     let initialWeekNumber
@@ -212,9 +110,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
     sharedButtonsClick();
-
-
-
 
     function updateCalendarPreviousWeek() {
         weekDifference--;
@@ -243,7 +138,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
     }
 
-    function generateCalendar(fullCells, weekDifference, selectedItem) {
+    function generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem) {
         document.getElementById("cal-start").innerHTML = "";
         currentDate = currentDate || new Date(); // in case we already set a date, it doesn't make a new one
         let hoursArray = [];
@@ -276,21 +171,20 @@ document.addEventListener("DOMContentLoaded", () => {
             timeDiv.textContent = hoursArray[i];
         }
 
-        addTimeElements(fullCells[selectedItem].otherUsers[weekDifference], fullCells[selectedItem].currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
+        addTimeElements(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference], weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
 
         function addTimeElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
             timeElements.forEach((timeElement, index) => {
-                
                 for (let i = 0; i < weeks.length; i++) {
                     const dayCell = document.createElement("div");
                     dayCell.className = "cell";
-                    addLockedOrFullCells(fullCellsArrayCurrentUser, 'full')
-                    addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked')
-                    function addLockedOrFullCells(userCellArray, lockedOrFull) {
-                        if (userCellArray) { //only runs if there are cells in the week that has
-                            for (let j = 0; j < userCellArray.length; j++) {
-                                if (i == convertNumber(userCellArray[j]).i && index == convertNumber(userCellArray[j]).index) {
+                    addLockedOrFullCells(fullCellsArrayCurrentUser, 'full') //not using this currently
+                    addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked') //important: we know whether or not to lock them because we know everything in the array needs to be locked (thats the point of the  array)
+                    function addLockedOrFullCells(fullCellsArray, lockedOrFull) {
+                        if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
+                            for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
+                                if (i == convertNumber(fullCellsArray[j]).i && index == convertNumber(fullCellsArray[j]).index) { //checks if a specific cell should be locked
                                     dayCell.classList.add(lockedOrFull);
                                 }
                             }
@@ -355,7 +249,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
 
     }
-
     
     function sharedButtonsClick () {
         const sharedButtons = document.querySelectorAll('.shared-items-btn')
@@ -400,21 +293,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
     }
 });
-const blurElements = document.querySelectorAll('.can-blur');
-const popupDivs = document.querySelectorAll('.hidden-popup-div');
-const activePopup = {
-    order: false,
-    budget: false,
-    settings: false,
-    feedback: false,
-    support: false,
-};
-
-activatePopup(activePopup, blurElements, popupDivs)
-deActivatePopup(activePopup, popupDivs)
-exitPopup(activePopup);
-
-
 
 function activatePopup (activePopup, blurElements, popupDivs) {
     const navButtons = document.querySelectorAll('.nav-btn');
@@ -423,7 +301,6 @@ function activatePopup (activePopup, blurElements, popupDivs) {
             switch (navButton.id) {
                 case 'order-btn':
                     document.getElementById('order-div').classList.toggle('display-none');
-                    orderTimes(weekDifferenceAndFullCells, weekDifference, selectedItem)
                     activePopup.order = true;
                     break;
                 case 'budget-btn':
@@ -456,12 +333,6 @@ function activatePopup (activePopup, blurElements, popupDivs) {
     });
 }
 
-
-
-
-
-
-
 function deActivatePopup(activePopup, popupDivs) {
     document.addEventListener('click', (event) => {
         const isPopupTrigger = event.target.classList.contains('nav-btn');
@@ -481,6 +352,53 @@ function deActivatePopup(activePopup, popupDivs) {
 }
 
 
+function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem) {
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell, index) => {
+        try {
+            pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem);
+        } catch(error) {
+            console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
+        }   
+    })
+}
+
+function convertNumber(number) { //lowest number is 0. Highest is 167. 
+    //this function converts one number into an object with two numbers; i and index.
+    //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
+    //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
+    const result = {index: 0, i: 0}
+    if (number <= 6) {
+        result.index = 0;
+    } else {
+        result.index = Math.floor(number / 7);
+    }
+    let steps = -1;
+    for (let i = 6; i >= 0; i--) {
+        steps++;
+        if ((number - i) === (result.index * 7)) {
+            result.i = steps;
+            break;
+        }
+    }
+    return result
+}
+
+function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem) {
+    if (cell.classList.contains('full')) {
+        if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
+        } else {
+            weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index)
+        }
+    } else {
+        for (let i = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
+            if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) {
+                weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].splice(i, 1)
+            }
+        }
+    }
+}
+
 function exitPopup(activePopup) {
     const exitButton = document.querySelectorAll('.exit-popup');
 
@@ -495,8 +413,6 @@ function exitPopup(activePopup) {
         }
     })
 }
-
-
 
 function removeActivePopup(activePopup) {
     for (let key in activePopup) {
