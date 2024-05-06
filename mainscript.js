@@ -274,7 +274,7 @@ document.addEventListener('keydown', (event) => {
 
 // Næste måned 
 function næsteMåned() {
-    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    var måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
     var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
     var næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
     document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
@@ -282,8 +282,19 @@ function næsteMåned() {
 
 // Forrige måned
 function forrigeMåned() {
-    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    var måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
     var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
     var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
+}
+
+
+
+
+function setBudget() {
+   
+    var budgetAmount = parseFloat(document.getElementById("monthly-budget").value);
+
+
+    document.getElementById("check-mark").style.display = "inline";
 }
