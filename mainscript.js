@@ -100,80 +100,48 @@ exitPopup(activePopup);
 
 document.addEventListener("DOMContentLoaded", () => {
     let currentDate
-    let initialWeekNumber
 
     generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
 
     document.getElementById("prev-week").addEventListener("click", updateCalendarPreviousWeek);
     document.getElementById("next-week").addEventListener("click", updateCalendarNextWeek);
-    interactiveCells(weekDifferenceAndFullCells, weekDifference);
+    interactiveCells(weekDifference);
 
-    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    pushUserChangesToObj(weekDifference, selectedItem);
     sharedButtonsClick();
 
     function updateCalendarPreviousWeek() {
         weekDifference--;
-        currentDate.setDate(currentDate.getDate() - 7); // Update the current date to the previous week
-        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
+        currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
         console.log('week diff: ' + weekDifference)
         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem);
         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
-        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+        interactiveCells(weekDifference);
     }
     
     function updateCalendarNextWeek() {
         weekDifference++;
-        currentDate.setDate(currentDate.getDate() + 7); // Update the current date to the next week
-        initialWeekNumber = getWeekNumber(currentDate); // Update the initial week number
+        currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
         
         console.log('week diff: ' + weekDifference)
         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem)
         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
-        interactiveCells(weekDifferenceAndFullCells, weekDifference);
+        interactiveCells(weekDifference);
     }
 
-    function getWeekNumber(date) {
-        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-        const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
-        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-    }
+
 
     function generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem) {
-        document.getElementById("cal-start").innerHTML = "";
+        document.getElementById("cal-start").innerHTML = ""; //reset the old html before generating the new one
         currentDate = currentDate || new Date(); // in case we already set a date, it doesn't make a new one
-        let hoursArray = [];
-        for (let i = 0; i < 24; i++) {
-            if (i <= 9) {
-                hoursArray[i] = '0' + i + ':00';
-            } else {
-                hoursArray[i] = i + ':00';
-            }
-        }
-    
         const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
-    
-        const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
-        timeHeader.className = "time-header";
-        const currentWeek = getWeekNumber(currentDate);
-        if (!initialWeekNumber) initialWeekNumber =  currentWeek;
-        timeHeader.textContent = "Uge " + currentWeek;
-        
-        let currentDayIndex = currentDate.getDay();
-    
-        if (currentDayIndex === 0) {
-            currentDayIndex = 7;
-        }
-    
-    
-        for (let i = 0; i < hoursArray.length; i++) {
-            const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
-            timeDiv.className = "time";
-            timeDiv.textContent = hoursArray[i];
-        }
 
-        addTimeElements(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference], weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
-
-        function addTimeElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
+        generateWeekElement(currentDate)
+        generateHourElements()
+        generateTimeElementsAndCells(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference], weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
+        generateWeekDayElements(currentDate, weeks);
+    
+        function generateTimeElementsAndCells(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
             timeElements.forEach((timeElement, index) => {
                 for (let i = 0; i < weeks.length; i++) {
@@ -195,23 +163,54 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        for (let i = 0; i < weeks.length; i++) {
-            const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
-            dayHeader.className = "day-header";
-            let dayIndex = (currentDayIndex + i - 1) % 7;
-            if (dayIndex < 0) dayIndex += 7; // Handling negative indices
+        function generateWeekDayElements (currentDate, weeks) {
+            let currentDayIndex = currentDate.getDay();
     
-            dayHeader.textContent = weeks[dayIndex];
+            if (currentDayIndex === 0) {
+                currentDayIndex = 7;
+            }
+            for (let i = 0; i < weeks.length; i++) {
+                const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
+                dayHeader.className = "day-header";
+                let dayIndex = (currentDayIndex + i - 1) % 7; //converting js dates into
+                if (dayIndex < 0) dayIndex += 7; // Handling negative indices
+                dayHeader.textContent = weeks[dayIndex];
+    
+                const dateForDay = new Date(currentDate);
+                dateForDay.setDate(dateForDay.getDate() + i); // Adjust date to represent previous weeks
+    
+                const dateDisplay = document.createElement("div");
+                dateDisplay.className = "date";
+                dateDisplay.textContent = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1 /*because months start at 0 in js..*/)).slice(-2);
+                dayHeader.appendChild(dateDisplay);
+            }
+        }
+        function generateHourElements () {
+            let hoursArray = [];
+            for (let i = 0; i < 24; i++) {
+                if (i <= 9) {
+                    hoursArray[i] = '0' + i + ':00';
+                } else {
+                    hoursArray[i] = i + ':00';
+                }
+            }
+            for (let i = 0; i < hoursArray.length; i++) {
+                const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
+                timeDiv.className = "time";
+                timeDiv.textContent = hoursArray[i];
+            }
+        }
+        function generateWeekElement(currentDate) {
+            const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
+            timeHeader.className = "time-header";
+            const currentWeek = getWeekNumber(currentDate);
+            timeHeader.textContent = "Uge " + currentWeek;
 
-            const dateForDay = new Date(currentDate);
-            dateForDay.setDate(dateForDay.getDate() + i); // Adjust date to represent previous weeks
-    
-            const formattedDate = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1 /*because months start at 0 in js..*/)).slice(-2);
-    
-            const dateDisplay = document.createElement("div");
-            dateDisplay.className = "date";
-            dateDisplay.textContent = formattedDate;
-            dayHeader.appendChild(dateDisplay);
+            function getWeekNumber(date) {
+                const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+                const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
+                return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+            }
         }
     }
 
@@ -220,11 +219,14 @@ document.addEventListener("DOMContentLoaded", () => {
     
         let isMouseDown = false;
         let firstHeldClickCell;
-        cells.forEach((cell, index) => {
-            if (!cell.classList.contains('locked') || (weekDifference < 0)) { //if it's locked or from last week then we can't edit it
+        cells.forEach((cell) => {
+            if (weekDifference < 0) { //add a class that removes functionality from cells when it's too old
+                cell.classList.toggle('oldcell')
+                return;
+            }
+            if (!cell.classList.contains('locked')) {
                 cell.addEventListener('click', () => {
                     cell.classList.toggle('full')
-                    // console.log(firstHeldClickCell, index)
                 });
                 cell.addEventListener('mousedown', () => {
                     isMouseDown = true;
@@ -239,60 +241,44 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                     firstHeldClickCell = undefined
                 })
-            } else {
-
             }
-  
             cell.addEventListener('mouseup', () => {
                 isMouseDown = false;
             });
-        })
-
-    }
+        });
+    };
     
     function sharedButtonsClick () {
-        const sharedButtons = document.querySelectorAll('.shared-items-btn')
+        const sharedButtons = document.querySelectorAll('.shared-items-btn');
         
         sharedButtons.forEach(sharedButton => {
             sharedButton.addEventListener('click', () => {
                 switch (sharedButton.id) {
                     case 'washing-machine-btn':
-                        console.log('wash')
-                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[0] //vaskerum
-                        
-                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
-                        break
+                        sharedButtonsCase(0, 'wash', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        break;
                     case 'party-room-btn':
-                        console.log('party')
-                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[1] //festlokale
-                        
-                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
-                        break
+                        sharedButtonsCase(1, 'party', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, )
+                        break;
                     case 'drill-btn':
-                        console.log('drill')
-                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[2] //boremaskine
-                        
-                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
-                        break
+                        sharedButtonsCase(2, 'drill', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        break;
                     case 'vacumn-cleaner-btn':
-                        console.log('vacumn')
-                        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        selectedItem = selectedItemArray[3] //støvsuger
-                        
-                        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
-                        interactiveCells(weekDifferenceAndFullCells, weekDifference);
-                        break
-                }
-            })
-        })
-    }
+                        sharedButtonsCase(3, 'vacumn', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        break;
+                };
+            });
+        });
+    };
 });
+
+function sharedButtonsCase(index, log, generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem) {
+    console.log(log);
+    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    selectedItem = selectedItemArray[index];
+    generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    interactiveCells(weekDifference);
+}
 
 function activatePopup (activePopup, blurElements, popupDivs) {
     const navButtons = document.querySelectorAll('.nav-btn');
@@ -331,7 +317,7 @@ function activatePopup (activePopup, blurElements, popupDivs) {
             });
         });
     });
-}
+};
 
 function deActivatePopup(activePopup, popupDivs) {
     document.addEventListener('click', (event) => {
@@ -342,14 +328,14 @@ function deActivatePopup(activePopup, popupDivs) {
             popupDivs.forEach(popupDiv => {
                 if (popupDiv.contains(event.target)) {
                     isInsidePopup = true;
-                }
+                };
             });
             if (!isInsidePopup) {
-                removeActivePopup(activePopup)
-            }
-        }
+                removeActivePopup(activePopup);
+            };
+        };
     });
-}
+};
 
 
 function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem) {
@@ -358,7 +344,7 @@ function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, select
         try {
             pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem);
         } catch(error) {
-            console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error)
+            console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error);
         }   
     })
 }
@@ -367,7 +353,7 @@ function convertNumber(number) { //lowest number is 0. Highest is 167.
     //this function converts one number into an object with two numbers; i and index.
     //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
     //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
-    const result = {index: 0, i: 0}
+    const result = {index: 0, i: 0};
     if (number <= 6) {
         result.index = 0;
     } else {
@@ -381,35 +367,35 @@ function convertNumber(number) { //lowest number is 0. Highest is 167.
             break;
         }
     }
-    return result
+    return result;
 }
 
 function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem) {
     if (cell.classList.contains('full')) {
         if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
         } else {
-            weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index)
-        }
+            weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index);
+        };
     } else {
         for (let i = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
             if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) {
-                weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].splice(i, 1)
+                weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].splice(i, 1);
             }
-        }
-    }
-}
+        };
+    };
+};
 
 function exitPopup(activePopup) {
     const exitButton = document.querySelectorAll('.exit-popup');
 
     exitButton.forEach(exitButton => {
         exitButton.addEventListener('click', () => {
-            removeActivePopup(activePopup)
+            removeActivePopup(activePopup);
         });
     });
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' || event.keyCode === 27) { //Keycode 27 = is the number of Escape on a keyboard
-            removeActivePopup(activePopup)
+        if (event.key === 'Escape' || event.keyCode === 27) { //keyCode 27 is the number of 'esc' on a keyboard
+            removeActivePopup(activePopup);
         }
     })
 }
@@ -417,7 +403,7 @@ function exitPopup(activePopup) {
 function removeActivePopup(activePopup) {
     for (let key in activePopup) {
         if (activePopup[key] === true) {
-            console.log(key)
+            console.log(key);
             document.getElementById(`${key}-div`).classList.add('display-none');
             activePopup[key] = false;
         }
