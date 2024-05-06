@@ -1,6 +1,6 @@
 const loginBtn = document.getElementById("loginBtn");
-const textbox1 = document.getElementById("textbox1");
-const textbox2 = document.getElementById("textbox2");
+const usernameElem = document.getElementById("username");
+const passwordElem = document.getElementById("password");
 
 
 loginBtn.addEventListener("click", function() {
@@ -23,8 +23,8 @@ const combinations = [
 ];
 
 function areTextBoxesFilled() {
-    const text1 = textbox1.value.toLowerCase().trim();
-    const text2 = textbox2.value.toLowerCase().trim();
+    const text1 = usernameElem.value.toLowerCase().trim();
+    const text2 = passwordElem.value.toLowerCase().trim();
     
     return combinations.some(({ text1: word1, text2: word2 }) => {
         const word1Found = text1.includes(word1);
@@ -33,10 +33,9 @@ function areTextBoxesFilled() {
     });
 }
 
-
 function isCombinationValid() {
-    const text1 = textbox1.value.toLowerCase().trim();
-    const text2 = textbox2.value.toLowerCase().trim();
+    const text1 = usernameElem.value.toLowerCase().trim();
+    const text2 = passwordElem.value.toLowerCase().trim();
 
     return combinations.some(({ text1: word1, text2: word2 }) => {
         const word1Found = text1.includes(word1);
@@ -45,28 +44,15 @@ function isCombinationValid() {
     });
 }
 
-
-textbox1.addEventListener("input", togglePage3Button);
-textbox2.addEventListener("input", togglePage3Button);
-
-textbox1.addEventListener("keydown", function(event) {
-    if (event.keyCode === 13) {
+usernameElem.addEventListener("keydown", function(event) {
+    if (event.key === 'Enter') {
         event.preventDefault();
-        textbox2.focus();
+        passwordElem.focus();
     }
 })
 
-function togglePage3Button() {
-    if (areTextBoxesFilled()) {
-        showButton(loginBtn);
-    } else {
-        hideButton(loginBtn);
-    }
-}
-
-
-textbox2.addEventListener("keydown", function(event) {
-    if (event.keyCode === 13) {
+passwordElem.addEventListener("keydown", function(event) {
+    if (event.key === 'Enter') {
         if (areTextBoxesFilled()) {
             window.location.href = "main.html";
         } else {

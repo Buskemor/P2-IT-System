@@ -1,5 +1,5 @@
 weekDifference = 0; //+1 is one week ahead. -1 is one week behind. 0 is current week.
-const weekDifferenceAndFullCells = { //THE SAME AS fullCells
+const weekDifferenceAndFullCells = {
     washingMachine: {
         otherUsers: {
             0: [50,57,60,63,67,70,86,93,94,99,101,105,106,110,112,117,143,147,148,150,153,154,155,160],
@@ -82,11 +82,11 @@ const weekDifferenceAndFullCells = { //THE SAME AS fullCells
     }
 };
 
-let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner']
+let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner'] //notice it uses the same names as weekDifferenceAndFullCells
 let selectedItem = selectedItemArray[0]
 const blurElements = document.querySelectorAll('.can-blur');
 const popupDivs = document.querySelectorAll('.hidden-popup-div');
-const activePopup = {
+const activePopup = { //set to true when there's an active poup
     order: false,
     budget: false,
     settings: false,
@@ -114,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
         weekDifference--;
         currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
         console.log('week diff: ' + weekDifference)
-        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem);
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem); //+1 because it needs to save the current week, not the one we are going to
         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
         interactiveCells(weekDifference);
     }
@@ -124,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
         
         console.log('week diff: ' + weekDifference)
-        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem)
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem) //-1 because it needs to save the current week, not the one we are going to
         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
         interactiveCells(weekDifference);
     }
@@ -138,10 +138,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         generateWeekElement(currentDate)
         generateHourElements()
-        generateTimeElementsAndCells(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference], weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference]) //note: this isn't an array, it's an object using bracket notation 
+        genereateCellElements(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference] /* <- explaining this*/, weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference])
+        //weekDifferenceAndFullCells refers to the whole object (weekDifferenceAndFullCells)
+        //[selectedItem] refers to what item is currently selected. Is is a a key in our object, and we find it using a string from our selectedItemArray on line 85.
+        //.otherUsers refers to which user owns the cells. Can also be currentUser and currentUserLocked in the future, as you can see in the object
+        //[weekDifference] refers to what week the data comes from. It is also a key in our object, and we find it using our weekDifference variable on line 1.
+            //this is also the reason why it breaks when
         generateWeekDayElements(currentDate, weeks);
     
-        function generateTimeElementsAndCells(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
+        function genereateCellElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
             timeElements.forEach((timeElement, index) => {
                 for (let i = 0; i < weeks.length; i++) {
@@ -153,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
                             for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
                                 if (i == convertNumber(fullCellsArray[j]).i && index == convertNumber(fullCellsArray[j]).index) { //checks if a specific cell should be locked
-                                    dayCell.classList.add(lockedOrFull);
+                                    dayCell.classList.add(lockedOrFull); //for more context find the convertNumber function
                                 }
                             }
                         }
@@ -165,10 +170,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function generateWeekDayElements (currentDate, weeks) {
             let currentDayIndex = currentDate.getDay();
-    
             if (currentDayIndex === 0) {
                 currentDayIndex = 7;
             }
+
             for (let i = 0; i < weeks.length; i++) {
                 const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
                 dayHeader.className = "day-header";
@@ -185,6 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 dayHeader.appendChild(dateDisplay);
             }
         }
+
         function generateHourElements () {
             let hoursArray = [];
             for (let i = 0; i < 24; i++) {
@@ -200,6 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 timeDiv.textContent = hoursArray[i];
             }
         }
+
         function generateWeekElement(currentDate) {
             const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
             timeHeader.className = "time-header";
@@ -212,7 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
             }
         }
-    }
+    } //generateCalendar() function ends-
 
     function interactiveCells(weekDifference) {
         const cells = document.querySelectorAll('.cell');
@@ -224,7 +231,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cell.classList.toggle('oldcell')
                 return;
             }
-            if (!cell.classList.contains('locked')) {
+            if (!cell.classList.contains('locked')) { //if the cell isn't locked, allow interaction
                 cell.addEventListener('click', () => {
                     cell.classList.toggle('full')
                 });
@@ -250,21 +257,20 @@ document.addEventListener("DOMContentLoaded", () => {
     
     function sharedButtonsClick () {
         const sharedButtons = document.querySelectorAll('.shared-items-btn');
-        
         sharedButtons.forEach(sharedButton => {
             sharedButton.addEventListener('click', () => {
                 switch (sharedButton.id) {
                     case 'washing-machine-btn':
-                        sharedButtonsCase(0, 'wash', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        selectedItem = sharedButtonsCase(0, 'wash', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem) //it also runs the function
                         break;
                     case 'party-room-btn':
-                        sharedButtonsCase(1, 'party', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, )
+                        selectedItem = sharedButtonsCase(1, 'party', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, )
                         break;
                     case 'drill-btn':
-                        sharedButtonsCase(2, 'drill', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        selectedItem = sharedButtonsCase(2, 'drill', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
                         break;
                     case 'vacumn-cleaner-btn':
-                        sharedButtonsCase(3, 'vacumn', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        selectedItem = sharedButtonsCase(3, 'vacumn', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
                         break;
                 };
             });
@@ -278,6 +284,7 @@ function sharedButtonsCase(index, log, generateCalendar, interactiveCells, weekD
     selectedItem = selectedItemArray[index];
     generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
     interactiveCells(weekDifference);
+    return selectedItem; //returning this because we desperately need this variable to change
 }
 
 function activatePopup (activePopup, blurElements, popupDivs) {
@@ -349,33 +356,11 @@ function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, select
     })
 }
 
-function convertNumber(number) { //lowest number is 0. Highest is 167. 
-    //this function converts one number into an object with two numbers; i and index.
-    //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
-    //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
-    const result = {index: 0, i: 0};
-    if (number <= 6) {
-        result.index = 0;
-    } else {
-        result.index = Math.floor(number / 7);
-    }
-    let steps = -1;
-    for (let i = 6; i >= 0; i--) {
-        steps++;
-        if ((number - i) === (result.index * 7)) {
-            result.i = steps;
-            break;
-        }
-    }
-    return result;
-}
-
 function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem) {
     if (cell.classList.contains('full')) {
-        if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //the index works here because the cells in the forEach loop is a nodeList
-        } else {
+        if (!weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
             weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index);
-        };
+        }
     } else {
         for (let i = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
             if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) {
@@ -387,14 +372,13 @@ function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDif
 
 function exitPopup(activePopup) {
     const exitButton = document.querySelectorAll('.exit-popup');
-
     exitButton.forEach(exitButton => {
         exitButton.addEventListener('click', () => {
             removeActivePopup(activePopup);
         });
     });
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' || event.keyCode === 27) { //keyCode 27 is the number of 'esc' on a keyboard
+        if (event.key === 'Escape') {
             removeActivePopup(activePopup);
         }
     })
@@ -414,6 +398,28 @@ function removeActivePopup(activePopup) {
     popupDivs.forEach(popupDiv => {
         popupDiv.classList.remove('popup-div-display');
     });
+}
+
+function convertNumber(number) { //lowest number is 0. Highest is 167. 
+    //this function converts one number into an object with two numbers; i and index.
+    //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
+    //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
+    //and YES i should rename i and index to x and y instead
+    const result = {index: 0, i: 0};
+    if (number <= 6) {
+        result.index = 0;
+    } else {
+        result.index = Math.floor(number / 7);
+    }
+    let steps = -1;
+    for (let i = 6; i >= 0; i--) {
+        steps++;
+        if ((number - i) === (result.index * 7)) {
+            result.i = steps;
+            break;
+        }
+    }
+    return result;
 }
 
 function submitFeedback() {
@@ -442,16 +448,16 @@ function Sentfunction() {
 
 // Næste måned 
 function næsteMåned() {
-    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
-    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
-    var næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
+    let måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    let nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    let næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
     document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
 }
 
 // Forrige måned
 function forrigeMåned() {
-    var måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
-    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
-    var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
+    let måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    let nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    let forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
 }
