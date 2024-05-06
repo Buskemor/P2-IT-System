@@ -122,7 +122,6 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateCalendarNextWeek() {
         weekDifference++;
         currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
-        
         console.log('week diff: ' + weekDifference)
         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem) //-1 because it needs to save the current week, not the one we are going to
         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
@@ -146,6 +145,34 @@ document.addEventListener("DOMContentLoaded", () => {
             //this is also the reason why it breaks when
         generateWeekDayElements(currentDate, weeks);
     
+        function generateWeekElement(currentDate) {
+            const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
+            timeHeader.className = "time-header";
+            const currentWeek = getWeekNumber(currentDate);
+            timeHeader.textContent = "Uge " + currentWeek;
+            function getWeekNumber(date) {
+                const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+                const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
+                return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+            }
+        }
+
+        function generateHourElements () {
+            let hoursArray = [];
+            for (let i = 0; i <= 23; i++) {
+                if (i <= 9) {
+                    hoursArray[i] = '0' + i + ':00';
+                } else {
+                    hoursArray[i] = i + ':00';
+                }
+            }
+            for (let i = 0; i < hoursArray.length; i++) {
+                const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
+                timeDiv.className = "time";
+                timeDiv.textContent = hoursArray[i];
+            }
+        }
+
         function genereateCellElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
             timeElements.forEach((timeElement, index) => {
@@ -157,9 +184,10 @@ document.addEventListener("DOMContentLoaded", () => {
                     function addLockedOrFullCells(fullCellsArray, lockedOrFull) {
                         if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
                             for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
-                                if (i == convertNumber(fullCellsArray[j]).i && index == convertNumber(fullCellsArray[j]).index) { //checks if a specific cell should be locked
+                                if (i == convertNumber(fullCellsArray[j]).x && index == convertNumber(fullCellsArray[j]).y) { //checks if a specific cell should be locked
                                     dayCell.classList.add(lockedOrFull); //for more context find the convertNumber function
                                 }
+                                // dayCell.classList.add(lockedOrFull); //for more context find the convertNumber function
                             }
                         }
                     }
@@ -183,7 +211,7 @@ document.addEventListener("DOMContentLoaded", () => {
     
                 const dateForDay = new Date(currentDate);
                 dateForDay.setDate(dateForDay.getDate() + i); // Adjust date to represent previous weeks
-    
+
                 const dateDisplay = document.createElement("div");
                 dateDisplay.className = "date";
                 dateDisplay.textContent = ("0" + dateForDay.getDate()).slice(-2) + "/" + ("0" + (dateForDay.getMonth() + 1 /*because months start at 0 in js..*/)).slice(-2);
@@ -191,34 +219,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        function generateHourElements () {
-            let hoursArray = [];
-            for (let i = 0; i < 24; i++) {
-                if (i <= 9) {
-                    hoursArray[i] = '0' + i + ':00';
-                } else {
-                    hoursArray[i] = i + ':00';
-                }
-            }
-            for (let i = 0; i < hoursArray.length; i++) {
-                const timeDiv = document.getElementById("cal-start").appendChild(document.createElement("div"));
-                timeDiv.className = "time";
-                timeDiv.textContent = hoursArray[i];
-            }
-        }
-
-        function generateWeekElement(currentDate) {
-            const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
-            timeHeader.className = "time-header";
-            const currentWeek = getWeekNumber(currentDate);
-            timeHeader.textContent = "Uge " + currentWeek;
-
-            function getWeekNumber(date) {
-                const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
-                const pastDaysOfYear = (date - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
-                return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-            }
-        }
+ 
     } //generateCalendar() function ends-
 
     function interactiveCells(weekDifference) {
@@ -405,17 +406,17 @@ function convertNumber(number) { //lowest number is 0. Highest is 167.
     //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
     //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
     //and YES i should rename i and index to x and y instead
-    const result = {index: 0, i: 0};
+    const result = {y: 0, x: 0};
     if (number <= 6) {
-        result.index = 0;
+        result.y = 0;
     } else {
-        result.index = Math.floor(number / 7);
+        result.y = Math.floor(number / 7);
     }
     let steps = -1;
     for (let i = 6; i >= 0; i--) {
         steps++;
-        if ((number - i) === (result.index * 7)) {
-            result.i = steps;
+        if ((number - i) === (result.y * 7)) {
+            result.x = steps;
             break;
         }
     }
