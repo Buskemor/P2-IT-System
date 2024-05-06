@@ -175,8 +175,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         function genereateCellElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
+            // console.log(convertNumber(0).x, convertNumber(0).y)
             timeElements.forEach((timeElement, index) => {
-                for (let i = 0; i < weeks.length; i++) {
+                for (let i = weeks.length -1; i >= 0; i--) { //reversed so the x coordinate is easier to read for us humans (it goes from left to right now)
+                    //dont actually know why exactly it works :I
                     const dayCell = document.createElement("div");
                     dayCell.className = "cell";
                     addLockedOrFullCells(fullCellsArrayCurrentUser, 'full') //not using this currently
@@ -185,9 +187,10 @@ document.addEventListener("DOMContentLoaded", () => {
                         if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
                             for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
                                 if (i == convertNumber(fullCellsArray[j]).x && index == convertNumber(fullCellsArray[j]).y) { //checks if a specific cell should be locked
+                                    //i is weeks, j is the nodeList and index is a timeElement (e.g 00:00, 12:00, 20:00)
+                                    // console.log(`(x,y) of userArray: ` + convertNumber(fullCellsArray[j]).x + ','+convertNumber(fullCellsArray[j]).y)
                                     dayCell.classList.add(lockedOrFull); //for more context find the convertNumber function
                                 }
-                                // dayCell.classList.add(lockedOrFull); //for more context find the convertNumber function
                             }
                         }
                     }
@@ -401,25 +404,10 @@ function removeActivePopup(activePopup) {
     });
 }
 
-function convertNumber(number) { //lowest number is 0. Highest is 167. 
-    //this function converts one number into an object with two numbers; i and index.
-    //the calendars row starts at 0 (from the top), and goes up to 23. This is result.index.
-    //the calendars column starts at 6 (from the left) and goes down to 0. This is result.i.
-    //and YES i should rename i and index to x and y instead
-    const result = {y: 0, x: 0};
-    if (number <= 6) {
-        result.y = 0;
-    } else {
-        result.y = Math.floor(number / 7);
-    }
-    let steps = -1;
-    for (let i = 6; i >= 0; i--) {
-        steps++;
-        if ((number - i) === (result.y * 7)) {
-            result.x = steps;
-            break;
-        }
-    }
+function convertNumber(number) {
+    const result = {x: 0, y: 0};
+    result.x = number % 7;
+    result.y = Math.floor(number / 7);
     return result;
 }
 
