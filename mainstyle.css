@@ -53,7 +53,6 @@ body {
     font-size: 18px;
 }
 
-
 .cell {
     transition: 250ms;
     border: 1px solid;
@@ -62,6 +61,13 @@ body {
 
 .cell:hover {
     background-color: #ff0000;
+}
+/* the old cells here is a quick workaround for cells that cant be edited. may need to be changed if we implement past weeks */
+.oldcell {
+    transition: 250ms;
+    border: 1px solid;
+    background-color: rgb(105, 129, 105);
+    pointer-events: none;
 }
 
 .full {
@@ -237,7 +243,7 @@ width: 30px;
     border: 2px solid;
 }
 
-#add-times {
+#order-btn {
     margin-left: 10px;
     width: 463px;
     height: 50px;
