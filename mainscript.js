@@ -177,7 +177,7 @@ navButtons.forEach(navButton => {
                 break;
             case 'logout-btn':
                 window.location.href = "index.html";
-                break; 
+                return; 
         };
         blurElements.forEach(blurElement => {
             blurElement.classList.toggle('blurred');
@@ -278,6 +278,7 @@ function næsteMåned() {
     var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
     var næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
     document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
+    rotermåneder(måneder[næsteMånedsIndex]);
 }
 
 // Forrige måned
@@ -286,16 +287,83 @@ function forrigeMåned() {
     var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
     var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
+    rotermåneder(måneder[forrigeMånedsIndex]);
+}
+
+function rotermåneder(måned) {
+    var tekst = "";
+    switch (måned) {
+        case 'Maj':
+            tekst = "Vaskemaskine 50 kr. Tøretumbler 8 kr.";
+            break;
+        case 'Juni':
+            tekst = "Vaskemaskine 30 kr. Tøretumbler 16 kr.";
+            break;
+        case 'Juli':
+            tekst = "Depositium for festlokale 1000kr. Vaskemaskine 10 kr.";
+            break;
+        case 'August':
+            tekst = "Vaskemaskine 10 kr. Tøretumbler 16 kr.";
+            break;
+        case 'September':
+            tekst = "Vaskemaskine 20 kr. Tøretumbler 8 kr.";
+            break;
+        case 'Oktober':
+            tekst = " Tøretumbler 32 kr.";
+            break;
+        case 'November':
+            tekst = "Vaskemaskine 30 kr. Tøretumbler 8 kr.";
+            break;
+        case 'December':
+            tekst = "Depositium for festlokale 1000 kr. Vaskemaskine 10 kr. Tøretumbler 8 kr.";
+            break;
+        case 'Januar':
+            tekst = "Vaskemaskine 20 kr. Tøretumbler 32 kr.";
+            break;
+        case 'Februar':
+            tekst = "Vaskemaskine 40 kr. Tøretumbler 32 kr.";
+            break;
+        case 'Marts':
+            tekst = "Vaskemaskine 50 kr. Tøretumbler 16 kr.";
+            break;
+        case 'April':
+            tekst = "Vaskemaskine 40 kr. Tøretumbler 8 kr.";
+            break;
+    }
+
+    document.querySelector('textarea').value = tekst;
+
+
 }
 
 
 function setBudget() {
    
-    var budgetAmount = parseFloat(document.getElementById("monthly-budget").value);
 
 
     document.getElementById("check-mark").style.display = "inline";
+
+setInterval(() => {
+    removeChekmark()
+}, 3000)
+
 }
+
+
+function removeChekmark() {
+
+ document.getElementById("check-mark").style.display = "none";
+
+}
+
+
+
+
+
+
+
+
+
 
 
 function  showHistory() {
@@ -303,3 +371,8 @@ function  showHistory() {
     document.getElementById('popup').classList.toggle ('display-none');
 
 }
+
+
+
+
+
