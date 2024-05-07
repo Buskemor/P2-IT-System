@@ -99,25 +99,17 @@ const activePopup = { //set to true when there's an active poup
 activatePopup()
 deActivatePopup()
 exitPopup();
-
-document.addEventListener("DOMContentLoaded", () => {
-    console.log('selceted: ' + selectedItem)
-    generateCalendar();
-    
-    sharedButtonsClick();
-   
-    document.getElementById("prev-week").addEventListener("click", () => {
-        updateCalendarPreviousWeek()
-    });
-    document.getElementById("next-week").addEventListener("click", () => {
-        updateCalendarNextWeek()
-    });
-    interactiveCells(weekDifference);
-    pushUserChangesToObj();
-
-    
-    confirmOrder()
+sharedButtonsClick();
+document.getElementById("prev-week").addEventListener("click", () => {
+    updateCalendarPreviousWeek()
 });
+document.getElementById("next-week").addEventListener("click", () => {
+    updateCalendarNextWeek()
+});
+generateCalendar();
+interactiveCells();
+pushUserChangesToObj();
+confirmOrder()
 
 function orderTimes() {
     console.log('orderTimes '+weekDifference + ' ' + selectedItem)
@@ -398,7 +390,6 @@ function deActivatePopup() {
         };
     });
 };
-
 
 function pushUserChangesToObj(currentlyConfirmingOrder) {
     const cells = document.querySelectorAll('.cell');
