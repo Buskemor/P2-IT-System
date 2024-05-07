@@ -160,6 +160,7 @@ navButtons.forEach(navButton => {
         switch (navButton.id) {
             case 'budget-btn':
                 document.getElementById('budget-div').classList.toggle('display-none');
+                document.getElementById('popup').classList.add('display-none');
                 activePopup.budget = true;
                 break;
             case 'settings-btn':
@@ -271,7 +272,6 @@ document.addEventListener('keydown', (event) => {
 
    
 
-
 // Næste måned 
 function næsteMåned() {
     var måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
@@ -289,12 +289,17 @@ function forrigeMåned() {
 }
 
 
-
-
 function setBudget() {
    
     var budgetAmount = parseFloat(document.getElementById("monthly-budget").value);
 
 
     document.getElementById("check-mark").style.display = "inline";
+}
+
+
+function  showHistory() {
+
+    document.getElementById('popup').classList.toggle ('display-none');
+
 }

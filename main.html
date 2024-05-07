@@ -24,21 +24,19 @@
             <h4 class="content">Overskridelse: <span id= overskridelse>0</span> DKK</h4>
 
     
-
-            <div id="popup">
-                <div class="popupcontent">
-                    <button class="content" onclick="showHistory()">Se din historik</button>
-                    <h3 id="current-month" class="content">Maj</h3>    
-                    <div class="navigation">
-                        <button id="prev-month-btn" class="content" onclick="forrigeMåned()">&#9664;</button>
-                        <span id="current-month"></span>
-                        <span id="current-year"></span>
-                        <button id="next-month-btn" class="content" onclick="næsteMåned()">&#9654;</button>
-                    </div>
-                    <textarea rows="4" cols="50" class="content"></textarea>
+            <button class="content" onclick="showHistory()">Se din historik</button>
+            <div class="display-none" id="popup">
+                <h3 id="current-month" class="content">Maj</h3>    
+                <div class="navigation">
+                    <button id="prev-month-btn" class="content" onclick="forrigeMåned()">&#9664;</button>
+                    <span id="current-month"></span>
+                    <span id="current-year"></span>
+                    <button id="next-month-btn" class="content" onclick="næsteMåned()">&#9654;</button>
                 </div>
-                </div>
+                <textarea rows="4" cols="50" class="content"></textarea>
             </div>
+        </div>  
+          
 
         <button class="exit-popup visible-exit" data-popup="settings-div">X</button>
         <div class="display-none" id="settings-div">Settings div</div>
