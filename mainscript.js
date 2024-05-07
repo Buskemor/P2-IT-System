@@ -94,6 +94,7 @@ const activePopup = { //set to true when there's an active poup
     settings: false,
     feedback: false,
     support: false,
+    cancel: false,
 };
 
 activatePopup()
@@ -112,40 +113,39 @@ pushUserChangesToObj();
 confirmOrder()
 
 function orderTimes() {
-    console.log('orderTimes '+weekDifference + ' ' + selectedItem)
     const displayOrderedTimes = document.getElementById('display-ordered-times')
-    if (activePopup.order === true) {
-        pushUserChangesToObj();
-
-        const selectedTimes = {
-            Mandag: [],
-            Tirsdag: [],
-            Onsdag: [],
-            Torsdag: [],
-            Fredag: [],
-            Lørdag: [],
-            Søndag: []
-        }
-        // console.log(JSON.stringify(selectedTimes))
-        let displayString = ''
-        for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; i++) {
-            selectedTimes[weeks[convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
-        }
-        for (let weekDay in selectedTimes) {
-            if (selectedTimes[weekDay].length !== 0) {
-                displayString += `<div>${weekDay}:</div>`
-                for (let i = 0; i < selectedTimes[weekDay].length; i++) {
-                    if (selectedTimes[weekDay][i] <= 9) {
-                        selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
-                    } else {
-                        selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
-                    }
-                }
-                displayString += `<div>${selectedTimes[weekDay]}</div>`
-            }
-        }
-        displayOrderedTimes.innerHTML = displayString
+    if (activePopup.order === false) {
+        return    
     }
+    pushUserChangesToObj();
+
+    const selectedTimes = {
+        Mandag: [],
+        Tirsdag: [],
+        Onsdag: [],
+        Torsdag: [],
+        Fredag: [],
+        Lørdag: [],
+        Søndag: []
+    }
+    let displayString = '';
+    for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; ++i) {
+        selectedTimes[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
+    }
+    for (let weekDay in selectedTimes) {
+        if (selectedTimes[weekDay].length !== 0) {
+            displayString += `<div>${weekDay}:</div>`
+            for (let i = 0; i < selectedTimes[weekDay].length; i++) {
+                if (selectedTimes[weekDay][i] <= 9) {
+                    selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
+                } else {
+                    selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
+                }
+            }
+            displayString += `<div>${selectedTimes[weekDay]}</div>`;
+        }
+    }
+    displayOrderedTimes.innerHTML = displayString
 }
 
 function confirmOrder() {
@@ -159,11 +159,57 @@ function confirmOrder() {
     });
 }
 
+function cancelTimes () {
+    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].includes()
+
+    console.log('CANCEL:  '+weekDifference + ' ' + selectedItem)
+    const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
+    if (activePopup.cancel === false) {
+        return;
+    }
+    // pushUserChangesToObj();
+
+    const selectedTimes = {
+        Mandag: [],
+        Tirsdag: [],
+        Onsdag: [],
+        Torsdag: [],
+        Fredag: [],
+        Lørdag: [],
+        Søndag: []
+    }
+
+    let displayString = ''
+    for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
+        selectedTimes[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
+    }
+    console.log(selectedTimes)
+    for (let weekDay in selectedTimes) {
+        if (selectedTimes[weekDay].length !== 0) {
+            displayString += `<div>${weekDay}:</div>`;
+            for (let i = 0; i < selectedTimes[weekDay].length; i++) {
+                if (selectedTimes[weekDay][i] <= 9) {
+                    selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
+                } else {
+                    selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
+                }
+            }
+            // displayString += `<div>${selectedTimes[weekDay]}</div>`;
+            // displayString += `<button class="${weekDay+='-cancel-btn'}">Aflys</button> <br></br>`;
+            // document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
+            //     console.log(`i want to cancel the times on ${weekDay}`)
+            // });
+        }
+    }
+    displayCancelledTimesElem.innerHTML = displayString;
+
+}
+
 function updateCalendarPreviousWeek() {
     currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
     pushUserChangesToObj(); //+1 because it needs to save the current week, not the one we are going to
     weekDifference--;
-    generateCalendar(); // Refresh the calendar
+    generateCalendar();
     interactiveCells();
 }
 
@@ -171,7 +217,7 @@ function updateCalendarNextWeek() {
     currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
     pushUserChangesToObj() //-1 because it needs to save the current week, not the one we are going to
     weekDifference++;
-    generateCalendar(); // Refresh the calendar
+    generateCalendar();
     interactiveCells();
 }
 function generateCalendar() {
@@ -180,20 +226,20 @@ function generateCalendar() {
     const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
     timeHeader.className = "time-header";
     
-    setWeekHeaderHtml(timeHeader)
+    setWeekHeaderHtml(timeHeader);
     let hoursArray = generateHoursArray();
     setHoursOfDayHtml(hoursArray);
     setCellsHtml();
-    setDayHeadersHtml()
-} //generateCalendar() function ends-¨
+    setDayHeadersHtml();
+}
 
 function addLockedOrFullCells(fullCellsArray, lockedOrFull, i, index, dayCell) {
     if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
         for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
-            if (i == convertNumber(fullCellsArray[j]).x && index == convertNumber(fullCellsArray[j]).y) { //checks if a specific cell should be locked
+            if (i == convertIndexToCoord(fullCellsArray[j]).x && index == convertIndexToCoord(fullCellsArray[j]).y) { //checks if a specific cell should be locked
                 //i is weeks, j is the nodeList and index is a timeElement (e.g 00:00, 12:00, 20:00)
-                // console.log(`(x,y) of userArray: ` + convertNumber(fullCellsArray[j]).x + ','+convertNumber(fullCellsArray[j]).y)
-                dayCell.classList.add(lockedOrFull); //for more context find the convertNumber function
+                // console.log(`(x,y) of userArray: ` + convertIndexToCoord(fullCellsArray[j]).x + ','+convertIndexToCoord(fullCellsArray[j]).y)
+                dayCell.classList.add(lockedOrFull); //for more context find the convertIndexToCoord function
             }
         }
     }
@@ -233,7 +279,7 @@ function setCellsHtml() {
     const fullCellsArrayCurrentUser = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference];
     const fullCellsArrayCurrentUserLocked = weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference];
     const timeElements = document.querySelectorAll(".time");
-    // console.log(convertNumber(0).x, convertNumber(0).y)
+    // console.log(convertIndexToCoord(0).x, convertIndexToCoord(0).y)
     timeElements.forEach((timeElement, index) => {
         for (let i = weeks.length -1; i >= 0; i--) { //reversed so the x coordinate is easier to read for us humans (it goes from left to right now)
             //dont actually know why exactly it works :I
@@ -253,7 +299,7 @@ function setDayHeadersHtml() {
     for (let i = 0; i < weeks.length; i++) {
         const dayHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
         dayHeader.className = "day-header";
-        let dayIndex = (currentDayIndex + i -1) % 7; //converting js dates into
+        let dayIndex = (currentDayIndex + i -1) % 7;
         dayHeader.textContent = weeks[dayIndex];
 
         const dateForDay = new Date(currentDate);
@@ -267,9 +313,7 @@ function setDayHeadersHtml() {
 }
 
 function interactiveCells() {
-
     const cells = document.querySelectorAll('.cell');
-
     let isMouseDown = false;
     let firstHeldClickCell;
     cells.forEach((cell) => {
@@ -305,8 +349,6 @@ function sharedButtonsClick () {
     const sharedButtons = document.querySelectorAll('.shared-items-btn');
     sharedButtons.forEach(sharedButton => {
         sharedButton.addEventListener('click', () => {
-
-            console.log('IM BEING PRESSED OMG')
             switch (sharedButton.id) {
                 case 'washing-machine-btn':
                     sharedButtonsCase(0)
@@ -326,7 +368,6 @@ function sharedButtonsClick () {
 }
 
 function sharedButtonsCase(index) {
-    // console.log(selectedItemArray[index]);
     pushUserChangesToObj();
     selectedItem = selectedItemArray[index];
     generateCalendar();
@@ -341,7 +382,7 @@ function activatePopup () {
                 case 'order-btn':
                     document.getElementById('order-div').classList.toggle('display-none');
                     activePopup.order = true;
-                    orderTimes(activePopup);
+                    orderTimes();
                     break;
                 case 'budget-btn':
                     document.getElementById('budget-div').classList.toggle('display-none');
@@ -358,6 +399,11 @@ function activatePopup () {
                 case 'support-btn':
                     document.getElementById('support-div').classList.toggle('display-none');
                     activePopup.support = true;
+                    break;
+                case 'cancel-btn':
+                    document.getElementById('cancel-div').classList.toggle('display-none');
+                    activePopup.cancel = true;
+                    cancelTimes()
                     break;
                 case 'logout-btn':
                     window.location.href = "index.html";
@@ -405,7 +451,6 @@ function pushUserChangesToObj(currentlyConfirmingOrder) {
 function pushNewFullToCellArray(cell, index, currentlyConfirmingOrder) {
     if (cell.classList.contains('full')) {
         if (!weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
-            // console.log('full and no index' + JSON.stringcell)
             weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index);
         }
         if (currentlyConfirmingOrder === true) {
@@ -437,10 +482,10 @@ function exitPopup(activePopup) {
 }
 
 function removeActivePopup(activePopup) {
-    for (let key in activePopup) {
-        if (activePopup[key] === true) {
-            document.getElementById(`${key}-div`).classList.add('display-none');
-            activePopup[key] = false;
+    for (let popup in activePopup) {
+        if (activePopup[popup] === true) {
+            document.getElementById(`${popup}-div`).classList.add('display-none');
+            activePopup[popup] = false;
         }
     }
     blurElements.forEach(blurElement => {
@@ -451,7 +496,7 @@ function removeActivePopup(activePopup) {
     });
 }
 
-function convertNumber(number) {
+function convertIndexToCoord(number) {
     const result = {x: 0, y: 0};
     result.x = number % 7;
     result.y = Math.floor(number / 7);
