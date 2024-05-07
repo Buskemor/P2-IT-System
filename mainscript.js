@@ -102,7 +102,7 @@ activatePopup(activePopup, blurElements, popupDivs)
 deActivatePopup(activePopup, popupDivs)
 exitPopup(activePopup);
 
-function orderTimes(weekDifferenceAndFullCells, activePopup) {
+function orderTimes(weekDifferenceAndFullCells, activePopup, weekDifference, selectedItem) {
     const displayOrderedTimes = document.getElementById('display-ordered-times')
     if (activePopup.order === true) {
         // let currentUserLocked = 'currentUserLocked'
@@ -117,7 +117,7 @@ function orderTimes(weekDifferenceAndFullCells, activePopup) {
             Lørdag: [],
             Søndag: []
         }
-        console.log(JSON.stringify(selectedTimes))
+        // console.log(JSON.stringify(selectedTimes))
         let displayString = ''
         for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; i++) {
             selectedTimes[weeks[convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
@@ -156,10 +156,12 @@ document.addEventListener("DOMContentLoaded", () => {
     function confirmOrder(weekDifferenceAndFullCells, weekDifference, selectedItem) {
         const confirmBtn = document.getElementById('confirm-btn-id')
         confirmBtn.addEventListener('click', () => {
+            // console.log(selectedItem)
+            // console.log(weekDifference)
             removeActivePopup(activePopup);
             pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUserLocked);
             weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference] = []
-            console.log(weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference])
+            // console.log(weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference])
             generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
             interactiveCells(weekDifference);
         });
@@ -321,16 +323,16 @@ document.addEventListener("DOMContentLoaded", () => {
             sharedButton.addEventListener('click', () => {
                 switch (sharedButton.id) {
                     case 'washing-machine-btn':
-                        selectedItem = sharedButtonsCase(0, 'wash', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem) //it also runs the function
+                        selectedItem = sharedButtonsCase(0, 'wash', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, blurElements, popupDivs) //it also runs the function
                         break;
                     case 'party-room-btn':
-                        selectedItem = sharedButtonsCase(1, 'party', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, )
+                        selectedItem = sharedButtonsCase(1, 'party', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, blurElements, popupDivs)
                         break;
                     case 'drill-btn':
-                        selectedItem = sharedButtonsCase(2, 'drill', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        selectedItem = sharedButtonsCase(2, 'drill', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, blurElements, popupDivs)
                         break;
                     case 'vacumn-cleaner-btn':
-                        selectedItem = sharedButtonsCase(3, 'vacumn', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem)
+                        selectedItem = sharedButtonsCase(3, 'vacumn', generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, blurElements, popupDivs)
                         break;
                 };
             });
@@ -338,13 +340,38 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 });
 
-function sharedButtonsCase(index, log, generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem) {
-    console.log(log);
-    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUser);
-    selectedItem = selectedItemArray[index];
-    generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
-    interactiveCells(weekDifference);
-    return selectedItem; //returning this because we desperately need this variable to change
+function sharedButtonsCase(index, log, generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem, blurElements, popupDivs) {
+    let isCellFull = false;
+    const cells = document.querySelectorAll('.cell');
+    cells.forEach((cell) => {
+        if (cell.classList.contains('full')) {
+            console.log('least one full')
+            isCellFull = true;
+        }
+    })
+    if (isCellFull == true) {
+        selectedItem = selectedItemArray[index];
+        document.getElementById('order-div').classList.toggle('display-none');
+        activePopup.order = true;
+        orderTimes(weekDifferenceAndFullCells, activePopup, weekDifference, selectedItem);
+        
+        blurElements.forEach(blurElement => {
+            blurElement.classList.add('blurred');
+        });
+        popupDivs.forEach(popupDiv => {
+            popupDiv.classList.add('popup-div-display');
+        });
+        
+        console.log('IT DOES??')
+        return selectedItem
+    } else {
+        console.log(log);
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUser);
+        selectedItem = selectedItemArray[index];
+        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+        interactiveCells(weekDifference);
+        return selectedItem; //returning this because we desperately need this variable to change
+    }
 }
 
 function activatePopup (activePopup, blurElements, popupDivs) {
@@ -355,7 +382,7 @@ function activatePopup (activePopup, blurElements, popupDivs) {
                 case 'order-btn':
                     document.getElementById('order-div').classList.toggle('display-none');
                     activePopup.order = true;
-                    orderTimes(weekDifferenceAndFullCells, activePopup);
+                    orderTimes(weekDifferenceAndFullCells, activePopup, weekDifference, selectedItem);
                     break;
                 case 'budget-btn':
                     document.getElementById('budget-div').classList.toggle('display-none');
