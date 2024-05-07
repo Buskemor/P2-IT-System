@@ -107,6 +107,7 @@ function orderTimes(weekDifferenceAndFullCells, activePopup) {
     if (activePopup.order === true) {
         // let currentUserLocked = 'currentUserLocked'
         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUser);
+
         const selectedTimes = {
             Mandag: [],
             Tirsdag: [],
@@ -116,6 +117,7 @@ function orderTimes(weekDifferenceAndFullCells, activePopup) {
             Lørdag: [],
             Søndag: []
         }
+        console.log(JSON.stringify(selectedTimes))
         let displayString = ''
         for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; i++) {
             selectedTimes[weeks[convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
@@ -156,8 +158,8 @@ document.addEventListener("DOMContentLoaded", () => {
         confirmBtn.addEventListener('click', () => {
             removeActivePopup(activePopup);
             pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUserLocked);
+            weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference] = []
             console.log(weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference])
-            // weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference] = []
             generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
             interactiveCells(weekDifference);
         });
@@ -416,17 +418,31 @@ function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, select
 }
 
 function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem, user) {
-    if ((cell.classList.contains('full')) || (cell.classList.contains('self-locked'))) {
-        if (!weekDifferenceAndFullCells[selectedItem][user][weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
-            weekDifferenceAndFullCells[selectedItem][user][weekDifference].push(index);
+    if (cell.classList.contains('full')) {
+        if (!weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
+            weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].push(index);
+        }
+        if (!weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
+            weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].push(index);
         }
     } else {
-        for (let i = weekDifferenceAndFullCells[selectedItem][user][weekDifference].length - 1; i >= 0; i--) {
-            if (weekDifferenceAndFullCells[selectedItem][user][weekDifference].includes(index)) {
-                weekDifferenceAndFullCells[selectedItem][user][weekDifference].splice(i, 1);
+        for (let i = weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].length - 1; i >= 0; i--) {
+            if (weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].includes(index)) {
+                weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].splice(i, 1);
             }
         };
     };
+    // if (cell.classList.contains('self-locked')) {
+    //     if (!weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
+    //         weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].push(index);
+    //     }
+    // } else {
+    //     for (let i = weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].length - 1; i >= 0; i--) {
+    //         if (weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].includes(index)) {
+    //             weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].splice(i, 1);
+    //         }
+    //     };
+    // };
 };
 
 function exitPopup(activePopup) {
