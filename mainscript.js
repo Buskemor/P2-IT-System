@@ -116,48 +116,25 @@ function orderTimes(weekDifferenceAndFullCells, activePopup) {
             Lørdag: [],
             Søndag: []
         }
-        const selectedTimesFinal = {}
-        let selectedWeeksArray = []
-        let selectedHoursArray = []
         let displayString = ''
         for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; i++) {
             selectedTimes[weeks[convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
         }
- 
         for (let weekDay in selectedTimes) {
-            
             if (selectedTimes[weekDay].length !== 0) {
                 displayString += `<div>${weekDay}:</div>`
-                // displayString += `<div>${selectedTimes[weekDay]}</div>`
-                // displayString += `<div>${displayTime(selectedTimes[weekDay])}</div>`
-    
                 for (let i = 0; i < selectedTimes[weekDay].length; i++) {
-
-                    // if ((selectedTimes[weekDay][i] + 1) == (selectedTimes[weekDay][i] - 1)) {
-                    //     displayString += `<div>true</div>`
-                    //     console.log('true KEK')
-                    // }
                     if (selectedTimes[weekDay][i] <= 9) {
                         selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
                     } else {
                         selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
                     }
-               
                 }
-               
- 
                 displayString += `<div>${selectedTimes[weekDay]}</div>`
-                // displayString += `<br>`
-                // console.log(selectedTimes[weekDay])
-                
-                
             }
         }
-        // console.log(JSON.stringify(selectedTimesFinal))
         displayOrderedTimes.innerHTML = displayString
     }
-    // pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUserLocked);
-    
 }
 
 
@@ -173,7 +150,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pushUserChangesToObj(weekDifference, selectedItem, currentUser);
     sharedButtonsClick();
-
+    confirmOrder(weekDifferenceAndFullCells, weekDifference, selectedItem)
     function confirmOrder(weekDifferenceAndFullCells, weekDifference, selectedItem) {
         const confirmBtn = document.getElementById('confirm-btn-id')
         confirmBtn.addEventListener('click', () => {
@@ -186,15 +163,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    confirmOrder(weekDifferenceAndFullCells, weekDifference, selectedItem)
-
     function updateCalendarPreviousWeek() {
         weekDifference--;
         currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
         console.log('week diff: ' + weekDifference)
         pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem, currentUser); //+1 because it needs to save the current week, not the one we are going to
-        // generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
-        // interactiveCells(weekDifference);
+        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
+        interactiveCells(weekDifference);
     }
     
     function updateCalendarNextWeek() {
@@ -451,11 +426,6 @@ function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDif
                 weekDifferenceAndFullCells[selectedItem][user][weekDifference].splice(i, 1);
             }
         };
-    };
-    for (let i = weekDifferenceAndFullCells[selectedItem][user][weekDifference].length - 1; i >= 0; i--) { //experimental (SUPER BROKEN)
-        if (weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].includes(index)) {
-            weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].splice(i, 1);
-        }
     };
 };
 
