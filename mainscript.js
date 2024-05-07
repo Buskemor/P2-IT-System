@@ -14,7 +14,7 @@ const weekDifferenceAndFullCells = {
             3: [],
         },
         currentUserLocked: {
-            0: [],
+            0: [0],
             1: [],
             2: [],
             3: [],
@@ -81,7 +81,7 @@ const weekDifferenceAndFullCells = {
         }
     }
 };
-
+const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
 let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner'] //notice it uses the same names as weekDifferenceAndFullCells
 let selectedItem = selectedItemArray[0]
 const blurElements = document.querySelectorAll('.can-blur');
@@ -98,7 +98,64 @@ activatePopup(activePopup, blurElements, popupDivs)
 deActivatePopup(activePopup, popupDivs)
 exitPopup(activePopup);
 
+function orderTimes(weekDifferenceAndFullCells, activePopup) {
+    const displayOrderedTimes = document.getElementById('display-ordered-times')
+    if (activePopup.order === true) {
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+        const selectedTimes = {
+            Mandag: [],
+            Tirsdag: [],
+            Onsdag: [],
+            Torsdag: [],
+            Fredag: [],
+            Lørdag: [],
+            Søndag: []
+        }
+        const selectedTimesFinal = {}
+        let selectedWeeksArray = []
+        let selectedHoursArray = []
+        let displayString = ''
+        for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; i++) {
+            selectedTimes[weeks[convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertNumber(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
+        }
+ 
+        for (let weekDay in selectedTimes) {
+            
+            if (selectedTimes[weekDay].length !== 0) {
+                displayString += `<div>${weekDay}:</div>`
+                // displayString += `<div>${selectedTimes[weekDay]}</div>`
+                // displayString += `<div>${displayTime(selectedTimes[weekDay])}</div>`
+    
+                for (let i = 0; i < selectedTimes[weekDay].length; i++) {
+
+                    // if ((selectedTimes[weekDay][i] + 1) == (selectedTimes[weekDay][i] - 1)) {
+                    //     displayString += `<div>true</div>`
+                    //     console.log('true KEK')
+                    // }
+                    if (selectedTimes[weekDay][i] <= 9) {
+                        selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
+                    } else {
+                        selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
+                    }
+               
+                }
+               
+ 
+                displayString += `<div>${selectedTimes[weekDay]}</div>`
+                // displayString += `<br>`
+                // console.log(selectedTimes[weekDay])
+                
+                
+            }
+        }
+        // console.log(JSON.stringify(selectedTimesFinal))
+        displayOrderedTimes.innerHTML = displayString
+    }
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
+
     let currentDate
 
     generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
@@ -109,6 +166,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     pushUserChangesToObj(weekDifference, selectedItem);
     sharedButtonsClick();
+
+    function confirmOrder() {
+        const confirmBtn = document.getElementById('confirm-btn-id')
+        confirmBtn.addEventListener('click', () => {
+            removeActivePopup(activePopup);
+            pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+            generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
+            interactiveCells(weekDifference);
+        });
+    }
+
+    confirmOrder()
 
     function updateCalendarPreviousWeek() {
         weekDifference--;
@@ -133,11 +202,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem) {
         document.getElementById("cal-start").innerHTML = ""; //reset the old html before generating the new one
         currentDate = currentDate || new Date(); // in case we already set a date, it doesn't make a new one
-        const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
+        
 
         generateWeekElement(currentDate)
         generateHourElements()
-        genereateCellElements(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference] /* <- explaining this*/, weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference])
+        genereateCellElements(weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference] /* <- explaining this*/, weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference], weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference])
         //weekDifferenceAndFullCells refers to the whole object (weekDifferenceAndFullCells)
         //[selectedItem] refers to what item is currently selected. Is is a a key in our object, and we find it using a string from our selectedItemArray on line 85.
         //.otherUsers refers to which user owns the cells. Can also be currentUser and currentUserLocked in the future, as you can see in the object
@@ -173,7 +242,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
 
-        function genereateCellElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser) { //an array of full cells from top left to bottom right in reading order.
+        function genereateCellElements(fullCellsArrayOtherUsers, fullCellsArrayCurrentUser, fullCellsArrayCurrentUserLocked) { //an array of full cells from top left to bottom right in reading order.
             const timeElements = document.querySelectorAll(".time");
             // console.log(convertNumber(0).x, convertNumber(0).y)
             timeElements.forEach((timeElement, index) => {
@@ -182,6 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     const dayCell = document.createElement("div");
                     dayCell.className = "cell";
                     addLockedOrFullCells(fullCellsArrayCurrentUser, 'full') //not using this currently
+                    addLockedOrFullCells(fullCellsArrayCurrentUserLocked, 'self-locked') //for the user times
                     addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked') //important: we know whether or not to lock them because we know everything in the array needs to be locked (thats the point of the  array)
                     function addLockedOrFullCells(fullCellsArray, lockedOrFull) {
                         if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
@@ -299,6 +369,7 @@ function activatePopup (activePopup, blurElements, popupDivs) {
                 case 'order-btn':
                     document.getElementById('order-div').classList.toggle('display-none');
                     activePopup.order = true;
+                    orderTimes(weekDifferenceAndFullCells, activePopup);
                     break;
                 case 'budget-btn':
                     document.getElementById('budget-div').classList.toggle('display-none');
@@ -391,7 +462,6 @@ function exitPopup(activePopup) {
 function removeActivePopup(activePopup) {
     for (let key in activePopup) {
         if (activePopup[key] === true) {
-            console.log(key);
             document.getElementById(`${key}-div`).classList.add('display-none');
             activePopup[key] = false;
         }
