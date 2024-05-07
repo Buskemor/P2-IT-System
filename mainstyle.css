@@ -62,18 +62,15 @@ body {
 .cell:hover {
     background-color: #ff0000;
 }
-/* the old cells here is a quick workaround for cells that cant be edited. may need to be changed if we implement past weeks */
-.oldcell {
-    transition: 250ms;
-    border: 1px solid;
-    background-color: rgb(105, 129, 105);
-    pointer-events: none;
-}
 
 .full {
     transition: 250ms;
     border: 1px solid;
     background-color: darkred;
+}
+
+.full:hover {
+    background-color: rgb(0, 71, 0);
 }
 
 .locked {
@@ -92,10 +89,15 @@ body {
     background-color: rgb(72, 18, 77);
 }
 
-.full:hover {
-    background-color: rgb(0, 71, 0);
-}
 
+
+/* the old cells here is a quick workaround for cells that cant be edited. may need to be changed if we implement past weeks */
+.oldcell {
+    transition: 250ms;
+    border: 1px solid;
+    background-color: rgb(105, 129, 105);
+    pointer-events: none;
+}
 .nav {
     display: flex;
     height: 50px;

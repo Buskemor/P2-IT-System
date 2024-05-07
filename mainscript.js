@@ -14,7 +14,7 @@ const weekDifferenceAndFullCells = {
             3: [],
         },
         currentUserLocked: {
-            0: [0],
+            0: [],
             1: [],
             2: [],
             3: [],
@@ -81,6 +81,10 @@ const weekDifferenceAndFullCells = {
         }
     }
 };
+let currentUser = 'currentUser'
+let otherUsers = 'otherUsers'
+let currentUserLocked = 'currentUserLocked'
+
 const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
 let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner'] //notice it uses the same names as weekDifferenceAndFullCells
 let selectedItem = selectedItemArray[0]
@@ -101,7 +105,8 @@ exitPopup(activePopup);
 function orderTimes(weekDifferenceAndFullCells, activePopup) {
     const displayOrderedTimes = document.getElementById('display-ordered-times')
     if (activePopup.order === true) {
-        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+        // let currentUserLocked = 'currentUserLocked'
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUser);
         const selectedTimes = {
             Mandag: [],
             Tirsdag: [],
@@ -151,6 +156,8 @@ function orderTimes(weekDifferenceAndFullCells, activePopup) {
         // console.log(JSON.stringify(selectedTimesFinal))
         displayOrderedTimes.innerHTML = displayString
     }
+    // pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUserLocked);
+    
 }
 
 
@@ -164,35 +171,37 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("next-week").addEventListener("click", updateCalendarNextWeek);
     interactiveCells(weekDifference);
 
-    pushUserChangesToObj(weekDifference, selectedItem);
+    pushUserChangesToObj(weekDifference, selectedItem, currentUser);
     sharedButtonsClick();
 
-    function confirmOrder() {
+    function confirmOrder(weekDifferenceAndFullCells, weekDifference, selectedItem) {
         const confirmBtn = document.getElementById('confirm-btn-id')
         confirmBtn.addEventListener('click', () => {
             removeActivePopup(activePopup);
-            pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+            pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUserLocked);
+            console.log(weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference])
+            // weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference] = []
             generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
             interactiveCells(weekDifference);
         });
     }
 
-    confirmOrder()
+    confirmOrder(weekDifferenceAndFullCells, weekDifference, selectedItem)
 
     function updateCalendarPreviousWeek() {
         weekDifference--;
         currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
         console.log('week diff: ' + weekDifference)
-        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem); //+1 because it needs to save the current week, not the one we are going to
-        generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
-        interactiveCells(weekDifference);
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference+1, selectedItem, currentUser); //+1 because it needs to save the current week, not the one we are going to
+        // generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
+        // interactiveCells(weekDifference);
     }
     
     function updateCalendarNextWeek() {
         weekDifference++;
         currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
         console.log('week diff: ' + weekDifference)
-        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem) //-1 because it needs to save the current week, not the one we are going to
+        pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference-1, selectedItem, currentUser) //-1 because it needs to save the current week, not the one we are going to
         generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem); // Refresh the calendar
         interactiveCells(weekDifference);
     }
@@ -305,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 cell.classList.toggle('oldcell')
                 return;
             }
-            if (!cell.classList.contains('locked')) { //if the cell isn't locked, allow interaction
+            if (!cell.classList.contains('locked') && (!cell.classList.contains('self-locked'))) { //if the cell isn't locked, allow interaction
                 cell.addEventListener('click', () => {
                     cell.classList.toggle('full')
                 });
@@ -354,7 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function sharedButtonsCase(index, log, generateCalendar, interactiveCells, weekDifferenceAndFullCells, weekDifference, selectedItem) {
     console.log(log);
-    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem);
+    pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, currentUser);
     selectedItem = selectedItemArray[index];
     generateCalendar(weekDifferenceAndFullCells, weekDifference, selectedItem);
     interactiveCells(weekDifference);
@@ -420,28 +429,33 @@ function deActivatePopup(activePopup, popupDivs) {
 };
 
 
-function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem) {
+function pushUserChangesToObj(weekDifferenceAndFullCells, weekDifference, selectedItem, user) {
     const cells = document.querySelectorAll('.cell');
     cells.forEach((cell, index) => {
         try {
-            pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem);
+            pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem, user);
         } catch(error) {
             console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error);
         }   
     })
 }
 
-function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem) {
-    if (cell.classList.contains('full')) {
-        if (!weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
-            weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index);
+function pushNewFullToCellArray(cell, index, weekDifferenceAndFullCells, weekDifference, selectedItem, user) {
+    if ((cell.classList.contains('full')) || (cell.classList.contains('self-locked'))) {
+        if (!weekDifferenceAndFullCells[selectedItem][user][weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
+            weekDifferenceAndFullCells[selectedItem][user][weekDifference].push(index);
         }
     } else {
-        for (let i = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
-            if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) {
-                weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].splice(i, 1);
+        for (let i = weekDifferenceAndFullCells[selectedItem][user][weekDifference].length - 1; i >= 0; i--) {
+            if (weekDifferenceAndFullCells[selectedItem][user][weekDifference].includes(index)) {
+                weekDifferenceAndFullCells[selectedItem][user][weekDifference].splice(i, 1);
             }
         };
+    };
+    for (let i = weekDifferenceAndFullCells[selectedItem][user][weekDifference].length - 1; i >= 0; i--) { //experimental (SUPER BROKEN)
+        if (weekDifferenceAndFullCells[selectedItem][currentUserLocked][weekDifference].includes(index)) {
+            weekDifferenceAndFullCells[selectedItem][currentUser][weekDifference].splice(i, 1);
+        }
     };
 };
 
