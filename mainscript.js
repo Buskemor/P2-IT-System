@@ -290,52 +290,50 @@ function forrigeMåned() {
     rotermåneder(måneder[forrigeMånedsIndex]);
 }
 
+
 function rotermåneder(måned) {
     var tekst = "";
     switch (måned) {
         case 'Maj':
-            tekst = "Vaskemaskine 50 kr. Tøretumbler 8 kr.";
+            tekst = "2/05/2024: Vaskemaskine 16 kr.  3/05/2024: Tøretumbler 8 kr. 9/05/2024: Vaskemaskine 8 kr. Tøretumbler 16 kr. 16/05/2024: Vaskemaskine 16 kr. 21/05/2024: Tøretumbler 8 kr.";
             break;
         case 'Juni':
-            tekst = "Vaskemaskine 30 kr. Tøretumbler 16 kr.";
+            tekst = "5/06/2024: Vaskemaskine 32 kr. 10/06/2024: Tøretumbler 16 kr. 15/06/2024: Vaskemaskine 16 kr. 20/06/2024: Tøretumbler 8 kr. 28/06/2024: Depositum for festlokale 1000 kr. ";
             break;
         case 'Juli':
-            tekst = "Depositium for festlokale 1000kr. Vaskemaskine 10 kr.";
+            tekst = "3/07/2024: Depositium for festlokale 1000 kr. 15/07/2024: Vaskemaskine 16 kr. 22/07/2024: Tøretumbler 16 kr. 29/07/2024: Vaskemaskine 16 kr.";
             break;
         case 'August':
-            tekst = "Vaskemaskine 10 kr. Tøretumbler 16 kr.";
+            tekst = "8/08/2024: Vaskemaskine 8 kr. 20/08/2024: Tøretumbler 16 kr. 25/08/2024: Vaskemaskine 16 kr.";
             break;
         case 'September':
-            tekst = "Vaskemaskine 20 kr. Tøretumbler 8 kr.";
+            tekst = "5/09/2024: Vaskemaskine 16 kr. 18/09/2024: Tøretumbler 8 kr.";
             break;
         case 'Oktober':
-            tekst = " Tøretumbler 32 kr.";
+            tekst = "10/10/2024: Tøretumbler 32 kr. 15/10/2024: Vaskemaskine 8 kr. 20/10/2024: Tøretumbler 16 kr. 25/10/2024: Vaskemaskine 16 kr.";
             break;
         case 'November':
-            tekst = "Vaskemaskine 30 kr. Tøretumbler 8 kr.";
+            tekst = "3/11/2024: Vaskemaskine 32 kr. 15/11/2024: Tøretumbler 8 kr. 20/11/2024: Vaskemaskine 32 kr.";
             break;
         case 'December':
-            tekst = "Depositium for festlokale 1000 kr. Vaskemaskine 10 kr. Tøretumbler 8 kr.";
+            tekst = "3/12/2024: Depositium for festlokale 1000 kr. 20/12/2024: Vaskemaskine 16 kr. 29/12/2024: Tøretumbler 8 kr. ";
             break;
         case 'Januar':
-            tekst = "Vaskemaskine 20 kr. Tøretumbler 32 kr.";
+            tekst = "7/01/2025: Vaskemaskine 16 kr. 18/01/2024: Tøretumbler 8 kr. 20/01/2024: Vaskemaskine 16 kr. Tøretumbler 16 kr. 28/01/2024: Vaskemaksine 16 kr.";
             break;
         case 'Februar':
-            tekst = "Vaskemaskine 40 kr. Tøretumbler 32 kr.";
+            tekst = "2/02/2025: Vaskemaskine 16 kr. 14/02/2024: Tøretumbler 8 kr. 18/02/2024: Depositum for festlokale 1000 kr. 24/02/2024: Vaskemakine 8 kr. Tøretumbler 16 kr.";
             break;
         case 'Marts':
-            tekst = "Vaskemaskine 50 kr. Tøretumbler 16 kr.";
+            tekst = "8/03/2025: Vaskemaskine 8 kr. 2/03/2024: Tøretumbler 16 kr. 14/03/2024: Vaskemaskine 16 kr. 25/03/2024: Vaskemaskine 8 kr. Tøretumbler 16 kr.";
             break;
         case 'April':
-            tekst = "Vaskemaskine 40 kr. Tøretumbler 8 kr.";
+            tekst = "5/04/2024: Vaskemaskine 16 kr. 16/04/2025: Vaskemaskine 8 kr. Tøretumbler 8 kr. 28/04/2024: Vaskemaskine 16 kr.";
             break;
     }
-
     document.querySelector('textarea').value = tekst;
 
-
 }
-
 
 function setBudget() {
    
