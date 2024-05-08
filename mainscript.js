@@ -608,8 +608,8 @@ function convertIndexToCoord(number) {
     return result;
 }
 
-function submitFeedback() {
 
+function submitFeedback() {
     let message = document.getElementById("message-box").value;
 
     console.log("Feedback Message:", message);
@@ -629,7 +629,7 @@ function sendFeedback() {
 
     console.log("Send Message:", message2);
     document.getElementById("message-box2").value = "";
-    document.getElementById('support-div').classList.toggle('display-none');
+    document.querySelectorAll('support-div').classList.toggle('display-none');
     
 
 }
