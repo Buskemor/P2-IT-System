@@ -57,6 +57,7 @@ body {
     transition: 250ms;
     border: 1px solid;
     background-color: green;
+    cursor: pointer;
 }
 
 .cell:hover {
@@ -110,6 +111,7 @@ body {
     margin: 10px;
     flex: 1;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .nav-btn:hover {
@@ -238,6 +240,7 @@ body {
     font-size: medium;
     font-weight: 700;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .submit-btn:hover {
@@ -263,6 +266,7 @@ p#Skriv-til-visevaerter{
     font-size: small;
     font-weight: 700;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .send-btn:hover {
@@ -382,6 +386,7 @@ p#Skriv-til-visevaerter{
     margin-left: 10px;
     border: rgba(0, 0, 0, 0);
     border-radius: 30px;
+    cursor: pointer;
 }
 
 .arrow:hover {
@@ -397,6 +402,7 @@ p#Skriv-til-visevaerter{
     width: 463px;
     height: 50px;
     border-radius: 30px;
+    cursor: pointer;
 }
 
 #order-btn:focus {
@@ -426,6 +432,7 @@ p#Skriv-til-visevaerter{
     font-size: 16px;
     font-weight: bold;
     text-transform: uppercase;
+    cursor: pointer;
 }
 
 /* Increase specificity */
@@ -446,8 +453,6 @@ p#Skriv-til-visevaerter{
     position: absolute;
 }
 
-
-
 .confirm-btn {
     position: absolute;
     top: 90%;
@@ -457,6 +462,7 @@ p#Skriv-til-visevaerter{
     border: 2px solid;
     width: 100px;
     height: 35px;
+    cursor: pointer;
 }
 
 .line-through {
