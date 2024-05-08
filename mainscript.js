@@ -609,6 +609,10 @@ function convertIndexToCoord(number) {
 }
 
 
+const exitButton = document.querySelectorAll('.exit-popup');
+const submitButtons = document.querySelectorAll('.submit-btn')
+
+
 function submitFeedback() {
     let message = document.getElementById("message-box").value;
 
