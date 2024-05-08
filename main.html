@@ -44,7 +44,7 @@
         <div class="display-none" id="feedback-div">
             <h1 class="content">Feedback</h1> 
             <p class="content">Skriv din feedback nedenunder</p>
-            <textarea id="message-box" rows="4" placeholder="Skriv din feedback her" class="content"></textarea>
+            <textarea id="message-box" rows="6,1" cols="50" placeholder="Skriv din feedback her" class="content"></textarea>
             <div class="content">
                 <div class="rating">
                     <input type="radio" id="rating1" value="1" name="radio">
@@ -62,6 +62,7 @@
             <div class="content">
                 <button class="submit-btn" onclick="submitFeedback()">Submit</button> 
             </div>
+            <div id="popup-message" class="display-none">Tak for din besvarelse!</div>
         </div>
 
         <button class="exit-popup visible-exit" data-popup="support-div"></button>
@@ -71,7 +72,7 @@
             <p class="content">Email: <a href="mailto:Jensenboligselskabsupport@gmail.com">Jensenboligselskabsupport@gmail.com</a></p>
             <p class="content">Adresse: xxxxxxxxxxxxx</p>
             <p class="content" id="Skriv-til-visevaerter">Skriv til vicevært</p>
-            <textarea class="content" id="message-box2" rows="4" placeholder="Skriv til vicevært her" ></textarea>
+            <textarea class="content" id="message-box2" rows="6,1" cols="50" placeholder="Skriv til vicevært her" ></textarea>
             <div class="content">
                 <button class="send-btn" onclick="sendFeedback()">Send</button>
             </div>
