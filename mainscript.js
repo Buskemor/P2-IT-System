@@ -271,73 +271,89 @@ document.addEventListener('keydown', (event) => {
     // });
 
    
+document.getElementById("next-month-btn").disabled = true;
 
 // Næste måned 
 function næsteMåned() {
-    var måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
-    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
-    var næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
+    let måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
+    let nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    let næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
+    if(11 == måneder.indexOf(document.getElementById('current-month').textContent)) {
+        document.getElementById("next-month-btn").disabled = true;
+    } else {
+        document.getElementById("next-month-btn").disabled = false;
+    }
+    console.log('hvad er '+måneder.indexOf(document.getElementById('current-month').textContent))
+
     document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
     rotermåneder(måneder[næsteMånedsIndex]);
 }
 
 // Forrige måned
 function forrigeMåned() {
-    var måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
-    var nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
-    var forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
+    let måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
+    let nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
+    let forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
+    if(0+1 == måneder.indexOf(document.getElementById('current-month').textContent)) {
+        document.getElementById("next-month-btn").disabled = true;
+    } else {
+        document.getElementById("next-month-btn").disabled = false;
+    }
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
     rotermåneder(måneder[forrigeMånedsIndex]);
 }
 
 
 function rotermåneder(måned) {
-    var tekst = "";
+    let tekst = "";
     switch (måned) {
         case 'Maj':
-            tekst = "2/05/2024: Vaskemaskine 16 kr.  3/05/2024: Tøretumbler 8 kr. 9/05/2024: Vaskemaskine 8 kr. Tøretumbler 16 kr. 16/05/2024: Vaskemaskine 16 kr. 21/05/2024: Tøretumbler 8 kr.";
+            tekst = "2/05/2024: Vaskemaskine: 16 kr. \r\n3/05/2024: Tøretumbler: 8 kr. \r\n9/05/2024: Vaskemaskine: 8 kr. & Tøretumbler: 16 kr. \r\n16/05/2024: Vaskemaskine: 16 kr. 21/05/2024: Tøretumbler: 8 kr.";
             break;
         case 'Juni':
-            tekst = "5/06/2024: Vaskemaskine 32 kr. 10/06/2024: Tøretumbler 16 kr. 15/06/2024: Vaskemaskine 16 kr. 20/06/2024: Tøretumbler 8 kr. 28/06/2024: Depositum for festlokale 1000 kr. ";
+            tekst = "5/06/2024: Vaskemaskine: 32 kr. \r\n10/06/2024: Tøretumbler: 16 kr. \r\n15/06/2024: Vaskemaskine: 16 kr. \r\n20/06/2024: Tøretumbler: 8 kr. \r\n28/06/2024: Depositum for festlokale: 1000 kr. ";
             break;
         case 'Juli':
-            tekst = "3/07/2024: Depositium for festlokale 1000 kr. 15/07/2024: Vaskemaskine 16 kr. 22/07/2024: Tøretumbler 16 kr. 29/07/2024: Vaskemaskine 16 kr.";
+            tekst = "3/07/2024: Depositium for festlokale: 1000 kr. \r\n15/07/2024: Vaskemaskine: 16 kr. \r\n22/07/2024: Tøretumbler: 16 kr. \r\n29/07/2024: Vaskemaskine: 16 kr.";
             break;
         case 'August':
-            tekst = "8/08/2024: Vaskemaskine 8 kr. 20/08/2024: Tøretumbler 16 kr. 25/08/2024: Vaskemaskine 16 kr.";
+            tekst = "8/08/2024: Vaskemaskine: 8 kr. \r\n20/08/2024: Tøretumbler: 16 kr. \r\n25/08/2024: Vaskemaskine: 16 kr.";
             break;
         case 'September':
-            tekst = "5/09/2024: Vaskemaskine 16 kr. 18/09/2024: Tøretumbler 8 kr.";
+            tekst = "5/09/2024: Vaskemaskine: 16 kr. \r\n18/09/2024: Tøretumbler: 8 kr.";
             break;
         case 'Oktober':
-            tekst = "10/10/2024: Tøretumbler 32 kr. 15/10/2024: Vaskemaskine 8 kr. 20/10/2024: Tøretumbler 16 kr. 25/10/2024: Vaskemaskine 16 kr.";
+            tekst = "10/10/2024: Tøretumbler: 32 kr. \r\n15/10/2024: Vaskemaskine: 8 kr. \r\n20/10/2024: Tøretumbler: 16 kr. \r\n25/10/2024: Vaskemaskine: 16 kr.";
             break;
         case 'November':
-            tekst = "3/11/2024: Vaskemaskine 32 kr. 15/11/2024: Tøretumbler 8 kr. 20/11/2024: Vaskemaskine 32 kr.";
+            tekst = "3/11/2024: Vaskemaskine: 32 kr. \r\n15/11/2024: Tøretumbler: 8 kr. \r\n20/11/2024: Vaskemaskine: 32 kr.";
             break;
         case 'December':
-            tekst = "3/12/2024: Depositium for festlokale 1000 kr. 20/12/2024: Vaskemaskine 16 kr. 29/12/2024: Tøretumbler 8 kr. ";
+            tekst = "3/12/2024: Depositium for festlokale: 1000 kr. \r\n20/12/2024: Vaskemaskine: 16 kr. \r\n29/12/2024: Tøretumbler: 8 kr. ";
             break;
         case 'Januar':
-            tekst = "7/01/2025: Vaskemaskine 16 kr. 18/01/2024: Tøretumbler 8 kr. 20/01/2024: Vaskemaskine 16 kr. Tøretumbler 16 kr. 28/01/2024: Vaskemaksine 16 kr.";
+            tekst = "7/01/2024: Vaskemaskine: 16 kr. \r\n18/01/2024: Tøretumbler: 8 kr. \r\n20/01/2024: Vaskemaskine: 16 kr. & Tøretumbler: 16 kr. \r\n28/01/2024: Vaskemaksine: 16 kr.";
             break;
         case 'Februar':
-            tekst = "2/02/2025: Vaskemaskine 16 kr. 14/02/2024: Tøretumbler 8 kr. 18/02/2024: Depositum for festlokale 1000 kr. 24/02/2024: Vaskemakine 8 kr. Tøretumbler 16 kr.";
+            tekst = "2/02/2024: Vaskemaskine: 16 kr. \r\n14/02/2024: Tøretumbler: 8 kr. \r\n18/02/2024: Depositum for festlokale 1000: kr. \r\n24/02/2024: Vaskemakine: 8 kr. Tøretumbler: 16 kr.";
             break;
         case 'Marts':
-            tekst = "8/03/2025: Vaskemaskine 8 kr. 2/03/2024: Tøretumbler 16 kr. 14/03/2024: Vaskemaskine 16 kr. 25/03/2024: Vaskemaskine 8 kr. Tøretumbler 16 kr.";
+            tekst = "8/03/2024: Vaskemaskine: 8 kr. \r\n2/03/2024: Tøretumbler: 16 kr. \r\n14/03/2024: Vaskemaskine: 16 kr. \r\n25/03/2024: Vaskemaskine: 8 kr. & Tøretumbler: 16 kr.";
             break;
         case 'April':
-            tekst = "5/04/2024: Vaskemaskine 16 kr. 16/04/2025: Vaskemaskine 8 kr. Tøretumbler 8 kr. 28/04/2024: Vaskemaskine 16 kr.";
+            tekst = "5/04/2024: Vaskemaskine: 16 kr. \r\n16/04/2024: Vaskemaskine: 8 kr. & Tøretumbler: 8 kr. 28/04/2024: Vaskemaskine: 16 kr.";
             break;
     }
     document.querySelector('textarea').value = tekst;
 
 }
 
-function setBudget() {
-   
 
+
+
+
+
+function setBudget() {
 
     document.getElementById("check-mark").style.display = "inline";
 
@@ -346,6 +362,11 @@ setInterval(() => {
 }, 3000)
 
 }
+
+
+
+
+
 
 
 function removeChekmark() {
