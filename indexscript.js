@@ -1,8 +1,6 @@
 const loginBtn = document.getElementById("loginBtn");
-const page2Div = document.getElementById("page2");
-const page3Div = document.getElementById("page3");
-const textbox1 = document.getElementById("textbox1");
-const textbox2 = document.getElementById("textbox2");
+const usernameElem = document.getElementById("username");
+const passwordElem = document.getElementById("password");
 
 
 loginBtn.addEventListener("click", function() {
@@ -12,7 +10,6 @@ loginBtn.addEventListener("click", function() {
         alert("Brugernavn eller adganskode er forkert");
         loginBtn.focus();
     }
-    
 });
 
 const combinations = [
@@ -25,37 +22,9 @@ const combinations = [
     { text1: "viranat", text2: "gruppe3"},
 ];
 
-
-function showPage(page) {
-    page.style.display = "block";
-}
-
-
-function hidePage(page) {
-    page.style.display = "none";
-}
-
-
-function showButton(button) {
-    button.classList.remove("hidden");
-}
-
-
-function hideButton(button) {
-    button.classList.add("hidden");
-}
-
-
-function showTextBoxes() {
-    textbox1.style.display = "block";
-    textbox2.style.display = "block";
-}
-
-
 function areTextBoxesFilled() {
-    const text1 = textbox1.value.toLowerCase().trim();
-    const text2 = textbox2.value.toLowerCase().trim();
-
+    const text1 = usernameElem.value.toLowerCase().trim();
+    const text2 = passwordElem.value.toLowerCase().trim();
     
     return combinations.some(({ text1: word1, text2: word2 }) => {
         const word1Found = text1.includes(word1);
@@ -64,10 +33,9 @@ function areTextBoxesFilled() {
     });
 }
 
-
 function isCombinationValid() {
-    const text1 = textbox1.value.toLowerCase().trim();
-    const text2 = textbox2.value.toLowerCase().trim();
+    const text1 = usernameElem.value.toLowerCase().trim();
+    const text2 = passwordElem.value.toLowerCase().trim();
 
     return combinations.some(({ text1: word1, text2: word2 }) => {
         const word1Found = text1.includes(word1);
@@ -76,44 +44,20 @@ function isCombinationValid() {
     });
 }
 
-
-textbox1.addEventListener("input", togglePage3Button);
-textbox2.addEventListener("input", togglePage3Button);
-
-
-function togglePage3Button() {
-    if (areTextBoxesFilled()) {
-        showButton(loginBtn);
-    } else {
-        hideButton(loginBtn);
+usernameElem.addEventListener("keydown", function(event) {
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        passwordElem.focus();
     }
-}
+})
 
-
-document.addEventListener("keydown", function(event) {
-    if (event.keyCode === 13) {
-
+passwordElem.addEventListener("keydown", function(event) {
+    if (event.key === 'Enter') {
         if (areTextBoxesFilled()) {
             window.location.href = "main.html";
         } else {
             alert("Brugernavn eller adganskode er forkert");
             // loginBtn.focus();
         }
-        // if (!loginBtn.classList.contains() && !isAlertDisplayed()) {
-        //     loginBtn.click();
-        // }
     }
 });
-
-function isAlertDisplayed() {
-    return document.body.classList.contains("alert-active");
-}
-
-function showAlert(message) {
-    alert(message);
-    document.body.classList.add("alert-active");
-}
-
-function hideAlert() {
-    document.body.classList.remove("alert-active");5
-}

@@ -7,13 +7,11 @@
 </head>
 <body>
     <div class="hidden-popup-div">
-        <button class="exit-popup">X</button>
-        <button class="exit-popup visible-exit" data-popup="budget-div">X</button>
+        <button class="exit-popup"></button>
+        <button class="exit-popup visible-exit" data-popup="budget-div"></button>
         <div class="display-none" id="budget-div">
             <h1 class="content">Saldo</h1>
             <h3 class="content">Her får du overblik over dit forbrug:</h3>
-
-    
             <label class="content" for="monthly-budget">Månedligt budget:</label>
             <input type="number" id="monthly-budget" placeholder="Indtast beløb">
             <button class="content" onclick="setBudget()">Indstil</button>
@@ -22,7 +20,6 @@
             <h4 class="content">Nuværende saldo: <span id="current-balance">72</span> Kr.</h4>
             <h4 class="content">Sidste måned: <span id="last-period">110</span> Kr.</h4>
             <h4 class="content">Denne måneds overskridelse: <span id= overskridelse>30</span> Kr.</h4>
-
     
             <button class="content" onclick="showHistory()">Se din historik</button>
             <div class="display-none" id="popup">
@@ -39,19 +36,57 @@
 16/05/2024: Vaskemaskine: 16 kr. 
 21/05/2024: Tøretumbler: 8 kr.</textarea>
             </div>
-        </div>  
-          
-
-        <button class="exit-popup visible-exit" data-popup="settings-div">X</button>
+        </div>
+        <button class="exit-popup visible-exit" data-popup="settings-div"></button>
         <div class="display-none" id="settings-div">Settings div</div>
     
-        <button class="exit-popup visible-exit" data-popup="feedback-div">X</button>
-        <div class="display-none" id="feedback-div">Feedback div</div>
-    
-        <button class="exit-popup visible-exit" data-popup="support-div">X</button>
-        <div class="display-none" id="support-div">Support div</div>
+        <button class="exit-popup visible-exit" data-popup="feedback-div"></button>
+        <div class="display-none" id="feedback-div">
+            <h1 class="content">Feedback</h1> 
+            <p class="content">Skriv din feedback nedenunder</p>
+            <textarea id="message-box" rows="4" placeholder="Skriv din feedback her" class="content"></textarea>
+            <div class="content">
+                <div class="rating">
+                    <input type="radio" id="rating1" value="1" name="radio">
+                    <label for="rating1" >1</label>
+                    <input type="radio" id="rating2" value="2" name="radio">
+                    <label for="rating2" >2</label>
+                    <input type="radio" id="rating3" value="3" name="radio">
+                    <label for="rating3" >3</label>
+                    <input type="radio" id="rating4" value="4" name="radio">
+                    <label for="rating4" >4</label>
+                    <input type="radio" id="rating5" value="5" name="radio">
+                    <label for="rating5" >5</label>
+                </div>
+            </div>
+            <div class="content">
+                <button class="submit-btn" onclick="submitFeedback()">Submit</button> 
+            </div>
+        </div>
+
+        <button class="exit-popup visible-exit" data-popup="support-div"></button>
+        <div class="display-none" id="support-div">
+            <h1 class="content">Kontakt informationer</h1>
+            <p class="content">Telefon: +45xxxxxxxx</p>
+            <p class="content">Email: <a href="mailto:Jensenboligselskabsupport@gmail.com">Jensenboligselskabsupport@gmail.com</a></p>
+            <p class="content">Adresse: xxxxxxxxxxxxx</p>
+            <p class="content" id="Skriv-til-visevaerter">Skriv til vicevært</p>
+            <textarea class="content" id="message-box2" rows="4" placeholder="Skriv til vicevært her" ></textarea>
+            <div class="content">
+                <button class="send-btn" onclick="sendFeedback()">Send</button>
+            </div>
+        </div>
+        <div class="display-none" id="order-div">
+            <h1>im adding times</h1>
+            <div id="display-ordered-times"></div>
+            <button class="confirm-btn" id="confirm-btn-id">Bekræft tider</button>
+        </div>
+        <div class="display-none" id ="cancel-div">
+            <h1>AFLYS DET HELE</h1>
+            <div id="display-cancelled-times"></div>
+        </div>
     </div>
-    <div class="exit-popup invisible-exit"></div> 
+    <div class="exit-popup invisible-exit"></div>
     <div class="can-blur">
         <div class="nav">
             <img src="logo.png">
@@ -59,12 +94,23 @@
             <button class="nav-btn" id="settings-btn">Settings</button>
             <button class="nav-btn" id="feedback-btn">Feedback</button>
             <button class="nav-btn" id="support-btn">Support</button>
+            <button class="nav-btn" id="cancel-btn">Aflys tider</button>
             <button class="nav-btn" id="logout-btn">Log ud</button>
         </div>
-        <button id="prev-week">◄</button>
-        <button id="next-week">►</button>
         <div class="calendar-grid" id="cal-start"></div>
-        <button class="nav-btn" style="width: 650px; height: 50px; margin-top: 10px; margin-left: 20px;">Tilføj tidspunkter</button>
+        <button class="arrow" id="prev-week">◄</button>
+        <button class="arrow" id="next-week">►</button>
+        <button class="nav-btn" id="order-btn">Tilføj tidspunkter</button>
+        <div class="shared-items-container">
+            <button class="shared-items-btn" id="washing-machine-btn">Vaskerum</button>
+            <div class="shared-items-selected"></div>
+            <button class="shared-items-btn" id="party-room-btn">Festlokale</button>
+            <div class="shared-items-selected"></div>
+            <button class="shared-items-btn" id="drill-btn">Boremaskine</button>
+            <div class="shared-items-selected"></div>
+            <button class="shared-items-btn" id="vacumn-cleaner-btn">Støvsuger</button>
+            <div class="shared-items-selected"></div>
+        </div>
     </div>
 </body>
 </html>
