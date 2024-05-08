@@ -81,6 +81,51 @@ const weekDifferenceAndFullCells = {
         }
     }
 };
+const lockedCellsDisplayObject = {
+    washingMachine: {
+        Mandag: [],
+        Tirsdag: [],
+        Onsdag: [],
+        Torsdag: [],
+        Fredag: [],
+        Lørdag: [],
+        Søndag: []
+    },
+    partyRoom: {
+        Mandag: [],
+        Tirsdag: [],
+        Onsdag: [],
+        Torsdag: [],
+        Fredag: [],
+        Lørdag: [],
+        Søndag: []
+    },
+    drill: {
+        Mandag: [],
+        Tirsdag: [],
+        Onsdag: [],
+        Torsdag: [],
+        Fredag: [],
+        Lørdag: [],
+        Søndag: []
+    },
+    vacumnCleaner: {
+        Mandag: [],
+        Tirsdag: [],
+        Onsdag: [],
+        Torsdag: [],
+        Fredag: [],
+        Lørdag: [],
+        Søndag: []
+    }
+};
+
+let objectString = ''
+for (let i = Object(lockedCellsDisplayObject.washingMachine.Mandag).length - 1; i >= 0; --i) {
+    if (lockedCellsDisplayObject.washingMachine.Mandag[i] !== undefined) {
+        console.log(lockedCellsDisplayObject.washingMachine.Mandag[i])
+    }
+}
 
 const currentDate = new Date()
 const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
@@ -184,34 +229,35 @@ function cancelTimes () {
     // for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
     //     selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
     // }
-    for (let i = Object.keys(weekDifferenceAndFullCells[selectedItem].currentUserLocked).length - 1; i >= 0; i--) {
+    for (let i = Object.keys(weekDifferenceAndFullCells).length - 1; i >= 0; i--) {
         for (let j = 0; j < weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].length; j++) {
             selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][j]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][j]).y);
         }
-    }
-    console.log(selectedTimesLocked)
-  
-    // let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
-    // const selectedTimesLockedPure = selectedTimesLocked;
-    // console.log(selectedTimesLocked)
-    let selectedItemTranslated = selectedItem
+        console.log(selectedItemArray[i])
+        console.log(selectedTimesLocked)
+        console.log(weekDifferenceAndFullCells)
+        console.log(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][0])
+
+
+    // let selectedItemTranslated = selectedItemArray[i]
     
-    switch(selectedItem) {
-        case 'washingMachine':
-            selectedItemTranslated = 'vaskerum'
-            break;
-        case 'partyRoom':
-            selectedItemTranslated = 'festlokale'
-            break;
-        case 'drill':
-            selectedItemTranslated = 'boremaskine'
-        case 'vacumnCleaner':
-            selectedItemTranslated = 'støvsuger'
-            break;
-    }
-        for (let weekDay in selectedTimesLocked) {
+    // switch(selectedItemArray[i]) {
+    //     case 'washingMachine':
+    //         selectedItemTranslated.push('vaskerum')
+    //         break;
+    //     case 'partyRoom':
+    //         selectedItemTranslated.push('festlokale')
+    //         break;
+    //     case 'drill':
+    //         selectedItemTranslated.push('boremaskine')
+    //     case 'vacumnCleaner':
+    //         selectedItemTranslated.push('støvsuger')
+    //         break;
+    // }
+
+    for (let weekDay in selectedTimesLocked) {
         if (selectedTimesLocked[weekDay].length !== 0) {
-            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay+' ('+selectedItemTranslated+')'}:</div>`;
+            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay+' ('+selectedItemArray[i]+')'}:</div>`;
             for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
                 if (selectedTimesLocked[weekDay][i] <= 9) {
                     selectedTimesLocked[weekDay][i] = '   0' + selectedTimesLocked[weekDay][i] + ':00';
@@ -221,14 +267,13 @@ function cancelTimes () {
             }
             displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
             displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
-
         }
     }
     // console.log(displayObject)
     let displayString = ''
     for (let weekDay in displayObject) {
         if (displayObject[weekDay] !== undefined) {
-            console.log(displayObject)
+            // console.log(displayObject)
             displayCancelledTimesElem.innerHTML = displayString += displayObject[weekDay];
         }
         document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
@@ -272,14 +317,14 @@ function cancelTimes () {
                 textDisplayElement.classList.add('line-through')
                 // textDisplayElement.classList.add('awaiting-deletion')
             })
-            for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
-                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+            for (let z = 0; i < weekDifferenceAndFullCells[selectedItemArray[z]].currentUserLocked[weekDifference].length; z++) {
+                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][z]).x == weekDayIndex) {
+                    weekDifferenceAndFullCells[selectedItemArray[z]].currentUserLocked[weekDifference].splice(z, 1)
                 }
             }
-            for (let i = weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
-                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+            for (let z = weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].length -1; z >= 0; z--) {
+                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][z]).x == weekDayIndex) {
+                    weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].splice(z, 1)
                 }
             }
             generateCalendar()
@@ -288,6 +333,7 @@ function cancelTimes () {
             cancelWeekDayButton.textContent = 'Aflyst'
             displayObject.weekDay = ''
         }
+    }
     }
 }
 // document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
