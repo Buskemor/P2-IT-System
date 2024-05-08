@@ -429,30 +429,47 @@ function sharedButtonsCase(index) {
     interactiveCells();
 }
 
-function activatePopup () {
+// not sure where to put this
+document.addEventListener('mousedown', function(event) {
+    const sharedItemsBtns = document.querySelectorAll('.shared-items-btn');
+    let isClickInside = false;
+    sharedItemsBtns.forEach((btn) => {
+        if (btn.contains(event.target)) {
+            isClickInside = true;
+        }
+    });
+    const textarea = document.querySelector('textarea');
+    const input = document.querySelector('input');
+    if (!isClickInside && !event.target.closest('textarea') && event.target.tagName !== 'TEXTAREA' && !event.target.closest('input') && event.target.tagName !== 'INPUT') {
+        event.preventDefault();
+    }
+});
+
+
+function activatePopup() {
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(navButton => {
         navButton.addEventListener('click', () => {
-            switch (navButton.id) {
+            switch (popupId) {
                 case 'order-btn':
                     document.getElementById('order-div').classList.toggle('display-none');
                     activePopup.order = true;
                     orderTimes();
                     break;
                 case 'budget-btn':
-                    document.getElementById('budget-div').classList.toggle('display-none');
+                    document.getElementById('budget-div').classList.remove('display-none'); // Remove display-none class
                     activePopup.budget = true;
                     break;
                 case 'settings-btn':
-                    document.getElementById('settings-div').classList.toggle('display-none');
+                    document.getElementById('settings-div').classList.remove('display-none'); // Remove display-none class
                     activePopup.settings = true;
                     break;
                 case 'feedback-btn':
-                    document.getElementById('feedback-div').classList.toggle('display-none');
+                    document.getElementById('feedback-div').classList.remove('display-none'); // Remove display-none class
                     activePopup.feedback = true;
                     break;
                 case 'support-btn':
-                    document.getElementById('support-div').classList.toggle('display-none');
+                    document.getElementById('support-div').classList.remove('display-none'); // Remove display-none class
                     activePopup.support = true;
                     break;
                 case 'cancel-btn':
@@ -462,8 +479,14 @@ function activatePopup () {
                     break;
                 case 'logout-btn':
                     window.location.href = "index.html";
-                    return; //return so the popup doesn't flashbang you when you logout
-            };
+                    return; // Return so the popup doesn't flash
+            }
+
+            // Add focus style to the corresponding nav button
+            navButtons.forEach(btn => {
+                btn.classList.remove('focused');
+            });
+            navButton.classList.add('focused');
             blurElements.forEach(blurElement => {
                 blurElement.classList.toggle('blurred');
             });
@@ -472,9 +495,30 @@ function activatePopup () {
             });
         });
     });
-};
+}
+
+function removeActivePopup(activePopup) {
+    for (let key in activePopup) {
+        if (activePopup[key] === true) {
+            const navButtonId = key + '-btn';
+            const navButton = document.getElementById(navButtonId);
+            if (navButton) {
+                navButton.classList.remove('focused'); // Remove focus style from nav button
+            }
+            document.getElementById(`${key}-div`).classList.add('display-none');
+            activePopup[key] = false;
+        }
+    }
+    blurElements.forEach(blurElement => {
+        blurElement.classList.remove('blurred');
+    });
+    popupDivs.forEach(popupDiv => {
+        popupDiv.classList.remove('popup-div-display');
+    });
+}
 
 function deActivatePopup() {
+    const navButtons = document.querySelectorAll('.nav-btn');
     document.addEventListener('click', (event) => {
         const isPopupTrigger = event.target.classList.contains('nav-btn');
         const isPopupContent = event.target.classList.contains('popup-div');
@@ -487,6 +531,10 @@ function deActivatePopup() {
             });
             if (!isInsidePopup) {
                 removeActivePopup(activePopup);
+                // Remove focus style from all nav buttons when any popup is closed
+                navButtons.forEach(btn => {
+                    btn.classList.remove('focused');
+                });
             };
         };
     });

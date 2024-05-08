@@ -1,21 +1,92 @@
-
 * {
     font-family: 'Montserrat', sans-serif;
+    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
 }
 
 body {
-    background-color: rgb(81, 87, 143);
-    margin-top: 0px;
-    margin-left: 0px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.page-container {
+    position: relative; /* Relative positioning for child elements */
 }
 
 .main-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%; /* Full width */
+    max-width: 500px; /* Limit maximum width */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 10px;
+}
+
+.textbox-container input[type="text"],
+.textbox-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+}
+
+.textbox-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #764ba2;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.textbox-container input[type="submit"]:hover {
+    background-color: #5c3e8f;
+}
+
+.textbox-container input[type="submit"]:focus {
+    outline: none;
+    background-color: #6848b2;
+}
+
+#loginBtn {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #764ba2;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#loginBtn:hover {
+    background-color: #5c3e8f;
+}
+
+#loginBtn:focus {
+    outline: none; /* Remove default focus outline */
+    background-color: #6848b2; /* Adjust color for focus state */
 }
 
 .dark-blue {
-    color: darkblue;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #764ba2;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    text-decoration: dashed;
+}
+
+.dark-blue:hover {
+    background-color: #5c3e8f;
 }

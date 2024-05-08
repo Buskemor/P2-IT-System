@@ -7,14 +7,14 @@
 </head>
 <body>
     <div class="hidden-popup-div">
-        <button class="exit-popup">X</button>
-        <button class="exit-popup visible-exit" data-popup="budget-div">X</button>
+        <button class="exit-popup"></button>
+        <button class="exit-popup visible-exit" data-popup="budget-div"></button>
         <div class="display-none" id="budget-div">
             <h1 class="content">Saldo</h1>
             <h3 class="content">Her får du overblik over dit forbrug</h3>
 
             <!-- månedligt budget -->
-            <label class="content" for="monthly-budget">Månedligt budget:</label>
+            <label for="monthly-budget">Månedligt budget:</label>
             <input type="number" id="monthly-budget" placeholder="Indtast beløb">
             <button onclick="setBudget()">Indstil</button>
             <h4 class="content">Nuværende saldo: <span id="current-balance">0</span> DKK</h4>
@@ -22,7 +22,7 @@
             <h4 class="content">Overskridelse: <span id= overskridelse>0</span> DKK</h4>
 
             <!--Forbrugshistorik -->
-            <button class="content" onclick="showHistory()">Se din historik</button>
+            <button class="content history-button" onclick="showHistory()">Se din historik</button>
             <ul id="history"></ul>
             <div id="history-popup" class="history-popup">
                 <h3 id="current-month" class="content">Januar</h3>               
@@ -35,10 +35,10 @@
                 <textarea rows="4" cols="50" class="content"></textarea>
             </div>
         </div>
-        <button class="exit-popup visible-exit" data-popup="settings-div">X</button>
+        <button class="exit-popup visible-exit" data-popup="settings-div"></button>
         <div class="display-none" id="settings-div">Settings div</div>
     
-        <button class="exit-popup visible-exit" data-popup="feedback-div">X</button>
+        <button class="exit-popup visible-exit" data-popup="feedback-div"></button>
         <div class="display-none" id="feedback-div">
             <h1 class="content">Feedback</h1> 
             <p class="content">Skriv din feedback nedenunder</p>
@@ -62,7 +62,7 @@
             </div>
         </div>
 
-        <button class="exit-popup visible-exit" data-popup="support-div">X</button>
+        <button class="exit-popup visible-exit" data-popup="support-div"></button>
         <div class="display-none" id="support-div">
             <h1 class="content">Kontakt informationer</h1>
             <p class="content">Telefon: +45xxxxxxxx</p>
