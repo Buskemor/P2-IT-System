@@ -123,11 +123,41 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const exitButton = document.querySelectorAll('.exit-popup');
     const submitButtons = document.querySelectorAll('.submit-btn')
+    const sendButton = document.querySelector('.send-btn')
     submitButtons.forEach(submitButton => {
         submitButton.addEventListener('click', () => {
 
-                document.getElementById(`feedback-div`).classList.toggle('display-none');
-                activePopup.feedback = false;
+            document.getElementById(`feedback-div`).classList.toggle('display-none');
+            activePopup.feedback = false;
+            blurElements.forEach(blurElement => {
+                blurElement.classList.toggle('blurred');
+            });
+            popupDivs.forEach(popupDiv => {
+                popupDiv.classList.toggle('popup-div-display');
+            });
+        });
+    });
+    exitButton.forEach(exitButton => {
+        exitButton.addEventListener('click', () => {
+            for (let key in activePopup) {
+                if (activePopup[key] === true) {
+                    document.getElementById(`${key}-div`).classList.toggle('display-none');
+                    activePopup[key] = false;
+                }
+            }
+            blurElements.forEach(blurElement => {
+                blurElement.classList.toggle('blurred');
+            });
+            popupDivs.forEach(popupDiv => {
+                popupDiv.classList.toggle('popup-div-display');
+            });
+        });
+    });
+    sendButton.forEach(sendButton => {
+        sendButton.addEventListener('click', () => {
+
+            document.getElementById(`support-div`).classList.toggle('display-none');
+            activePopup.support = false;
             blurElements.forEach(blurElement => {
                 blurElement.classList.toggle('blurred');
             });
@@ -190,13 +220,14 @@ function submitFeedback() {
 
     // alert("Tak for din feedback!");
 }
-function Sentfunction() {
-    let message2 = document.getElementById("message-box").value;
+function sendFeedback() {
+    let message2 = document.getElementById("message-box2").value;
 
-    console.log("Send Message2:", message2);
+    console.log("Send Message:", message2);
     document.getElementById("message-box2").value = "";
-    document.getElementById("support-div").classList.toggle('display-none');
+    document.getElementById('popup-message').classList.toggle('display-none');
     
+
 }
    
 

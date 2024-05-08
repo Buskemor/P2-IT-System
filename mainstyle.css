@@ -186,7 +186,7 @@ textarea {
 }
 
 .submit-btn {
-    background-color: red;
+    background-color: white;
     font-size: medium;
     font-weight: 700;
 }
@@ -199,7 +199,7 @@ p.Skriv-til-visevaerter{
     font-weight: 700;
 }
 .send-btn {
-    background-color: red;
+    background-color: white;
     font-size: small;
     font-weight: 700;
 }
