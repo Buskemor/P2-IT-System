@@ -272,39 +272,94 @@ p#Skriv-til-visevaerter{
     padding: 12px 20px;
     font-size: 16px;
     resize: none;
-    
 }
 
 .content {
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 15px;
     resize: none;
 }
+
 
 .money-info {
     width: 400px;
     height: 700px;
 }
 
-.prev-month-btn {
-    width: 30px;
-}
-
-.next-month-btn {
-    width: 30px;
-}
 
 .navigation button {
-    margin-right: 5px;
+    margin-right: 1px;
     border-radius: 30px;
+    width: 10%;
+    position: absolute;
 }
 
-.navigation button:hover {
-    background-color: rgb(138, 138, 138);
+.navigation button#prev-month-btn {
+    box-sizing: border-box;
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #764ba2;
+    color: #ffffff;
+    cursor: pointer;
+    width: 55px;
+    height: 35px;
+    bottom: 24%;
+    right: 60%; 
 }
 
-.navigation button:active {
-    background-color: rgb(82, 80, 80);
+.navigation button#next-month-btn {
+    box-sizing: border-box;
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #764ba2;
+    color: #ffffff;
+    cursor: pointer;
+    width: 55px;
+    height: 35px;
+    bottom: 24%;
+    right: 30%;
+}
+
+.navigation button#next-month-btn:hover {
+    background-color: #5c3e8f;
+}
+
+.navigation button#prev-month-btn:hover {
+    background-color: #5c3e8f;
+}
+
+#current-month {
+    position: relative;
+    left: 150px;
+    bottom: 15px;
+}
+
+.content.history-button {
+    box-sizing: border-box;
+    width: 50%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #764ba2;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    position: relative;
+    left: 80px;
+    bottom: 15px;
+}
+
+.content.history-button:hover {
+    background-color: #5c3e8f;
+}
+
+.content.history-button:focus {
+    outline: none;
+    background-color: #6848b2;
 }
 
 

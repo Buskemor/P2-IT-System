@@ -301,10 +301,13 @@ document.addEventListener('mousedown', function(event) {
             isClickInside = true;
         }
     });
-    if (!isClickInside && !event.target.closest('textarea')) {
+    const textarea = document.querySelector('textarea');
+    const input = document.querySelector('input');
+    if (!isClickInside && !event.target.closest('textarea') && event.target.tagName !== 'TEXTAREA' && !event.target.closest('input') && event.target.tagName !== 'INPUT') {
         event.preventDefault();
     }
 });
+
 
 function activatePopup(activePopup, blurElements, popupDivs) {
     const navButtons = document.querySelectorAll('.nav-btn');
