@@ -11,28 +11,30 @@
         <button class="exit-popup visible-exit" data-popup="budget-div"></button>
         <div class="display-none" id="budget-div">
             <h1 class="content">Saldo</h1>
-            <h3 class="content">Her får du overblik over dit forbrug</h3>
-
-            <!-- månedligt budget -->
-            <label for="monthly-budget">Månedligt budget:</label>
+            <h3 class="content">Her får du overblik over dit forbrug:</h3>
+            <label class="content" for="monthly-budget">Månedligt budget:</label>
             <input type="number" id="monthly-budget" placeholder="Indtast beløb">
-            <button onclick="setBudget()">Indstil</button>
-            <h4 class="content">Nuværende saldo: <span id="current-balance">0</span> DKK</h4>
-            <h4 class="content">Sidste periode: <span id="last-period">0</span> DKK</h4>
-            <h4 class="content">Overskridelse: <span id= overskridelse>0</span> DKK</h4>
+            <button class="content" onclick="setBudget()">Indstil</button>
+            <span id="check-mark" style="display:none;">✔️</span>
 
-            <!--Forbrugshistorik -->
-            <button class="content history-button" onclick="showHistory()">Se din historik</button>
-            <ul id="history"></ul>
-            <div id="history-popup" class="history-popup">
-                <h3 id="current-month" class="content">Januar</h3>               
+            <h4 class="content">Nuværende saldo: <span id="current-balance">72</span> Kr.</h4>
+            <h4 class="content">Sidste måned: <span id="last-period">110</span> Kr.</h4>
+            <h4 class="content">Denne måneds overskridelse: <span id= overskridelse>30</span> Kr.</h4>
+    
+            <button class="content" onclick="showHistory()">Se din historik</button>
+            <div class="display-none" id="popup">
+                <h3 id="current-month" class="content">Maj</h3>    
                 <div class="navigation">
                     <button id="prev-month-btn" class="content" onclick="forrigeMåned()">&#9664;</button>
                     <span id="current-month"></span>
                     <span id="current-year"></span>
                     <button id="next-month-btn" class="content" onclick="næsteMåned()">&#9654;</button>
                 </div>
-                <textarea rows="4" cols="50" class="content"></textarea>
+                <textarea rows="6,1" cols="50" class="content">2/05/2024: Vaskemaskine: 16 kr. 
+3/05/2024: Tøretumbler: 8 kr. 
+9/05/2024: Vaskemaskine: 8 kr. & Tøretumbler: 16 kr. 
+16/05/2024: Vaskemaskine: 16 kr. 
+21/05/2024: Tøretumbler: 8 kr.</textarea>
             </div>
         </div>
         <button class="exit-popup visible-exit" data-popup="settings-div"></button>

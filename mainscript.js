@@ -484,7 +484,6 @@ function activatePopup() {
                     window.location.href = "index.html";
                     return; // Return so the popup doesn't flash
             }
-
             // Add focus style to the corresponding nav button
             navButtons.forEach(btn => {
                 btn.classList.remove('focused');
@@ -611,40 +610,101 @@ function convertIndexToCoord(number) {
 
 function submitFeedback() {
 
-    let message = document.getElementById("message-box").value;
-
-    console.log("Feedback Message:", message);
-    document.getElementById("message-box").value = "";
-    document.getElementById("popup-message").classList.toggle('display-none');
-    let popupMessage = document.getElementById("popup-message");
-    popupMessage.textContent = "Tak for din feeback";
-    popupMessage.style.display = "block"; //so it displays something
-
-    setTimeout(function(){
-        popupMessage.style.display = "none";
-    }, 3000); 
-}
-function Sentfunction() {
-    let message2 = document.getElementById("message-box").value;
-
-    console.log("Send Message2:", message2);
-    document.getElementById("message-box2").value = "";
-    document.getElementById("support-div").classList.toggle('display-none');
-    
-}
+   
+document.getElementById("next-month-btn").disabled = true;
 
 // Næste måned 
 function næsteMåned() {
-    let måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    let måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
     let nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
     let næsteMånedsIndex = (nuværendeMånedsIndex + 1) % måneder.length;
+    if(11 == måneder.indexOf(document.getElementById('current-month').textContent)) {
+        document.getElementById("next-month-btn").disabled = true;
+    } else {
+        document.getElementById("next-month-btn").disabled = false;
+    }
+    console.log('hvad er '+måneder.indexOf(document.getElementById('current-month').textContent))
     document.getElementById('current-month').textContent = måneder[næsteMånedsIndex];
+    rotermåneder(måneder[næsteMånedsIndex]);
 }
 
 // Forrige måned
 function forrigeMåned() {
-    let måneder = ['Januar', 'Februar', 'Marts', 'April', 'Maj', 'Juni', 'Juli', 'August', 'September', 'Oktober', 'November', 'December'];
+    let måneder = ['Maj', 'Juni','Juli', 'August', 'September', 'Oktober', 'November', 'December', 'Januar', 'Februar', 'Marts', 'April'];
     let nuværendeMånedsIndex = måneder.indexOf(document.getElementById('current-month').textContent);
     let forrigeMånedsIndex = (nuværendeMånedsIndex - 1 + måneder.length) % måneder.length;
+    if(0+1 == måneder.indexOf(document.getElementById('current-month').textContent)) {
+        document.getElementById("next-month-btn").disabled = true;
+    } else {
+        document.getElementById("next-month-btn").disabled = false;
+    }
     document.getElementById('current-month').textContent = måneder[forrigeMånedsIndex];
+    rotermåneder(måneder[forrigeMånedsIndex]);
+}
+
+
+function rotermåneder(måned) {
+    let tekst = "";
+    switch (måned) {
+        case 'Maj':
+            tekst = "2/05/2024: Vaskemaskine: 16 kr. \r\n3/05/2024: Tøretumbler: 8 kr. \r\n9/05/2024: Vaskemaskine: 8 kr. & Tøretumbler: 16 kr. \r\n16/05/2024: Vaskemaskine: 16 kr. 21/05/2024: Tøretumbler: 8 kr.";
+            break;
+        case 'Juni':
+            tekst = "5/06/2024: Vaskemaskine: 32 kr. \r\n10/06/2024: Tøretumbler: 16 kr. \r\n15/06/2024: Vaskemaskine: 16 kr. \r\n20/06/2024: Tøretumbler: 8 kr. \r\n28/06/2024: Depositum for festlokale: 1000 kr. ";
+            break;
+        case 'Juli':
+            tekst = "3/07/2024: Depositium for festlokale: 1000 kr. \r\n15/07/2024: Vaskemaskine: 16 kr. \r\n22/07/2024: Tøretumbler: 16 kr. \r\n29/07/2024: Vaskemaskine: 16 kr.";
+            break;
+        case 'August':
+            tekst = "8/08/2024: Vaskemaskine: 8 kr. \r\n20/08/2024: Tøretumbler: 16 kr. \r\n25/08/2024: Vaskemaskine: 16 kr.";
+            break;
+        case 'September':
+            tekst = "5/09/2024: Vaskemaskine: 16 kr. \r\n18/09/2024: Tøretumbler: 8 kr.";
+            break;
+        case 'Oktober':
+            tekst = "10/10/2024: Tøretumbler: 32 kr. \r\n15/10/2024: Vaskemaskine: 8 kr. \r\n20/10/2024: Tøretumbler: 16 kr. \r\n25/10/2024: Vaskemaskine: 16 kr.";
+            break;
+        case 'November':
+            tekst = "3/11/2024: Vaskemaskine: 32 kr. \r\n15/11/2024: Tøretumbler: 8 kr. \r\n20/11/2024: Vaskemaskine: 32 kr.";
+            break;
+        case 'December':
+            tekst = "3/12/2024: Depositium for festlokale: 1000 kr. \r\n20/12/2024: Vaskemaskine: 16 kr. \r\n29/12/2024: Tøretumbler: 8 kr. ";
+            break;
+        case 'Januar':
+            tekst = "7/01/2024: Vaskemaskine: 16 kr. \r\n18/01/2024: Tøretumbler: 8 kr. \r\n20/01/2024: Vaskemaskine: 16 kr. & Tøretumbler: 16 kr. \r\n28/01/2024: Vaskemaksine: 16 kr.";
+            break;
+        case 'Februar':
+            tekst = "2/02/2024: Vaskemaskine: 16 kr. \r\n14/02/2024: Tøretumbler: 8 kr. \r\n18/02/2024: Depositum for festlokale 1000: kr. \r\n24/02/2024: Vaskemakine: 8 kr. Tøretumbler: 16 kr.";
+            break;
+        case 'Marts':
+            tekst = "8/03/2024: Vaskemaskine: 8 kr. \r\n2/03/2024: Tøretumbler: 16 kr. \r\n14/03/2024: Vaskemaskine: 16 kr. \r\n25/03/2024: Vaskemaskine: 8 kr. & Tøretumbler: 16 kr.";
+            break;
+        case 'April':
+            tekst = "5/04/2024: Vaskemaskine: 16 kr. \r\n16/04/2024: Vaskemaskine: 8 kr. & Tøretumbler: 8 kr. 28/04/2024: Vaskemaskine: 16 kr.";
+            break;
+    }
+    document.querySelector('textarea').value = tekst;
+
+}
+
+function setBudget() {
+
+    document.getElementById("check-mark").style.display = "inline";
+
+setInterval(() => {
+    removeChekmark()
+}, 3000)
+
+}
+
+function removeChekmark() {
+
+ document.getElementById("check-mark").style.display = "none";
+
+}
+
+function  showHistory() {
+
+    document.getElementById('popup').classList.toggle ('display-none');
+
 }
