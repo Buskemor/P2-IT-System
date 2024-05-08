@@ -433,14 +433,16 @@ function sharedButtonsCase(index) {
 document.addEventListener('mousedown', function(event) {
     const sharedItemsBtns = document.querySelectorAll('.shared-items-btn');
     let isClickInside = false;
-    sharedItemsBtns.forEach((btn) => {
-        if (btn.contains(event.target)) {
+    console.log(sharedItemsBtns[0])
+    sharedItemsBtns.forEach((button) => {
+        if (button.contains(event.target)) {
             isClickInside = true;
         }
     });
     const textarea = document.querySelector('textarea');
     const input = document.querySelector('input');
-    if (!isClickInside && !event.target.closest('textarea') && event.target.tagName !== 'TEXTAREA' && !event.target.closest('input') && event.target.tagName !== 'INPUT') {
+    console.log(!isClickInside)
+    if (!isClickInside && !event.target.closest('textarea') && event.target.tagName !== 'textarea' && !event.target.closest('input') && event.target.tagName !== 'INPUT') {
         event.preventDefault();
     }
 });
@@ -450,7 +452,7 @@ function activatePopup() {
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(navButton => {
         navButton.addEventListener('click', () => {
-            switch (popupId) {
+            switch (navButton.id) {
                 case 'order-btn':
                     document.getElementById('order-div').classList.toggle('display-none');
                     activePopup.order = true;
@@ -478,6 +480,7 @@ function activatePopup() {
                     cancelTimes()
                     break;
                 case 'logout-btn':
+                    console.log('logout')
                     window.location.href = "index.html";
                     return; // Return so the popup doesn't flash
             }
