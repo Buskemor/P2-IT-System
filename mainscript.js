@@ -610,6 +610,30 @@ function convertIndexToCoord(number) {
 
 function submitFeedback() {
 
+    let message = document.getElementById("message-box").value;
+
+    console.log("Feedback Message:", message);
+    document.getElementById("message-box").value = "";
+    document.getElementById("popup-message").classList.toggle('display-none');
+    let popupMessage = document.getElementById("popup-message");
+    popupMessage.textContent = "Tak for din feeback";
+    popupMessage.style.display = "block";
+
+    setTimeout(function(){
+        popupMessage.style.display = "none";
+    }, 3000); 
+
+}
+function sendFeedback() {
+    let message2 = document.getElementById("message-box2").value;
+
+    console.log("Send Message:", message2);
+    document.getElementById("message-box2").value = "";
+    document.getElementById('support-div').classList.toggle('display-none');
+    
+
+}
+
    
 document.getElementById("next-month-btn").disabled = true;
 
