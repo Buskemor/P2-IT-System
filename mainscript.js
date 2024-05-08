@@ -162,14 +162,14 @@ function confirmOrder() {
 function cancelTimes () {
     weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].includes()
 
-    console.log('CANCEL:  '+weekDifference + ' ' + selectedItem)
+    // console.log('CANCEL:  '+weekDifference + ' ' + selectedItem)
     const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
     if (activePopup.cancel === false) {
         return;
     }
     // pushUserChangesToObj();
 
-    const selectedTimes = {
+    const selectedTimesLocked = {
         Mandag: [],
         Tirsdag: [],
         Onsdag: [],
@@ -179,31 +179,85 @@ function cancelTimes () {
         Søndag: []
     }
 
-    let displayString = ''
+    let displayObject = {}
     for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
-        selectedTimes[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
+        selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
     }
-    console.log(selectedTimes)
-    for (let weekDay in selectedTimes) {
-        if (selectedTimes[weekDay].length !== 0) {
-            displayString += `<div>${weekDay}:</div>`;
-            for (let i = 0; i < selectedTimes[weekDay].length; i++) {
-                if (selectedTimes[weekDay][i] <= 9) {
-                    selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
+    let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
+    // const selectedTimesLockedPure = selectedTimesLocked;
+    // console.log(selectedTimesLocked)
+    for (let weekDay in selectedTimesLocked) {
+        if (selectedTimesLocked[weekDay].length !== 0) {
+            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay}:</div>`;
+            for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
+                if (selectedTimesLocked[weekDay][i] <= 9) {
+                    selectedTimesLocked[weekDay][i] = '   0' + selectedTimesLocked[weekDay][i] + ':00';
                 } else {
-                    selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
+                    selectedTimesLocked[weekDay][i] = '   '+ selectedTimesLocked[weekDay][i] + ':00';
                 }
             }
-            // displayString += `<div>${selectedTimes[weekDay]}</div>`;
-            // displayString += `<button class="${weekDay+='-cancel-btn'}">Aflys</button> <br></br>`;
-            // document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
-            //     console.log(`i want to cancel the times on ${weekDay}`)
-            // });
+            displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
+            displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
+
         }
     }
-    displayCancelledTimesElem.innerHTML = displayString;
+    console.log(displayObject)
+    let displayString = ''
+    for (let weekDay in displayObject) {
+        if (displayObject[weekDay] !== undefined) {
+            console.log(displayObject)
+            displayCancelledTimesElem.innerHTML = displayString += displayObject[weekDay];
+        }
+        document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
+            cancelWeekDayButton.addEventListener('click', () => {
+                switch (cancelWeekDayButton.id) {
+                    case 'Mandag-cancel-btn':
+                        console.log('monday!')
+                        document.querySelectorAll('.Mandag-can-line-through').forEach(textDisplayElement => {
+                            textDisplayElement.classList.add('line-through')
+                            console.log(textDisplayElement)
+                        })
+                        console.log(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference])
+                        for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
+                            weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i].splice(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y, 1);
+                        }
+                        console.log(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference])
+                        // console.log(selectedTimesLockedPure)
+                        // weekDifferenceAndFullCells
 
+
+                        // console.log('removing ' + JSON.stringify(document.getElementById('Mandag-cancel-btn')))
+                        // document.getElementById('Mandag-cancel-btn').remove()
+                        console.log('cancel Mandag');
+                        break;
+                    case 'Tirsdag-cancel-btn':
+                        console.log('cancel Tirsdag');
+                        break;
+                    case 'Onsdag-cancel-btn':
+                        console.log('cancel Onsdag');
+                        break;
+                    case 'Torsdag-cancel-btn':
+                        console.log('cancel Torsdag');
+                        break;
+                    case 'Fredag-cancel-btn':
+                        console.log('cancel Fredag');
+                        break;
+                    case 'Lørdag-cancel-btn':
+                        console.log('cancel Lørdag');
+                        break;
+                    case 'Søndag-cancel-btn':
+                        console.log('cancel Søndag');
+                        break;
+                }
+                
+                // console.log(`i want to cancel the times on ${weekDay}`)
+            });
+        })
+    }
 }
+// document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
+//     console.log(`i want to cancel the times on ${weekDay}`)
+// });
 
 function updateCalendarPreviousWeek() {
     currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
@@ -283,6 +337,7 @@ function setCellsHtml() {
     timeElements.forEach((timeElement, index) => {
         for (let i = weeks.length -1; i >= 0; i--) { //reversed so the x coordinate is easier to read for us humans (it goes from left to right now)
             //dont actually know why exactly it works :I
+            // console.log(i)
             const dayCell = document.createElement("div");
             dayCell.className = "cell";
             addLockedOrFullCells(fullCellsArrayCurrentUser, 'full', i, index, dayCell) //not using this currently

@@ -288,3 +288,12 @@ width: 30px;
     width: 100px;
     height: 35px;
 }
+
+.line-through {
+    text-decoration: line-through;
+    color: #8a1c1c;
+  }
+/*   
+  .Mandag-can-line-trough {
+    background-color: black;
+  } */
