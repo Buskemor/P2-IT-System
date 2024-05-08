@@ -96,10 +96,11 @@ const activePopup = { //set to true when there's an active poup
     support: false,
     cancel: false,
 };
-
-activatePopup()
-deActivatePopup()
-exitPopup();
+let displayObject = {} //used cancelTimes and removePopup
+const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
+navBtnsEventlistener()
+invisiblePopupExitListener()
+exitButtonListener();
 sharedButtonsClick();
 document.getElementById("prev-week").addEventListener("click", () => {
     updateCalendarPreviousWeek()
@@ -151,7 +152,7 @@ function orderTimes() {
 function confirmOrder() {
     const confirmBtn = document.getElementById('confirm-btn-id')
     confirmBtn.addEventListener('click', () => {
-        removeActivePopup(activePopup);
+        removeActivePopup();
         pushUserChangesToObj(true);
         weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference] = []
         generateCalendar();
@@ -163,7 +164,7 @@ function cancelTimes () {
     weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].includes()
 
     // console.log('CANCEL:  '+weekDifference + ' ' + selectedItem)
-    const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
+    
     if (activePopup.cancel === false) {
         return;
     }
@@ -179,11 +180,10 @@ function cancelTimes () {
         Søndag: []
     }
 
-    let displayObject = {}
     for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
         selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
     }
-    let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
+    // let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
     // const selectedTimesLockedPure = selectedTimesLocked;
     // console.log(selectedTimesLocked)
     for (let weekDay in selectedTimesLocked) {
@@ -201,7 +201,7 @@ function cancelTimes () {
 
         }
     }
-    console.log(displayObject)
+    // console.log(displayObject)
     let displayString = ''
     for (let weekDay in displayObject) {
         if (displayObject[weekDay] !== undefined) {
@@ -212,40 +212,31 @@ function cancelTimes () {
             cancelWeekDayButton.addEventListener('click', () => {
                 switch (cancelWeekDayButton.id) {
                     case 'Mandag-cancel-btn':
-                        console.log('monday!')
-                        document.querySelectorAll('.Mandag-can-line-through').forEach(textDisplayElement => {
-                            textDisplayElement.classList.add('line-through')
-                            console.log(textDisplayElement)
-                        })
-                        console.log(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference])
-                        for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
-                            weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i].splice(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y, 1);
-                        }
-                        console.log(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference])
-                        // console.log(selectedTimesLockedPure)
-                        // weekDifferenceAndFullCells
-
-
-                        // console.log('removing ' + JSON.stringify(document.getElementById('Mandag-cancel-btn')))
-                        // document.getElementById('Mandag-cancel-btn').remove()
+                        weekDayCase(0, 'Mandag', cancelWeekDayButton)
                         console.log('cancel Mandag');
                         break;
                     case 'Tirsdag-cancel-btn':
+                        weekDayCase(1, 'Tirsdag', cancelWeekDayButton)
                         console.log('cancel Tirsdag');
                         break;
                     case 'Onsdag-cancel-btn':
+                        weekDayCase(2, 'Onsdag', cancelWeekDayButton)
                         console.log('cancel Onsdag');
                         break;
                     case 'Torsdag-cancel-btn':
+                        weekDayCase(3, 'Torsdag', cancelWeekDayButton)
                         console.log('cancel Torsdag');
                         break;
                     case 'Fredag-cancel-btn':
+                        weekDayCase(4, 'Fredag', cancelWeekDayButton)
                         console.log('cancel Fredag');
                         break;
                     case 'Lørdag-cancel-btn':
+                        weekDayCase(5, 'Lørdag', cancelWeekDayButton)
                         console.log('cancel Lørdag');
                         break;
                     case 'Søndag-cancel-btn':
+                        weekDayCase(6, 'Søndag', cancelWeekDayButton)
                         console.log('cancel Søndag');
                         break;
                 }
@@ -253,6 +244,27 @@ function cancelTimes () {
                 // console.log(`i want to cancel the times on ${weekDay}`)
             });
         })
+        function weekDayCase(weekDayIndex, weekDay, cancelWeekDayButton) {
+            document.querySelectorAll(`.${weekDay}-can-line-through`).forEach(textDisplayElement => {
+                textDisplayElement.classList.add('line-through')
+                // textDisplayElement.classList.add('awaiting-deletion')
+            })
+            for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
+                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+                }
+            }
+            for (let i = weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
+                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+                }
+            }
+            generateCalendar()
+            interactiveCells()
+            cancelWeekDayButton.disabled = true;
+            cancelWeekDayButton.textContent = 'Aflyst'
+            displayObject.weekDay = ''
+        }
     }
 }
 // document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
@@ -447,13 +459,13 @@ function sharedButtonsCase(index) {
 //     }
 // });
 
-function activatePopup() {
+function navBtnsEventlistener() {
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(navButton => {
         navButton.addEventListener('click', () => {
             switch (navButton.id) {
                 case 'order-btn':
-                    document.getElementById('order-div').classList.toggle('display-none');
+                    document.getElementById('order-div').classList.remove('display-none');
                     activePopup.order = true;
                     orderTimes();
                     break;
@@ -474,7 +486,7 @@ function activatePopup() {
                     activePopup.support = true;
                     break;
                 case 'cancel-btn':
-                    document.getElementById('cancel-div').classList.toggle('display-none');
+                    document.getElementById('cancel-div').classList.remove('display-none');
                     activePopup.cancel = true;
                     cancelTimes()
                     break;
@@ -484,28 +496,28 @@ function activatePopup() {
                     return; // Return so the popup doesn't flash
             }
             // Add focus style to the corresponding nav button
-            navButtons.forEach(btn => {
-                btn.classList.remove('focused');
-            });
-            navButton.classList.add('focused');
+            // navButtons.forEach(btn => {
+            //     btn.classList.remove('focused');
+            // });
+            // navButton.classList.add('focused');
             blurElements.forEach(blurElement => {
-                blurElement.classList.toggle('blurred');
+                blurElement.classList.add('blurred');
             });
             popupDivs.forEach(popupDiv => {
-                popupDiv.classList.toggle('popup-div-display');
+                popupDiv.classList.add('popup-div-display');
             });
         });
     });
 }
 
-function removeActivePopup(activePopup) {
+function removeActivePopup() {
     for (let key in activePopup) {
         if (activePopup[key] === true) {
             const navButtonId = key + '-btn';
             const navButton = document.getElementById(navButtonId);
-            if (navButton) {
-                navButton.classList.remove('focused'); // Remove focus style from nav button
-            }
+            // if (navButton) {
+            //     navButton.classList.remove('focused'); // Remove focus style from nav button
+            // }
             document.getElementById(`${key}-div`).classList.add('display-none');
             activePopup[key] = false;
         }
@@ -518,8 +530,8 @@ function removeActivePopup(activePopup) {
     });
 }
 
-function deActivatePopup() {
-    const navButtons = document.querySelectorAll('.nav-btn');
+function invisiblePopupExitListener() {
+    // const navButtons = document.querySelectorAll('.nav-btn');
     document.addEventListener('click', (event) => {
         const isPopupTrigger = event.target.classList.contains('nav-btn');
         const isPopupContent = event.target.classList.contains('popup-div');
@@ -531,11 +543,10 @@ function deActivatePopup() {
                 };
             });
             if (!isInsidePopup) {
-                removeActivePopup(activePopup);
-                // Remove focus style from all nav buttons when any popup is closed
-                navButtons.forEach(btn => {
-                    btn.classList.remove('focused');
-                });
+                removeActivePopup();
+                // navButtons.forEach(btn => {
+                //     btn.classList.remove('focused');
+                // });
             };
         };
     });
@@ -571,24 +582,29 @@ function pushNewFullToCellArray(cell, index, currentlyConfirmingOrder) {
     };
 };
 
-function exitPopup(activePopup) {
+function exitButtonListener() {
     const exitButton = document.querySelectorAll('.exit-popup');
     exitButton.forEach(exitButton => {
         exitButton.addEventListener('click', () => {
-            removeActivePopup(activePopup);
+            removeActivePopup();
         });
     });
     document.addEventListener('keydown', (event) => {
         if (event.key === 'Escape') {
-            removeActivePopup(activePopup);
+            removeActivePopup();
         }
     })
 }
 
-function removeActivePopup(activePopup) {
+function removeActivePopup() {
     for (let popup in activePopup) {
         if (activePopup[popup] === true) {
             document.getElementById(`${popup}-div`).classList.add('display-none');
+            if (activePopup[popup] == activePopup.cancel) {
+                console.log('end cancel')
+                displayObject = {}
+                displayCancelledTimesElem.innerText = ""
+            }
             activePopup[popup] = false;
         }
     }

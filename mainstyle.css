@@ -118,13 +118,13 @@ body {
     background-color: rgb(138, 138, 138);
 }
 
-.nav-btn:focus {
+/* .nav-btn:focus {
     background-color: rgb(138, 138, 138);
 }
 
 .nav-btn.focused {
     background-color: rgb(138, 138, 138);
-}
+} */
 
 .nav-btn:active {
     background-color: rgb(82, 80, 80);
@@ -202,9 +202,9 @@ body {
     background-color: #555;
 }
 
-.exit-popup:focus {
+/* .exit-popup:focus {
     outline: none;
-}
+} */
 
 .invisible-exit {
     display: none;
@@ -370,10 +370,10 @@ p#Skriv-til-visevaerter{
     background-color: #5c3e8f;
 }
 
-.content.history-button:focus {
+/* .content.history-button:focus {
     outline: none;
     background-color: #6848b2;
-}
+} */
 
 
 
@@ -404,9 +404,9 @@ p#Skriv-til-visevaerter{
     cursor: pointer;
 }
 
-#order-btn:focus {
+/* #order-btn:focus {
     background-color: rgb(138, 138, 138);
-}
+} */
 
 #order-btn:active {
     background-color: rgb(82, 80, 80);
@@ -442,13 +442,24 @@ p#Skriv-til-visevaerter{
     background-color: rgb(138, 138, 138);
 }
 
-.shared-items-btn:focus {
+/* .shared-items-btn:focus {
     background-color: rgb(138, 138, 138);
-}
-
+} */
 
 .shared-items-selected {
     position: absolute;
+}
+
+.shared-items-img {
+    width: 190px;
+    pointer-events: none;
+}
+.shared-items-img-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    position: absolute;
+    top: 120px;
+    right: 700px;
 }
 
 .confirm-btn {
