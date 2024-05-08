@@ -288,15 +288,10 @@ p#Skriv-til-visevaerter{
     resize: none;
 }
 
-
-    .content {
-        font-weight: normal;
-    }
-
 .content {
     margin-left: 10px;
-    margin-top: 15px;
-    resize: none;
+    /* margin-top: 15px; */
+    /* resize: none; */
 }
 
 .money-info {
@@ -350,11 +345,11 @@ p#Skriv-til-visevaerter{
     background-color: #5c3e8f;
 }
 
-#current-month {
+/* #current-month {
     position: relative;
     left: 150px;
     bottom: 15px;
-}
+} */
 
 .content.history-button {
     box-sizing: border-box;
@@ -481,3 +476,7 @@ p#Skriv-til-visevaerter{
   .Mandag-can-line-trough {
     background-color: black;
   } */
+
+#monthly-budget {
+    width: 120px;
+}

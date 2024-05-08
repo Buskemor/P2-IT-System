@@ -429,24 +429,23 @@ function sharedButtonsCase(index) {
     interactiveCells();
 }
 
-// not sure where to put this
-document.addEventListener('mousedown', function(event) {
-    const sharedItemsBtns = document.querySelectorAll('.shared-items-btn');
-    let isClickInside = false;
-    console.log(sharedItemsBtns[0])
-    sharedItemsBtns.forEach((button) => {
-        if (button.contains(event.target)) {
-            isClickInside = true;
-        }
-    });
-    const textarea = document.querySelector('textarea');
-    const input = document.querySelector('input');
-    console.log(!isClickInside)
-    if (!isClickInside && !event.target.closest('textarea') && event.target.tagName !== 'textarea' && !event.target.closest('input') && event.target.tagName !== 'INPUT') {
-        event.preventDefault();
-    }
-});
-
+// // not sure where to put this
+// document.addEventListener('mousedown', function(event) {
+//     const sharedItemsBtns = document.querySelectorAll('.shared-items-btn');
+//     let isClickInside = false;
+//     console.log(sharedItemsBtns[0])
+//     sharedItemsBtns.forEach((button) => {
+//         if (button.contains(event.target)) {
+//             isClickInside = true;
+//         }
+//     });
+//     const textarea = document.querySelector('textarea');
+//     const input = document.querySelector('input');
+//     console.log(!isClickInside)
+//     if (!isClickInside && !event.target.closest('textarea') && event.target.tagName !== 'textarea' && !event.target.closest('input') && event.target.tagName !== 'INPUT') {
+//         event.preventDefault();
+//     }
+// });
 
 function activatePopup() {
     const navButtons = document.querySelectorAll('.nav-btn');
@@ -607,9 +606,6 @@ function convertIndexToCoord(number) {
     result.y = Math.floor(number / 7);
     return result;
 }
-
-function submitFeedback() {
-
    
 document.getElementById("next-month-btn").disabled = true;
 
@@ -684,17 +680,13 @@ function rotermåneder(måned) {
             break;
     }
     document.querySelector('textarea').value = tekst;
-
 }
 
 function setBudget() {
-
     document.getElementById("check-mark").style.display = "inline";
-
-setInterval(() => {
-    removeChekmark()
-}, 3000)
-
+    setInterval(() => {
+        removeChekmark()
+    }, 3000)
 }
 
 function removeChekmark() {
@@ -703,8 +695,6 @@ function removeChekmark() {
 
 }
 
-function  showHistory() {
-
+function showHistory() {
     document.getElementById('popup').classList.toggle ('display-none');
-
 }
