@@ -133,6 +133,7 @@ function orderTimes() {
     for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; ++i) {
         selectedTimes[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
     }
+
     for (let weekDay in selectedTimes) {
         if (selectedTimes[weekDay].length !== 0) {
             displayString += `<div>${weekDay}:</div>`
@@ -180,15 +181,37 @@ function cancelTimes () {
         Søndag: []
     }
 
-    for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
-        selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
+    // for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
+    //     selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
+    // }
+    for (let i = Object.keys(weekDifferenceAndFullCells[selectedItem].currentUserLocked).length - 1; i >= 0; i--) {
+        for (let j = 0; j < weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].length; j++) {
+            selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][j]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][j]).y);
+        }
     }
+    console.log(selectedTimesLocked)
+  
     // let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
     // const selectedTimesLockedPure = selectedTimesLocked;
     // console.log(selectedTimesLocked)
-    for (let weekDay in selectedTimesLocked) {
+    let selectedItemTranslated = selectedItem
+    
+    switch(selectedItem) {
+        case 'washingMachine':
+            selectedItemTranslated = 'vaskerum'
+            break;
+        case 'partyRoom':
+            selectedItemTranslated = 'festlokale'
+            break;
+        case 'drill':
+            selectedItemTranslated = 'boremaskine'
+        case 'vacumnCleaner':
+            selectedItemTranslated = 'støvsuger'
+            break;
+    }
+        for (let weekDay in selectedTimesLocked) {
         if (selectedTimesLocked[weekDay].length !== 0) {
-            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay}:</div>`;
+            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay+' ('+selectedItemTranslated+')'}:</div>`;
             for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
                 if (selectedTimesLocked[weekDay][i] <= 9) {
                     selectedTimesLocked[weekDay][i] = '   0' + selectedTimesLocked[weekDay][i] + ':00';
@@ -465,10 +488,23 @@ function navBtnsEventlistener() {
         navButton.addEventListener('click', () => {
             switch (navButton.id) {
                 case 'order-btn':
+                    let tutorialString = "Du har ikke valgt nogle tidspunkter. Tryk på de grønne celler i kalenderen for at vælge tidspunkter." + ` <img src="thatgif.gif">.`
                     document.getElementById('order-div').classList.remove('display-none');
-                    activePopup.order = true;
-                    orderTimes();
-                    break;
+                    pushUserChangesToObj();
+                    // console.log(weekDifferenceAndFullCells[selectedItem])
+                    if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length === 0) {
+                        document.getElementById('display-ordered-times').innerHTML = tutorialString
+                        activePopup.order = true;
+                        break;
+                    } else {
+                        activePopup.order = true;
+                        orderTimes();
+                        break;
+                    }
+                    // if ((document.getElementById('display-ordered-times').innerHTML == "") || (document.getElementById('display-ordered-times').innerHTML == tutorialString)) {
+                    
+                    // }
+          
                 case 'budget-btn':
                     document.getElementById('budget-div').classList.remove('display-none'); // Remove display-none class
                     activePopup.budget = true;
