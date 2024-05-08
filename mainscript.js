@@ -119,7 +119,10 @@ const lockedCellsDisplayObject = {
         Søndag: []
     }
 };
-
+//you could make this new object just steal from the old object, and then update the new object when the old object is changed.
+//to convert the object you can use the same math as in orderTimes or cancelTimes
+//you can iterate over all the different weekdays on drill etc. and compare it to the currentUserLocked.weekDiff[0] array
+//you're kinda doing a small version of this already so scaling it up shouldn't be *that* big of a problem?
 let objectString = ''
 for (let i = Object(lockedCellsDisplayObject.washingMachine.Mandag).length - 1; i >= 0; --i) {
     if (lockedCellsDisplayObject.washingMachine.Mandag[i] !== undefined) {
@@ -239,101 +242,102 @@ function cancelTimes () {
         console.log(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][0])
 
 
-    // let selectedItemTranslated = selectedItemArray[i]
-    
-    // switch(selectedItemArray[i]) {
-    //     case 'washingMachine':
-    //         selectedItemTranslated.push('vaskerum')
-    //         break;
-    //     case 'partyRoom':
-    //         selectedItemTranslated.push('festlokale')
-    //         break;
-    //     case 'drill':
-    //         selectedItemTranslated.push('boremaskine')
-    //     case 'vacumnCleaner':
-    //         selectedItemTranslated.push('støvsuger')
-    //         break;
-    // }
+        // let selectedItemTranslated = selectedItemArray[i]
+        
+        // switch(selectedItemArray[i]) {
+        //     case 'washingMachine':
+        //         selectedItemTranslated.push('vaskerum')
+        //         break;
+        //     case 'partyRoom':
+        //         selectedItemTranslated.push('festlokale')
+        //         break;
+        //     case 'drill':
+        //         selectedItemTranslated.push('boremaskine')
+        //     case 'vacumnCleaner':
+        //         selectedItemTranslated.push('støvsuger')
+        //         break;
+        // }
 
-    for (let weekDay in selectedTimesLocked) {
-        if (selectedTimesLocked[weekDay].length !== 0) {
-            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay+' ('+selectedItemArray[i]+')'}:</div>`;
-            for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
-                if (selectedTimesLocked[weekDay][i] <= 9) {
-                    selectedTimesLocked[weekDay][i] = '   0' + selectedTimesLocked[weekDay][i] + ':00';
-                } else {
-                    selectedTimesLocked[weekDay][i] = '   '+ selectedTimesLocked[weekDay][i] + ':00';
+        for (let weekDay in selectedTimesLocked) {
+            if (selectedTimesLocked[weekDay].length !== 0) {
+                displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay+' ('+selectedItemArray[i]+')'}:</div>`;
+                for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
+                    if (selectedTimesLocked[weekDay][i] <= 9) {
+                        selectedTimesLocked[weekDay][i] = '   0' + selectedTimesLocked[weekDay][i] + ':00';
+                    } else {
+                        selectedTimesLocked[weekDay][i] = '   '+ selectedTimesLocked[weekDay][i] + ':00';
+                    }
                 }
+                displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
+                displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
             }
-            displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
-            displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
         }
-    }
-    // console.log(displayObject)
-    let displayString = ''
-    for (let weekDay in displayObject) {
-        if (displayObject[weekDay] !== undefined) {
-            // console.log(displayObject)
-            displayCancelledTimesElem.innerHTML = displayString += displayObject[weekDay];
-        }
-        document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
-            cancelWeekDayButton.addEventListener('click', () => {
-                switch (cancelWeekDayButton.id) {
-                    case 'Mandag-cancel-btn':
-                        weekDayCase(0, 'Mandag', cancelWeekDayButton)
-                        console.log('cancel Mandag');
-                        break;
-                    case 'Tirsdag-cancel-btn':
-                        weekDayCase(1, 'Tirsdag', cancelWeekDayButton)
-                        console.log('cancel Tirsdag');
-                        break;
-                    case 'Onsdag-cancel-btn':
-                        weekDayCase(2, 'Onsdag', cancelWeekDayButton)
-                        console.log('cancel Onsdag');
-                        break;
-                    case 'Torsdag-cancel-btn':
-                        weekDayCase(3, 'Torsdag', cancelWeekDayButton)
-                        console.log('cancel Torsdag');
-                        break;
-                    case 'Fredag-cancel-btn':
-                        weekDayCase(4, 'Fredag', cancelWeekDayButton)
-                        console.log('cancel Fredag');
-                        break;
-                    case 'Lørdag-cancel-btn':
-                        weekDayCase(5, 'Lørdag', cancelWeekDayButton)
-                        console.log('cancel Lørdag');
-                        break;
-                    case 'Søndag-cancel-btn':
-                        weekDayCase(6, 'Søndag', cancelWeekDayButton)
-                        console.log('cancel Søndag');
-                        break;
-                }
-                
-                // console.log(`i want to cancel the times on ${weekDay}`)
-            });
-        })
-        function weekDayCase(weekDayIndex, weekDay, cancelWeekDayButton) {
-            document.querySelectorAll(`.${weekDay}-can-line-through`).forEach(textDisplayElement => {
-                textDisplayElement.classList.add('line-through')
-                // textDisplayElement.classList.add('awaiting-deletion')
+        // console.log(displayObject)
+        let displayString = ''
+        for (let weekDay in displayObject) {
+            if (displayObject[weekDay] !== undefined) {
+                // console.log(displayObject)
+                displayCancelledTimesElem.innerHTML = displayString += displayObject[weekDay];
+            }
+            document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
+                cancelWeekDayButton.addEventListener('click', () => {
+                    switch (cancelWeekDayButton.id) {
+                        case 'Mandag-cancel-btn':
+                            weekDayCase(0, 'Mandag', cancelWeekDayButton)
+                            console.log('cancel Mandag');
+                            break;
+                        case 'Tirsdag-cancel-btn':
+                            weekDayCase(1, 'Tirsdag', cancelWeekDayButton)
+                            console.log('cancel Tirsdag');
+                            break;
+                        case 'Onsdag-cancel-btn':
+                            weekDayCase(2, 'Onsdag', cancelWeekDayButton)
+                            console.log('cancel Onsdag');
+                            break;
+                        case 'Torsdag-cancel-btn':
+                            weekDayCase(3, 'Torsdag', cancelWeekDayButton)
+                            console.log('cancel Torsdag');
+                            break;
+                        case 'Fredag-cancel-btn':
+                            weekDayCase(4, 'Fredag', cancelWeekDayButton)
+                            console.log('cancel Fredag');
+                            break;
+                        case 'Lørdag-cancel-btn':
+                            weekDayCase(5, 'Lørdag', cancelWeekDayButton)
+                            console.log('cancel Lørdag');
+                            break;
+                        case 'Søndag-cancel-btn':
+                            weekDayCase(6, 'Søndag', cancelWeekDayButton)
+                            console.log('cancel Søndag');
+                            break;
+                    }
+                    
+                    // console.log(`i want to cancel the times on ${weekDay}`)
+                });
             })
-            for (let z = 0; i < weekDifferenceAndFullCells[selectedItemArray[z]].currentUserLocked[weekDifference].length; z++) {
-                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][z]).x == weekDayIndex) {
-                    weekDifferenceAndFullCells[selectedItemArray[z]].currentUserLocked[weekDifference].splice(z, 1)
+            function weekDayCase(weekDayIndex, weekDay, cancelWeekDayButton) {
+                document.querySelectorAll(`.${weekDay}-can-line-through`).forEach(textDisplayElement => {
+                    textDisplayElement.classList.add('line-through')
+                    // textDisplayElement.classList.add('awaiting-deletion')
+                })
+                for (let z = 0; i < weekDifferenceAndFullCells[selectedItemArray[z]].currentUserLocked[weekDifference].length; z++) {
+                    if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][z]).x == weekDayIndex) {
+                        weekDifferenceAndFullCells[selectedItemArray[z]].currentUserLocked[weekDifference].splice(z, 1)
+                    }
                 }
-            }
-            for (let z = weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].length -1; z >= 0; z--) {
-                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][z]).x == weekDayIndex) {
-                    weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].splice(z, 1)
+                for (let z = weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].length -1; z >= 0; z--) {
+                    if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference][z]).x == weekDayIndex) {
+                        weekDifferenceAndFullCells[selectedItemArray[i]].currentUserLocked[weekDifference].splice(z, 1)
+                    }
                 }
+                generateCalendar()
+                interactiveCells()
+                cancelWeekDayButton.disabled = true;
+                cancelWeekDayButton.textContent = 'Aflyst'
+                displayObject.weekDay = ''
             }
-            generateCalendar()
-            interactiveCells()
-            cancelWeekDayButton.disabled = true;
-            cancelWeekDayButton.textContent = 'Aflyst'
-            displayObject.weekDay = ''
+           
         }
-    }
     }
 }
 // document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
