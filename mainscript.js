@@ -1,5 +1,5 @@
 let weekDifference = 0; //+1 is one week ahead. -1 is one week behind. 0 is current week.
-const weekDifferenceAndFullCells = {
+const calendarObject = {
     washingMachine: {
         otherUsers: {
             0: [50,57,60,63,67,70,86,93,94,99,101,105,106,110,112,117,143,147,148,150,153,154,155,160],
@@ -14,10 +14,42 @@ const weekDifferenceAndFullCells = {
             3: [],
         },
         currentUserLocked: {
-            0: [],
-            1: [],
-            2: [],
-            3: [],
+            0: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            1: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            2: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            3: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
         }
     },
     partyRoom: {
@@ -82,9 +114,19 @@ const weekDifferenceAndFullCells = {
     }
 };
 
+// calendarObject.sharedItem.user[weekDifference].weekDay
+
+console.log(calendarObject.washingMachine.currentUserLocked[0].Mandag)
+//runs through all days
+const calendarObjectWeekLength = Object.keys(calendarObject.washingMachine.currentUserLocked[0]).length
+
+for (let i = calendarObjectWeekLength - 1; i >= 0; i--) {
+    console.log(i)
+}
+
 const currentDate = new Date()
 const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
-let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner'] //notice it uses the same names as weekDifferenceAndFullCells
+let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner'] //notice it uses the same names as calendarObject
 let selectedItem = selectedItemArray[0]
 const blurElements = document.querySelectorAll('.can-blur');
 const popupDivs = document.querySelectorAll('.hidden-popup-div');
@@ -113,6 +155,19 @@ interactiveCells();
 pushUserChangesToObj();
 confirmOrder()
 
+
+
+
+
+function concatCalendarUserLocked() {
+    let currentUserLockedArray = []
+    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+        // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
+        currentUserLockedArray = currentUserLockedArray.concat(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
+    }
+    return currentUserLockedArray;
+}
+
 function orderTimes() {
     const displayOrderedTimes = document.getElementById('display-ordered-times')
     if (activePopup.order === false) {
@@ -130,8 +185,8 @@ function orderTimes() {
         Søndag: []
     }
     let displayString = '';
-    for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length; ++i) {
-        selectedTimes[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference][i]).y)
+    for (let i = 0; i < calendarObject[selectedItem].currentUser[weekDifference].length; ++i) {
+        selectedTimes[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUser[weekDifference][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUser[weekDifference][i]).y)
     }
     for (let weekDay in selectedTimes) {
         if (selectedTimes[weekDay].length !== 0) {
@@ -154,14 +209,14 @@ function confirmOrder() {
     confirmBtn.addEventListener('click', () => {
         removeActivePopup();
         pushUserChangesToObj(true);
-        weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference] = []
+        calendarObject[selectedItem].currentUser[weekDifference] = []
         generateCalendar();
         interactiveCells(weekDifference);
     });
 }
 
 function cancelTimes () {
-    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].includes()
+    // calendarObject[selectedItem].currentUserLocked[weekDifference].includes()
 
     // console.log('CANCEL:  '+weekDifference + ' ' + selectedItem)
     
@@ -180,8 +235,8 @@ function cancelTimes () {
         Søndag: []
     }
 
-    for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
-        selectedTimesLocked[weeks[convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).y);
+    for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
+        selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).y);
     }
     // let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
     // const selectedTimesLockedPure = selectedTimesLocked;
@@ -249,14 +304,14 @@ function cancelTimes () {
                 textDisplayElement.classList.add('line-through')
                 // textDisplayElement.classList.add('awaiting-deletion')
             })
-            for (let i = 0; i < weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length; i++) {
-                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+            for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
+                if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                    calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
                 }
             }
-            for (let i = weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
-                if (convertIndexToCoord(weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                    weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+            for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
+                if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                    calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
                 }
             }
             generateCalendar()
@@ -341,9 +396,14 @@ function setHoursOfDayHtml(hoursArray) {
 }
 
 function setCellsHtml() {
-    const fullCellsArrayOtherUsers = weekDifferenceAndFullCells[selectedItem].otherUsers[weekDifference];
-    const fullCellsArrayCurrentUser = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference];
-    const fullCellsArrayCurrentUserLocked = weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference];
+    const fullCellsArrayOtherUsers = calendarObject[selectedItem].otherUsers[weekDifference];
+    const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
+    // const fullCellsArrayCurrentUserLocked = calendarObject[selectedItem].currentUserLocked[weekDifference];
+    const fullCellsArrayCurrentUserLocked = concatCalendarUserLocked() //temporary until i figure something else out ig? seems decent though.
+
+    // for (let i = calendarObjectWeekLength - 1; i >= 0; i--) {
+    //     console.log(i)
+    // }
     const timeElements = document.querySelectorAll(".time");
     // console.log(convertIndexToCoord(0).x, convertIndexToCoord(0).y)
     timeElements.forEach((timeElement, index) => {
@@ -555,28 +615,38 @@ function invisiblePopupExitListener() {
 function pushUserChangesToObj(currentlyConfirmingOrder) {
     const cells = document.querySelectorAll('.cell');
     cells.forEach((cell, index) => {
+        // pushNewFullToCellArray(cell, index, currentlyConfirmingOrder);
         try {
             pushNewFullToCellArray(cell, index, currentlyConfirmingOrder);
-        } catch(error) {
+        }
+        catch(error) {
             console.log('THIS ERROR IS TOTALLY INTENTIONAL: ' +error);
         }   
     })
 }
 
 function pushNewFullToCellArray(cell, index, currentlyConfirmingOrder) {
+    let currentUserLockedArray = concatCalendarUserLocked()
     if (cell.classList.contains('full')) {
-        if (!weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
-            weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].push(index);
-        }
+        if (!calendarObject[selectedItem].currentUser[weekDifference].includes(index)) { //i can use index here because the cells in the forEach loop is a nodeList
+            calendarObject[selectedItem].currentUser[weekDifference].push(index);
+        } //should delete this if here and make sure it warns the user for having selected times that aren't added
         if (currentlyConfirmingOrder === true) {
-            if (!weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].includes(index)) {
-                weekDifferenceAndFullCells[selectedItem].currentUserLocked[weekDifference].push(index);
+            if (!currentUserLockedArray.includes(index)) {
+                // calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].push(index); //USE SAME MATH AS IN CANCELORDERS TO CONVERT
+                // for (let i = 0; i < currentUserLockedArray.length; i++) {
+                    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+                        calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].push(index);
+                        // calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                        // calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                    }
+                // }
             }
         }
     } else {
-        for (let i = weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
-            if (weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].includes(index)) {
-                weekDifferenceAndFullCells[selectedItem].currentUser[weekDifference].splice(i, 1);
+        for (let i = calendarObject[selectedItem].currentUser[weekDifference].length - 1; i >= 0; i--) {
+            if (calendarObject[selectedItem].currentUser[weekDifference].includes(index)) {
+                calendarObject[selectedItem].currentUser[weekDifference].splice(i, 1);
             }
         };
     };
