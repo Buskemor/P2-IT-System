@@ -117,12 +117,13 @@ const calendarObject = {
 // calendarObject.sharedItem.user[weekDifference].weekDay
 
 console.log(calendarObject.washingMachine.currentUserLocked[0].Mandag)
+
 //runs through all days
 const calendarObjectWeekLength = Object.keys(calendarObject.washingMachine.currentUserLocked[0]).length
 
-for (let i = calendarObjectWeekLength - 1; i >= 0; i--) {
-    console.log(i)
-}
+// for (let i = calendarObjectWeekLength - 1; i >= 0; i--) {
+//     console.log(i)
+// }
 
 const currentDate = new Date()
 const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
@@ -140,6 +141,8 @@ const activePopup = { //set to true when there's an active poup
 };
 let displayObject = {} //used cancelTimes and removePopup
 const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
+
+// console.log(calendarObject[selectedItem].currentUserLocked[weekDifference])
 navBtnsEventlistener()
 invisiblePopupExitListener()
 exitButtonListener();
@@ -225,30 +228,52 @@ function cancelTimes () {
     }
     // pushUserChangesToObj();
 
-    const selectedTimesLocked = {
-        Mandag: [],
-        Tirsdag: [],
-        Onsdag: [],
-        Torsdag: [],
-        Fredag: [],
-        Lørdag: [],
-        Søndag: []
-    }
+    // const selectedTimesLocked = {
+    //     Mandag: [],
+    //     Tirsdag: [],
+    //     Onsdag: [],
+    //     Torsdag: [],
+    //     Fredag: [],
+    //     Lørdag: [],
+    //     Søndag: []
+    // }
 
-    for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
-        selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).y);
+    let selectedTimesLocked = calendarObject[selectedItem].currentUserLocked[weekDifference]
+    
+    //first attempt at conversion
+    let tempWeekDay;
+    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+        // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length)
+        for (let i = selectedTimesLocked[weekDay].length - 1; i >= 0; i--) {
+            tempWeekDay = weeks[convertIndexToCoord(selectedTimesLocked[weekDay][i]).x];
+            break; //REALLY A MESS HERE
+            // console.log(weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x])
+            // console.log(selectedTimesLocked[weeks[convertIndexToCoord(selectedTimesLocked[weekDay][i]).x]])
+            // console.log(i)
+            
+            // switch (weekDayIndex) {
+            //     case 0:
+            console.log(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y)
+            // }
+            selectedTimesLocked[weeks[convertIndexToCoord(selectedTimesLocked[weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+            // console.log(i)
+        }
+        selectedTimesLocked[tempWeekDay].push((convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y))
     }
-    // let selectedTimesLockedPure = selectedTimesLocked; //version without date format like 01:00 just 1 instead
-    // const selectedTimesLockedPure = selectedTimesLocked;
-    // console.log(selectedTimesLocked)
+    console.log(selectedTimesLocked)
+    // old
+    // for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
+    //     selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).y);
+    // }
+ 
     for (let weekDay in selectedTimesLocked) {
         if (selectedTimesLocked[weekDay].length !== 0) {
             displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay}:</div>`;
             for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
                 if (selectedTimesLocked[weekDay][i] <= 9) {
-                    selectedTimesLocked[weekDay][i] = '   0' + selectedTimesLocked[weekDay][i] + ':00';
+                    selectedTimesLocked[weekDay][i] = '0' + selectedTimesLocked[weekDay][i] + ':00';
                 } else {
-                    selectedTimesLocked[weekDay][i] = '   '+ selectedTimesLocked[weekDay][i] + ':00';
+                    selectedTimesLocked[weekDay][i] = ''+ selectedTimesLocked[weekDay][i] + ':00';
                 }
             }
             displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
@@ -256,11 +281,12 @@ function cancelTimes () {
 
         }
     }
+
     // console.log(displayObject)
     let displayString = ''
     for (let weekDay in displayObject) {
         if (displayObject[weekDay] !== undefined) {
-            console.log(displayObject)
+            // console.log(displayObject)
             displayCancelledTimesElem.innerHTML = displayString += displayObject[weekDay];
         }
         document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
@@ -304,16 +330,36 @@ function cancelTimes () {
                 textDisplayElement.classList.add('line-through')
                 // textDisplayElement.classList.add('awaiting-deletion')
             })
-            for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
-                if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                    calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+
+            for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+                for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length; i++) {
+                    // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                    if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x == weekDayIndex) {
+                        calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].splice(i, 1)
+                    }
+                }
+
+                for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length - 1; i >= 0 ; i--) {
+                    // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                    if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                        calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+                    }
                 }
             }
-            for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
-                if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                    calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
-                }
-            }
+            //old 1
+            // for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
+            //     if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+            //         calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+            //     }
+            // }
+
+            //old 2
+            // for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
+            //     if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+            //         calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+            //     }
+            // }
+
             generateCalendar()
             interactiveCells()
             cancelWeekDayButton.disabled = true;
