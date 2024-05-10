@@ -58,7 +58,6 @@ body {
     transition: 250ms;
     border: 1px solid;
     background-color: #5fa061;
-    cursor: cell;
 }
 
 .cell:hover {
@@ -100,7 +99,11 @@ body {
     transition: 250ms;
     border: 1px solid;
     background-color: rgb(105, 129, 105);
-    pointer-events: none;
+    /* pointer-events: none; */
+    cursor: not-allowed;
+}
+.oldcell:hover {
+    background-color: rgb(105, 129, 105);
 }
 
 .hidden-popup-div {
@@ -259,58 +262,6 @@ p#Skriv-til-visevaerter{
     width: 400px;
     height: 700px;
 }
-
-
-.navigation button {
-    margin-right: 1px;
-    border-radius: 30px;
-    width: 10%;
-    position: absolute;
-}
-
-.navigation button#prev-month-btn {
-    box-sizing: border-box;
-    width: 50%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #764ba2;
-    color: #d8d8d8;
-    cursor: pointer;
-    width: 55px;
-    height: 35px;
-    bottom: 24%;
-    right: 60%; 
-}
-
-.navigation button#next-month-btn {
-    box-sizing: border-box;
-    width: 50%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #764ba2;
-    color: #d8d8d8;
-    cursor: pointer;
-    width: 55px;
-    height: 35px;
-    bottom: 24%;
-    right: 30%;
-}
-
-.navigation button#next-month-btn:hover {
-    background-color: #5c3e8f;
-}
-
-.navigation button#prev-month-btn:hover {
-    background-color: #5c3e8f;
-}
-
-/* #current-month {
-    position: relative;
-    left: 150px;
-    bottom: 15px;
-} */
 
 .content.history-button {
     box-sizing: border-box;
@@ -483,7 +434,7 @@ nav ul li{
 }
 
 nav ul li button{
-    font-size: 25px;
+    font-size: 17px;
     margin: 0 0 0 20px;
     padding: 10px;
     border-style: none;
@@ -511,7 +462,7 @@ nav ul li button:hover{
 
 
 .container-left{
-    margin-right: 100px;
+    margin-right: 30px;
 }
 
 .button-container{
@@ -527,7 +478,7 @@ nav ul li button:hover{
 .container-right{
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    margin-left: 100px;
+    margin-left: 30px;
 }
 
 .container-right img{

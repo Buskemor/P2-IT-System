@@ -66,10 +66,42 @@ const calendarObject = {
             3: [],
         },
         currentUserLocked: {
-            0: [],
-            1: [],
-            2: [],
-            3: [],
+            0: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            1: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            2: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            3: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
         }
     },
     drill: {
@@ -86,10 +118,42 @@ const calendarObject = {
             3: [],
         },
         currentUserLocked: {
-            0: [],
-            1: [],
-            2: [],
-            3: [],
+            0: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            1: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            2: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            3: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
         }
     },
     vacumnCleaner: {
@@ -106,17 +170,49 @@ const calendarObject = {
             3: [],
         },
         currentUserLocked: {
-            0: [],
-            1: [],
-            2: [],
-            3: [],
+            0: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            1: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            2: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
+            3: {
+                Mandag: [],
+                Tirsdag: [],
+                Onsdag: [],
+                Torsdag: [],
+                Fredag: [],
+                Lørdag: [],
+                Søndag: [],
+            },
         }
     }
 };
 
 // calendarObject.sharedItem.user[weekDifference].weekDay
 
-console.log(calendarObject.washingMachine.currentUserLocked[0].Mandag)
+// console.log(calendarObject.washingMachine.currentUserLocked[0].Mandag)
 
 //runs through all days
 const calendarObjectWeekLength = Object.keys(calendarObject.washingMachine.currentUserLocked[0]).length
@@ -176,6 +272,8 @@ function orderTimes() {
     if (activePopup.order === false) {
         return    
     }
+
+    // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference])
     pushUserChangesToObj();
 
     const selectedTimes = {
@@ -193,7 +291,7 @@ function orderTimes() {
     }
     for (let weekDay in selectedTimes) {
         if (selectedTimes[weekDay].length !== 0) {
-            displayString += `<div>${weekDay}:</div>`
+            displayString += `<div>${selectedItem + ' ' + weekDay}:</div>`
             for (let i = 0; i < selectedTimes[weekDay].length; i++) {
                 if (selectedTimes[weekDay][i] <= 9) {
                     selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
@@ -219,75 +317,72 @@ function confirmOrder() {
 }
 
 function cancelTimes () {
-    // calendarObject[selectedItem].currentUserLocked[weekDifference].includes()
 
-    // console.log('CANCEL:  '+weekDifference + ' ' + selectedItem)
-    
     if (activePopup.cancel === false) {
         return;
     }
-    // pushUserChangesToObj();
 
-    // const selectedTimesLocked = {
-    //     Mandag: [],
-    //     Tirsdag: [],
-    //     Onsdag: [],
-    //     Torsdag: [],
-    //     Fredag: [],
-    //     Lørdag: [],
-    //     Søndag: []
-    // }
+    let displayObjectPerma = {}
 
-    let selectedTimesLocked = calendarObject[selectedItem].currentUserLocked[weekDifference]
+    displayObjectPerma[weekDay]
     
-    //first attempt at conversion
-    let tempWeekDay;
-    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
-        // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length)
-        for (let i = selectedTimesLocked[weekDay].length - 1; i >= 0; i--) {
-            tempWeekDay = weeks[convertIndexToCoord(selectedTimesLocked[weekDay][i]).x];
-            break; //REALLY A MESS HERE
-            // console.log(weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x])
-            // console.log(selectedTimesLocked[weeks[convertIndexToCoord(selectedTimesLocked[weekDay][i]).x]])
-            // console.log(i)
-            
-            // switch (weekDayIndex) {
-            //     case 0:
-            console.log(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y)
-            // }
-            selectedTimesLocked[weeks[convertIndexToCoord(selectedTimesLocked[weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
-            // console.log(i)
-        }
-        selectedTimesLocked[tempWeekDay].push((convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y))
-    }
-    console.log(selectedTimesLocked)
-    // old
-    // for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
-    //     selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).y);
-    // }
- 
-    for (let weekDay in selectedTimesLocked) {
-        if (selectedTimesLocked[weekDay].length !== 0) {
-            displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay}:</div>`;
-            for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
-                if (selectedTimesLocked[weekDay][i] <= 9) {
-                    selectedTimesLocked[weekDay][i] = '0' + selectedTimesLocked[weekDay][i] + ':00';
-                } else {
-                    selectedTimesLocked[weekDay][i] = ''+ selectedTimesLocked[weekDay][i] + ':00';
+    for (let sharedItem in calendarObject) {
+        let selectedTimesLocked = calendarObject[sharedItem].currentUserLocked[weekDifference]
+        const selectedTimeTemp = structuredClone(selectedTimesLocked)
+        // console.log(selectedTimeTemp)
+        console.log(selectedTimesLocked.Mandag)
+    
+        for (let weekDay in selectedTimesLocked) {
+            if (selectedTimesLocked[weekDay].length !== 0) {
+                displayObject[weekDay] = ''
+                console.log(displayObject[weekDay])
+                displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${sharedItem+' '+weekDay}:</div>`;
+                for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
+                    if (selectedTimesLocked[weekDay][i] <= 9) {
+                        selectedTimeTemp[weekDay][i] = '0' + convertIndexToCoord(selectedTimesLocked[weekDay][i]).y + ':00';
+                    } else {
+                        selectedTimeTemp[weekDay][i] = ''+ convertIndexToCoord(selectedTimesLocked[weekDay][i]).y + ':00';
+                    }
                 }
-            }
-            displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
-            displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
 
+                console.log(displayObjectPerma[weekDay])
+                displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimeTemp[weekDay]}</div>`;
+                displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
+                displayObjectPerma[weekDay] += displayObject[weekDay]
+                console.log(displayObjectPerma[weekDay])
+            }
         }
     }
+    console.log(displayObject)
+    console.log(displayObjectPerma)
+
+
+    // console.log(displayObject)
+    // console.log(selectedTimeTemp.Mandag)
+    // console.log(selectedTimesLocked.Mandag)
+    // old?
+    // for (let weekDay in selectedTimesLocked) {
+    //     if (selectedTimesLocked[weekDay].length !== 0) {
+    //         displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay}:</div>`;
+    //         for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
+    //             if (selectedTimesLocked[weekDay][i] <= 9) {
+    //                 selectedTimesLocked[weekDay][i] = '0' + selectedTimesLocked[weekDay][i] + ':00';
+    //             } else {
+    //                 selectedTimesLocked[weekDay][i] = ''+ selectedTimesLocked[weekDay][i] + ':00';
+    //             }
+    //         }
+    //         displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
+    //         displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
+
+    //     }
+    // }
 
     // console.log(displayObject)
     let displayString = ''
     for (let weekDay in displayObject) {
-        if (displayObject[weekDay] !== undefined) {
+        if (displayObjectPerma[weekDay] !== undefined) {
             // console.log(displayObject)
-            displayCancelledTimesElem.innerHTML = displayString += displayObject[weekDay];
+            displayCancelledTimesElem.innerHTML = displayString += displayObjectPerma[weekDay];
         }
         document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
             cancelWeekDayButton.addEventListener('click', () => {
@@ -446,7 +541,6 @@ function setCellsHtml() {
     const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
     // const fullCellsArrayCurrentUserLocked = calendarObject[selectedItem].currentUserLocked[weekDifference];
     const fullCellsArrayCurrentUserLocked = concatCalendarUserLocked() //temporary until i figure something else out ig? seems decent though.
-
     // for (let i = calendarObjectWeekLength - 1; i >= 0; i--) {
     //     console.log(i)
     // }
@@ -679,14 +773,18 @@ function pushNewFullToCellArray(cell, index, currentlyConfirmingOrder) {
         } //should delete this if here and make sure it warns the user for having selected times that aren't added
         if (currentlyConfirmingOrder === true) {
             if (!currentUserLockedArray.includes(index)) {
+                calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(index).x]].push(index);
                 // calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].push(index); //USE SAME MATH AS IN CANCELORDERS TO CONVERT
                 // for (let i = 0; i < currentUserLockedArray.length; i++) {
-                    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
-                        calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].push(index);
-                        // calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
-                        // calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
-                    }
+                    // for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+                    //     // console.log(weeks[convertIndexToCoord(index).x])
+                        
+                    //     // calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                    //     // calendarObject[selectedItem].currentUserLocked[weekDifference][weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                    //     // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
+                    // }
                 // }
+                // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference])
             }
         }
     } else {
