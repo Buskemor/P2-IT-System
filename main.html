@@ -3,6 +3,7 @@
 <head>
     <title>Deløkonomi</title>
     <link rel="stylesheet" href="mainstyle.css">
+    <link rel="icon" type="image/x-icon" href="logo-white.png">
     <script defer src="mainscript.js"></script>
 </head>
 <body>
@@ -88,7 +89,7 @@
     </div>
     <div class="exit-popup invisible-exit"></div>
     <div class="can-blur">
-        <div class="nav">
+        <!-- <div class="nav">
             <img src="logo.png">
             <button class="nav-btn" id="budget-btn">Månedligt forbrug</button>
             <button class="nav-btn" id="settings-btn">Settings</button>
@@ -96,27 +97,61 @@
             <button class="nav-btn" id="support-btn">Support</button>
             <button class="nav-btn" id="cancel-btn">Aflys tider</button>
             <button class="nav-btn" id="logout-btn">Log ud</button>
-        </div>
-        <div class="calendar-grid" id="cal-start"></div>
-        <button class="arrow" id="prev-week">◄</button>
-        <button class="arrow" id="next-week">►</button>
-        <button class="nav-btn" id="order-btn">Tilføj tidspunkter</button>
-        <div class="shared-items-container">
-            <button class="shared-items-btn" id="washing-machine-btn">Vaskerum</button>
-            <div class="shared-items-selected"></div>
-            <button class="shared-items-btn" id="party-room-btn">Festlokale</button>
-            <div class="shared-items-selected"></div>
-            <button class="shared-items-btn" id="drill-btn">Boremaskine</button>
-            <div class="shared-items-selected"></div>
-            <button class="shared-items-btn" id="vacumn-cleaner-btn">Støvsuger</button>
-            <div class="shared-items-selected"></div>
-        </div>
-        <!-- <div class="shared-items-img-container">
-            <img src="washingmachine.png" class ="shared-items-img">
-            <img src="party.png" class ="shared-items-img">
-            <img src="drill.png" class ="shared-items-img">
-            <img src="vacuum.png" class ="shared-items-img">
         </div> -->
+
+        <nav>
+            <img src="logo.png">
+            <ul>
+                <div class="nav-left">
+                    <li><button class="nav-btn" id="budget-btn">Månedligt forbrug</button></li>
+                    <li><button class="nav-btn" id="settings-btn">Settings</button></li>
+                    <li><button class="nav-btn" id="feedback-btn">Feedback</button></li>
+                    <li><button class="nav-btn" id="support-btn">Support</button></li>
+                    <li><button class="nav-btn" id="cancel-btn">Aflys tider</button></li>
+                </div>
+                <div class="nav-right">
+                    <li><button class="nav-btn" id="logout-btn">Log ud</button></li>
+                </div>
+            </ul>
+        </nav>
+
+        <div class="main-section-container">
+            <div class="container-left">
+                <div class="calendar-grid" id="cal-start"></div>
+                <div class="button-container">
+                    <button class="arrow" id="prev-week">◄</button>
+                    <button class="arrow" id="next-week">►</button>
+                    <button class="nav-btn" id="order-btn">Tilføj tidspunkter</button>
+                </div>
+            </div>
+            <div class="container-right">
+                <div class="shared-items-btn" id="washing-machine-btn">
+                    <div class="washing-container, button-inner">
+                        <h2>Vaskerum</h2>
+                        <img src="IMAGES/washingmachine.png" alt="">
+                    </div>
+                </div>
+                <div class="shared-items-btn" id="party-room-btn">
+                    <div class="party-container, button-inner">
+                        <h2>Festlokale</h2>
+                        <img src="IMAGES/party.png" alt="" sizes="" srcset="">
+                    </div>
+                </div>
+                <div class="shared-items-btn" id="drill-btn">
+                    <div class="drill-container, button-inner">
+                        <h2>Boremaskine</h2>
+                        <img src="IMAGES/drill.png" alt="" srcset="">
+                    </div>
+                </div>
+                <div class="shared-items-btn" id="vacumn-cleaner-btn">
+                    <div class="vacuum-container, button-inner">
+                        <h2>Støvsuger</h2>
+                        <img src="IMAGES/vacuum.png" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    <!-- <footer></footer> -->
 </body>
 </html>
