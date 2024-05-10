@@ -15,10 +15,10 @@ const calendarObject = {
         },
         currentUserLocked: {
             0: {
-                Mandag: [],
-                Tirsdag: [],
-                Onsdag: [],
-                Torsdag: [],
+                Mandag: [0],
+                Tirsdag: [1],
+                Onsdag: [2],
+                Torsdag: [3],
                 Fredag: [],
                 Lørdag: [],
                 Søndag: [],
@@ -67,10 +67,10 @@ const calendarObject = {
         },
         currentUserLocked: {
             0: {
-                Mandag: [],
-                Tirsdag: [],
-                Onsdag: [],
-                Torsdag: [],
+                Mandag: [0],
+                Tirsdag: [1],
+                Onsdag: [2],
+                Torsdag: [3],
                 Fredag: [],
                 Lørdag: [],
                 Søndag: [],
@@ -235,7 +235,14 @@ const activePopup = { //set to true when there's an active poup
     support: false,
     cancel: false,
 };
-let displayObject = {} //used cancelTimes and removePopup
+let displayObject = {
+    Mandag: '',
+    Tirsdag: '',
+    Onsdag: '',
+    Fredag: '',
+    Lørdag: '',
+    Søndag: ''
+} //used cancelTimes and removePopup
 const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
 
 // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference])
@@ -258,14 +265,7 @@ confirmOrder()
 
 
 
-function concatCalendarUserLocked() {
-    let currentUserLockedArray = []
-    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
-        // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
-        currentUserLockedArray = currentUserLockedArray.concat(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
-    }
-    return currentUserLockedArray;
-}
+
 
 function orderTimes() {
     const displayOrderedTimes = document.getElementById('display-ordered-times')
@@ -291,7 +291,7 @@ function orderTimes() {
     }
     for (let weekDay in selectedTimes) {
         if (selectedTimes[weekDay].length !== 0) {
-            displayString += `<div>${selectedItem + ' ' + weekDay}:</div>`
+            displayString += `<div>${weekDay + ' (' + translateSharedItems(selectedItem) + ')'}:</div>`
             for (let i = 0; i < selectedTimes[weekDay].length; i++) {
                 if (selectedTimes[weekDay][i] <= 9) {
                     selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
@@ -305,6 +305,23 @@ function orderTimes() {
     displayOrderedTimes.innerHTML = displayString
 }
 
+function translateSharedItems(sharedItem) {
+    switch(sharedItem) {
+        case 'washingMachine':
+            return 'Vaskerum';
+            break;
+        case 'partyRoom':
+            return 'Festlokale';
+            break;
+        case 'drill':
+            return 'Boremaskine';
+            break;
+        case 'vacumnCleaner':
+            return 'Støvsuger';
+            break;
+    }
+}
+
 function confirmOrder() {
     const confirmBtn = document.getElementById('confirm-btn-id')
     confirmBtn.addEventListener('click', () => {
@@ -315,27 +332,133 @@ function confirmOrder() {
         interactiveCells(weekDifference);
     });
 }
-
+// document.getElementById('cancel-div').classList.remove('display-none');
+activePopup.cancel = true;// just here to test
+cancelTimes();
 function cancelTimes () {
 
     if (activePopup.cancel === false) {
         return;
     }
 
-    let displayObjectPerma = {}
-
-    displayObjectPerma[weekDay]
+    // let displayObjectPerma = {}
+    let displayString = ''
     
     for (let sharedItem in calendarObject) {
         let selectedTimesLocked = calendarObject[sharedItem].currentUserLocked[weekDifference]
         const selectedTimeTemp = structuredClone(selectedTimesLocked)
-        // console.log(selectedTimeTemp)
-        console.log(selectedTimesLocked.Mandag)
+        // console.log(selectedTimesLocked)
+        
+        
+        console.log(selectedTimeTemp)
+        for (let weekDay in selectedTimeTemp) {
+            if (selectedTimeTemp[weekDay].length !== 0) {
+                // displayString += `${sharedItem} ` + selectedTimeTemp[weekDay] + ' ' + weekDay + '<br></br>';
+                function displayHours() {
+                    return selectedTimeTemp[weekDay]
+
+                }
+                displayString += `<div class="${sharedItem+'-'+weekDay+'-can-line-through'}">${weekDay + ' (' + translateSharedItems(sharedItem) + ') ' + displayHours(selectedTimeTemp)}</div>`;
+                displayString += `<button class="cancel-weekday-btn" id="${sharedItem+'-'+weekDay+'-cancel-btn'}">Aflys</button> <br></br>` //washingMachine-Mandag-cancel-btn
+            }
+            displayCancelledTimesElem.innerHTML = displayString
+            // console.log(displayCancelledTimesElem.innerHTML)
+            // console.log(document.getElementById(`${sharedItem}-${weekDay}-cancel-btn`))
+            
+            // const cancelBtn = document.getElementById(`${sharedItem}-${weekDay}-cancel-btn`);
+            // if (cancelBtn != null) {
+            //     cancelBtn.addEventListener('click', () => {
+            //         console.log(`${sharedItem}-${weekDay}-cancel-btn`)
+            //     })
+            //     console.log(document.getElementById(`${sharedItem}-${weekDay}-cancel-btn`))
+            // }
+        }
+        // selectedTimeTemp = {}
+    }
     
+    // i would prefer not making the same for loops as earlier, but for some reason i couldn't find a solution that worked while up there
+    document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
+        cancelWeekDayButton.addEventListener('click', () => {
+            for (let sharedItem in calendarObject) {
+                for (let weekDay in calendarObject[sharedItem].currentUserLocked[weekDifference]) { //
+                    if (cancelWeekDayButton.id == `${sharedItem}-${weekDay}-cancel-btn`) {
+                        console.log(`${sharedItem}-${sharedItem+'-'+weekDay}-cancel-btn`)
+                        document.querySelectorAll(`.${sharedItem+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => {
+                            textDisplayElement.classList.add('line-through')
+                        })
+                        
+                        for (let i = calendarObject[sharedItem].currentUserLocked[weekDifference][weekDay].length - 1; i >= 0; i--) {
+                            // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                            if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifference][weekDay][i]).x == convertWeekDayToIndex(weekDay)) {
+                                calendarObject[sharedItem].currentUserLocked[weekDifference][weekDay].splice(i, 1)
+                            }
+                        }
+        
+                        for (let i = calendarObject[sharedItem].currentUserLocked[weekDifference][weekDay].length - 1; i >= 0 ; i--) {
+                            // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                            if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifference][i]).x == convertWeekDayToIndex(weekDay)) {
+                                calendarObject[sharedItem].currentUserLocked[weekDifference].splice(i, 1)
+                            }
+                        }
+                        generateCalendar()
+                        interactiveCells()
+                    }
+                }
+            }
+            // console.log(`i want to cancel the times on ${weekDay}`)
+        });
+    })
+
+    function convertWeekDayToIndex(weekDay) {
+        switch(weekDay) {
+            case 'Mandag':
+                return 0;
+                break;
+            case 'Tirsdag':
+                return 1;
+                break;
+            case 'Onsdag':
+                return 2;
+                break;
+            case 'Torsdag':
+                return 3;
+                break;
+            case 'Fredag':
+                return 4;
+                break;
+            case 'Lørdag':
+                return 5;
+                break;
+            case 'Søndag':
+                return 6;
+                break;
+        }
+    }
+
+
+
+    return;
+    for (let sharedItem in calendarObject) {
+        let selectedTimesLocked = calendarObject[sharedItem].currentUserLocked[weekDifference]
+        const selectedTimeTemp = structuredClone(selectedTimesLocked)
+        // console.log(selectedTimeTemp)
+        // console.log(selectedTimesLocked.Mandag)
+        
         for (let weekDay in selectedTimesLocked) {
+            
+            // if (selectedTimesLocked[weekDay].length !== 0) {
+            //     console.log(selectedTimesLocked)
+            // }
+            
+            // console.log(displayObjectPerma[weekDay])
+            // displayObjectPerma = ''
             if (selectedTimesLocked[weekDay].length !== 0) {
+                // console.log(weekDay)
+                // console.log(selectedTimesLocked[weekDay])
                 displayObject[weekDay] = ''
-                console.log(displayObject[weekDay])
+                
+                
+                // console.log(displayObject[weekDay])
                 displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${sharedItem+' '+weekDay}:</div>`;
                 for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
                     if (selectedTimesLocked[weekDay][i] <= 9) {
@@ -344,124 +467,121 @@ function cancelTimes () {
                         selectedTimeTemp[weekDay][i] = ''+ convertIndexToCoord(selectedTimesLocked[weekDay][i]).y + ':00';
                     }
                 }
-
-                console.log(displayObjectPerma[weekDay])
-                displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimeTemp[weekDay]}</div>`;
-                displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
-                displayObjectPerma[weekDay] += displayObject[weekDay]
-                console.log(displayObjectPerma[weekDay])
+                console.log(selectedTimeTemp[weekDay])
+                selectedTimeTemp[weekDay] = `<div class="${weekDay+'-can-line-through'}">${selectedTimeTemp[weekDay]}</div>`;
+                selectedTimeTemp[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
+                // displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimeTemp[weekDay]}</div>`;
+                // displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
+                // displayObjectPerma[weekDay] += displayObject[weekDay]
+                // console.log(displayObject)
+                // console.log(JSON.stringify(displayObjectPerma))
+                // console.log(displayObjectPerma[weekDay])
+                // console.log(displayObjectPerma[weekDay])
+                // console.log(displayObject)
+                let displayString = ''
+                displayCancelledTimesElem.innerHTML = displayString += selectedTimeTemp[weekDay];
             }
+            
         }
-    }
-    console.log(displayObject)
-    console.log(displayObjectPerma)
-
-
-    // console.log(displayObject)
-    // console.log(selectedTimeTemp.Mandag)
-    // console.log(selectedTimesLocked.Mandag)
-    // old?
-    // for (let weekDay in selectedTimesLocked) {
-    //     if (selectedTimesLocked[weekDay].length !== 0) {
-    //         displayObject[weekDay] = `<div class="${weekDay+'-can-line-through'}">${weekDay}:</div>`;
-    //         for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
-    //             if (selectedTimesLocked[weekDay][i] <= 9) {
-    //                 selectedTimesLocked[weekDay][i] = '0' + selectedTimesLocked[weekDay][i] + ':00';
-    //             } else {
-    //                 selectedTimesLocked[weekDay][i] = ''+ selectedTimesLocked[weekDay][i] + ':00';
-    //             }
-    //         }
-    //         displayObject[weekDay] += `<div class="${weekDay+'-can-line-through'}">${selectedTimesLocked[weekDay]}</div>`;
-    //         displayObject[weekDay] += `<button class="cancel-weekday-btn" id="${weekDay+'-cancel-btn'}">Aflys</button> <br></br>`;
-
-    //     }
-    // }
-
-    // console.log(displayObject)
-    let displayString = ''
-    for (let weekDay in displayObject) {
-        if (displayObjectPerma[weekDay] !== undefined) {
-            // console.log(displayObject)
-            displayCancelledTimesElem.innerHTML = displayString += displayObjectPerma[weekDay];
-        }
-        document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
-            cancelWeekDayButton.addEventListener('click', () => {
-                switch (cancelWeekDayButton.id) {
-                    case 'Mandag-cancel-btn':
-                        weekDayCase(0, 'Mandag', cancelWeekDayButton)
-                        console.log('cancel Mandag');
-                        break;
-                    case 'Tirsdag-cancel-btn':
-                        weekDayCase(1, 'Tirsdag', cancelWeekDayButton)
-                        console.log('cancel Tirsdag');
-                        break;
-                    case 'Onsdag-cancel-btn':
-                        weekDayCase(2, 'Onsdag', cancelWeekDayButton)
-                        console.log('cancel Onsdag');
-                        break;
-                    case 'Torsdag-cancel-btn':
-                        weekDayCase(3, 'Torsdag', cancelWeekDayButton)
-                        console.log('cancel Torsdag');
-                        break;
-                    case 'Fredag-cancel-btn':
-                        weekDayCase(4, 'Fredag', cancelWeekDayButton)
-                        console.log('cancel Fredag');
-                        break;
-                    case 'Lørdag-cancel-btn':
-                        weekDayCase(5, 'Lørdag', cancelWeekDayButton)
-                        console.log('cancel Lørdag');
-                        break;
-                    case 'Søndag-cancel-btn':
-                        weekDayCase(6, 'Søndag', cancelWeekDayButton)
-                        console.log('cancel Søndag');
-                        break;
-                }
+        return;
+        // let displayString = ''
+        // // console.log(displayObjectPerma)
+        // // for (let weekDay in selectedTimeTemp) {
+        //     console.log(selectedTimeTemp[weekDay])
+        //     // console.log(displayObject)
+        //     // console.log(displayObject[weekDay])
+        //     if (selectedTimeTemp[weekDay] !== undefined) {
+        //         // console.log(displayObject)
                 
-                // console.log(`i want to cancel the times on ${weekDay}`)
-            });
-        })
-        function weekDayCase(weekDayIndex, weekDay, cancelWeekDayButton) {
-            document.querySelectorAll(`.${weekDay}-can-line-through`).forEach(textDisplayElement => {
-                textDisplayElement.classList.add('line-through')
-                // textDisplayElement.classList.add('awaiting-deletion')
+        //         displayCancelledTimesElem.innerHTML = displayString += selectedTimeTemp[weekDay];
+        //     }
+        //     return;
+            document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
+                cancelWeekDayButton.addEventListener('click', () => {
+                    switch (cancelWeekDayButton.id) {
+                        case 'Mandag-cancel-btn':
+                            weekDayCase(0, 'Mandag', cancelWeekDayButton)
+                            console.log('cancel Mandag');
+                            break;
+                        case 'Tirsdag-cancel-btn':
+                            weekDayCase(1, 'Tirsdag', cancelWeekDayButton)
+                            console.log('cancel Tirsdag');
+                            break;
+                        case 'Onsdag-cancel-btn':
+                            weekDayCase(2, 'Onsdag', cancelWeekDayButton)
+                            console.log('cancel Onsdag');
+                            break;
+                        case 'Torsdag-cancel-btn':
+                            weekDayCase(3, 'Torsdag', cancelWeekDayButton)
+                            console.log('cancel Torsdag');
+                            break;
+                        case 'Fredag-cancel-btn':
+                            weekDayCase(4, 'Fredag', cancelWeekDayButton)
+                            console.log('cancel Fredag');
+                            break;
+                        case 'Lørdag-cancel-btn':
+                            weekDayCase(5, 'Lørdag', cancelWeekDayButton)
+                            console.log('cancel Lørdag');
+                            break;
+                        case 'Søndag-cancel-btn':
+                            weekDayCase(6, 'Søndag', cancelWeekDayButton)
+                            console.log('cancel Søndag');
+                            break;
+                    }
+                    
+                    // console.log(`i want to cancel the times on ${weekDay}`)
+                });
             })
-
-            for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
-                for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length; i++) {
-                    // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
-                    if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x == weekDayIndex) {
-                        calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].splice(i, 1)
+            function weekDayCase(weekDayIndex, weekDay, cancelWeekDayButton) {
+                document.querySelectorAll(`.${weekDay}-can-line-through`).forEach(textDisplayElement => {
+                    textDisplayElement.classList.add('line-through')
+                    // textDisplayElement.classList.add('awaiting-deletion')
+                })
+    
+                for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+                    for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length; i++) {
+                        // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                        if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x == weekDayIndex) {
+                            calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].splice(i, 1)
+                        }
+                    }
+    
+                    for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length - 1; i >= 0 ; i--) {
+                        // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
+                        if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                            calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+                        }
                     }
                 }
-
-                for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay].length - 1; i >= 0 ; i--) {
-                    // selectedTimesLocked[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay][i]).y);
-                    if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-                        calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
-                    }
-                }
+                //old 1
+                // for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
+                //     if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                //         calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+                //     }
+                // }
+    
+                //old 2
+                // for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
+                //     if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
+                //         calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
+                //     }
+                // }
+    
+                generateCalendar()
+                interactiveCells()
+                cancelWeekDayButton.disabled = true;
+                cancelWeekDayButton.textContent = 'Aflyst'
+                displayObject.weekDay = ''
             }
-            //old 1
-            // for (let i = 0; i < calendarObject[selectedItem].currentUserLocked[weekDifference].length; i++) {
-            //     if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-            //         calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
-            //     }
-            // }
+        // }
 
-            //old 2
-            // for (let i = calendarObject[selectedItem].currentUserLocked[weekDifference].length -1; i >= 0; i--) {
-            //     if (convertIndexToCoord(calendarObject[selectedItem].currentUserLocked[weekDifference][i]).x == weekDayIndex) {
-            //         calendarObject[selectedItem].currentUserLocked[weekDifference].splice(i, 1)
-            //     }
-            // }
 
-            generateCalendar()
-            interactiveCells()
-            cancelWeekDayButton.disabled = true;
-            cancelWeekDayButton.textContent = 'Aflyst'
-            displayObject.weekDay = ''
-        }
+
+
     }
+
+
+
 }
 // document.querySelector(`.${weekDay}-cancel-btn`).addEventListener('click', () => {
 //     console.log(`i want to cancel the times on ${weekDay}`)
@@ -493,18 +613,6 @@ function generateCalendar() {
     setHoursOfDayHtml(hoursArray);
     setCellsHtml();
     setDayHeadersHtml();
-}
-
-function addLockedOrFullCells(fullCellsArray, lockedOrFull, i, index, dayCell) {
-    if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
-        for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
-            if (i == convertIndexToCoord(fullCellsArray[j]).x && index == convertIndexToCoord(fullCellsArray[j]).y) { //checks if a specific cell should be locked
-                //i is weeks, j is the nodeList and index is a timeElement (e.g 00:00, 12:00, 20:00)
-                // console.log(`(x,y) of userArray: ` + convertIndexToCoord(fullCellsArray[j]).x + ','+convertIndexToCoord(fullCellsArray[j]).y)
-                dayCell.classList.add(lockedOrFull); //for more context find the convertIndexToCoord function
-            }
-        }
-    }
 }
 
 function setWeekHeaderHtml(timeHeader) {
@@ -541,6 +649,7 @@ function setCellsHtml() {
     const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
     // const fullCellsArrayCurrentUserLocked = calendarObject[selectedItem].currentUserLocked[weekDifference];
     const fullCellsArrayCurrentUserLocked = concatCalendarUserLocked() //temporary until i figure something else out ig? seems decent though.
+
     // for (let i = calendarObjectWeekLength - 1; i >= 0; i--) {
     //     console.log(i)
     // }
@@ -558,6 +667,28 @@ function setCellsHtml() {
             timeElement.parentNode.insertBefore(dayCell, timeElement.nextSibling);
         }
     });
+}
+
+function addLockedOrFullCells(fullCellsArray, lockedOrFull, i, index, dayCell) {
+    if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
+        for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
+            if (i == convertIndexToCoord(fullCellsArray[j]).x && index == convertIndexToCoord(fullCellsArray[j]).y) { //checks if a specific cell should be locked
+                //i is weeks, j is the nodeList and index is a timeElement (e.g 00:00, 12:00, 20:00)
+                // console.log(`(x,y) of userArray: ` + convertIndexToCoord(fullCellsArray[j]).x + ','+convertIndexToCoord(fullCellsArray[j]).y)
+                dayCell.classList.add(lockedOrFull); //for more context find the convertIndexToCoord function
+            }
+        }
+    }
+}
+
+function concatCalendarUserLocked() {
+    let currentUserLockedArray = []
+    for (let weekDay in calendarObject[selectedItem].currentUserLocked[weekDifference]) {
+        // console.log(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
+        currentUserLockedArray = currentUserLockedArray.concat(calendarObject[selectedItem].currentUserLocked[weekDifference][weekDay])
+    }
+    console.log(currentUserLockedArray)
+    return currentUserLockedArray;
 }
 
 function setDayHeadersHtml() {
