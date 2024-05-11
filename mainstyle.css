@@ -22,10 +22,10 @@ body {
     width: 700px;
 }
 
-.time-header {
+time-header {
     grid-row-start: 1;
     border: 1px solid;
-    background-color: gray;
+    background-color: gray;.
 }
 
 .time {
@@ -490,4 +490,13 @@ p#Skriv-til-visevaerter{
 
 #monthly-budget {
     width: 120px;
+}
+
+
+.color-picker > fieldset   {
+margin-inline: auto;
+}
+
+:root:has(#mørk:checked){
+    background-color:#2b2b2b;
 }
