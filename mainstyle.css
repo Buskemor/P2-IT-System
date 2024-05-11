@@ -3,6 +3,8 @@
     user-select: none;
 }
 
+
+
 .blurred {
     filter: blur(3px);
     transition: 600ms;
@@ -227,7 +229,7 @@ p#Skriv-til-visevaerter{
 
 .send-btn {
     background-color:#d8d8d8;
-    font-size: small;
+    font-size: medium;
     font-weight: 700;
     border-radius: 30px;
     cursor: pointer;
@@ -291,47 +293,40 @@ p#Skriv-til-visevaerter{
 
 /* rahmos slut */
 
-.arrow {
-    width: 100px;
-    height: 50px;
-    margin-left: 10px;
-    border: rgba(0, 0, 0, 0);
-    border-radius: 30px;
-    cursor: pointer;
-}
 
-.arrow:hover {
-    background-color: rgb(138, 138, 138);
-}
 
-.arrow:active {
+/* .arrow:active {
     background-color: rgb(82, 80, 80);
-}
+} */
 
 #order-btn {
     background-color: #d8d8d8;
     margin-left: 10px;
     width: 463px;
     height: 50px;
-    border-radius: 30px;
+    border-radius: 20px;
     cursor: pointer;
+}
+
+#order-btn:hover {
+    background-color: #c8c8c8;
 }
 
 /* #order-btn:focus {
     background-color: rgb(138, 138, 138);
 } */
 
-#order-btn:active {
+/* #order-btn:active {
     background-color: rgb(82, 80, 80);
-}
+} */
 
-.container-right {
+/* .container-right {
 
 
-}
+} */
 
 .shared-items-btn {
-    background-color: #a3a3a3;
+    background-color: #d8d8d8;
     margin: 20px;
     width: 200px;
     height: 200px;
@@ -340,7 +335,11 @@ p#Skriv-til-visevaerter{
 }
 
 .shared-items-btn:hover {
-    background-color: #8a8a8a;
+    background-color: #aaaaaa;
+}
+
+.hover-class {
+    background-color: #b9b9b9;
 }
 
 .shared-items-selected {
@@ -369,6 +368,11 @@ p#Skriv-til-visevaerter{
     width: 100px;
     height: 35px;
     cursor: pointer;
+}
+
+
+.confirm-btn:hover {
+    background-color: #c8c8c8;;
 }
 
 #cancel-all {
@@ -408,6 +412,52 @@ p#Skriv-til-visevaerter{
     width: 120px;
 }
 
+.arrow {
+    width: 100px;
+    height: 50px;
+    margin-left: 10px;
+    border-radius: 30px;
+    cursor: pointer;
+    background-color: #d8d8d8;
+}
+
+#prev-week {
+    background-color: #d8d8d8;
+}
+
+#next-week {
+    background-color: #d8d8d8;
+}
+
+#prev-week:hover {
+    background-color: #c8c8c8;
+}
+
+#next-week:hover {
+    background-color: #c8c8c8;
+}
+
+/* .arrow:hover {
+    background-color: rgb(138, 138, 138);
+} */
+
+
+#close-cancel {
+    position: absolute;
+    top: 90%;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    background-color: #d8d8d8;;
+    border: 2px solid;
+    width: 100px;
+    height: 35px;
+    cursor: pointer;
+}
+
+#close-cancel:hover {
+    background-color: #c8c8c8;;
+}
+
 /* NAVIGATION */
 
 nav{
@@ -417,13 +467,15 @@ nav{
 }
 
 nav img{
-    width: 80px;
+    width: 75px;
+    height: 75px;
     margin: 5px
 }
 
 nav ul{
     display: flex;
     justify-content: space-between;
+    /* margin-left */
 }
 
 nav ul .nav-left{
@@ -433,17 +485,14 @@ nav ul .nav-left{
 }
 
 nav ul .nav-right{
-display: flex;
-position: absolute;
-margin-right: 15px;
-right: 0;
-top: 20px;
+    display: flex;
+    position: absolute;
+    margin-right: 15px;
+    right: 0;
+    top: 20px;
 }
 
-nav ul .nav-right li button{
-    background-color: #a1352a;
-    color: #FFFFFF;
-}
+
 
 nav ul li{
     list-style: none;
@@ -458,16 +507,25 @@ nav ul li button{
     padding: 10px;
     border-style: none;
     border-radius: 15px;
-    background-color: #FFFFFF;
+    background-color: white;
     cursor: pointer;
     transition: 300ms;
 }
 
 nav ul li button:hover{
-    background-color: #1d1d1d;
-    color: #FFFFFF;
+    background-color: #c8c8c8;
+    /* color: white; */
+}
+/* logout btn */
+nav ul .nav-right li button{ 
+    background-color: #a1352a;
+    color: white;
 }
 
+nav ul .nav-right li button:hover { 
+    background-color: black;
+    color: white;
+}
 
 
 /* MAIN SECTION */
@@ -528,5 +586,5 @@ footer{
     margin: 0;
     margin-top: 100px;
     padding: 0;
-
 }
+

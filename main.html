@@ -43,9 +43,17 @@
     
         <button class="exit-popup " data-popup="feedback-div"></button>
         <div class="display-none" id="feedback-div">
-            <h1 class="content">Feedback</h1> 
-            <p class="content">Skriv din feedback nedenunder</p>
-            <textarea id="message-box" rows="4" placeholder="Skriv din feedback her" class="content"></textarea>
+            <h1 class="content">Kontakt informationer</h1>
+            <p class="content" style="margin-top: -10px">Telefon: +45xxxxxxxx</p>
+            <p class="content" style="margin-top: -10px">Email: <a href="mailto:Jensenboligselskabsupport@gmail.com">Jensenboligselskabsupport@gmail.com</a></p>
+            <p class="content" style="margin-top: -10px">Adresse: xxxxxxxxxxxxx</p>
+            <p class="content" id="Skriv-til-visevaerter">Skriv til vicevært</p>
+            <textarea class="content" id="message-box" rows="4" placeholder="Skriv til vicevært her" style="margin-top: -10px"></textarea>
+            <div class="content">
+                <button class="send-btn" onclick="submitFeedback()">Send</button>
+            </div>
+            <h3 class="content">Feedback</h3> 
+            <textarea id="message-box" rows="4" placeholder="Skriv din feedback her" class="content" style="margin-top: -10px"></textarea>
             <div class="content">
                 <div class="rating">
                     <input type="radio" id="rating1" value="1" name="radio">
@@ -61,20 +69,7 @@
                 </div>
             </div>
             <div class="content">
-                <button class="submit-btn" onclick="submitFeedback()">Submit</button> 
-            </div>
-        </div>
-
-        <button class="exit-popup " data-popup="support-div"></button>
-        <div class="display-none" id="support-div">
-            <h1 class="content">Kontakt informationer</h1>
-            <p class="content">Telefon: +45xxxxxxxx</p>
-            <p class="content">Email: <a href="mailto:Jensenboligselskabsupport@gmail.com">Jensenboligselskabsupport@gmail.com</a></p>
-            <p class="content">Adresse: xxxxxxxxxxxxx</p>
-            <p class="content" id="Skriv-til-visevaerter">Skriv til vicevært</p>
-            <textarea class="content" id="message-box2" rows="4" placeholder="Skriv til vicevært her" ></textarea>
-            <div class="content">
-                <button class="send-btn" onclick="sendFeedback()">Send</button>
+                <button class="submit-btn" onclick="submitFeedback()">Send</button> 
             </div>
         </div>
         <div class="display-none" id="order-div">
@@ -83,12 +78,14 @@
             <button class="confirm-btn" id="confirm-btn-id">Bekræft tider</button>
         </div>
         <div class="display-none" id ="cancel-div">
-            <h1 style="margin-left: 10px">Dine tider</h1>
+            <h1 style="margin-left: 10px">Mine tider</h1>
             <div id="display-cancelled-times"></div>
             <button id="cancel-all" onclick="cancelAllTimes()">Aflys alle tider</button>
+            <button id="close-cancel">Luk</button>
         </div>
     </div>
     <div class="exit-popup invisible-exit"></div>
+    <div id="popup-message" class="display-none">Tak for din besvarelse!</div>
     <div class="can-blur">
         <!-- <div class="nav">
             <img src="logo.png">
@@ -104,11 +101,12 @@
             <img src="logo.png">
             <ul>
                 <div class="nav-left">
-                    <li><button class="nav-btn" id="budget-btn">Månedligt forbrug</button></li>
-                    <li><button class="nav-btn" id="settings-btn">Settings</button></li>
-                    <li><button class="nav-btn" id="feedback-btn">Feedback</button></li>
-                    <li><button class="nav-btn" id="support-btn">Support</button></li>
                     <li><button class="nav-btn" id="cancel-btn">Dine tider</button></li>
+                    <li><button class="nav-btn" id="budget-btn">Månedligt forbrug</button></li>
+                    <li><button class="nav-btn" id="settings-btn">Indstillinger</button></li>
+                    <li><button class="nav-btn" id="feedback-btn">Kontakt / Support</button></li>
+                    <!-- <li><button class="nav-btn" id="support-btn">Support</button></li> -->
+                    
                 </div>
                 <div class="nav-right">
                     <li><button class="nav-btn" id="logout-btn">Log ud</button></li>
@@ -124,6 +122,7 @@
                     <button class="arrow" id="prev-week">◄</button>
                     <button class="arrow" id="next-week">►</button>
                     <button class="nav-btn" id="order-btn">Tilføj tider</button>
+                    <!-- <button class="nav-btn extra-cancel-btn" id="cancel-btn">Aflys tider</button> -->
                 </div>
             </div>
             <div class="container-right">

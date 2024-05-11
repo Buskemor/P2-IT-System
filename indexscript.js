@@ -20,6 +20,7 @@ const combinations = [
     { text1: "nichlas", text2: "gruppe3"},
     { text1: "rahmo", text2: "gruppe3"},
     { text1: "viranat", text2: "gruppe3"},
+    { text1: "john", text2: "aldi"},
 ];
 
 function areTextBoxesFilled() {

@@ -221,7 +221,6 @@ const activePopup = { //set to true when there's an active poup
     budget: false,
     settings: false,
     feedback: false,
-    support: false,
     cancel: false,
 };
 let displayObject = { //used in cancelTimes and removePopup
@@ -233,6 +232,7 @@ let displayObject = { //used in cancelTimes and removePopup
     Søndag: ''
 }
 const displayCancelledTimesElem = document.getElementById('display-cancelled-times')
+
 
 navBtnsEventlistener()
 invisiblePopupExitListener()
@@ -248,6 +248,7 @@ interactiveCells();
 pushUserChangesToObj();
 confirmOrder()
 sharedButtonsClick();
+closeCancel()
 // document.addEventListener("DOMContentLoaded", () => {
     
 // });
@@ -323,6 +324,17 @@ function confirmOrder() {
         calendarObject[selectedItem].currentUser[weekDifference] = []
         generateCalendar();
         interactiveCells(weekDifference);
+    });
+}
+
+function closeCancel() {
+    const closeCancelBtn = document.getElementById('close-cancel')
+    closeCancelBtn.addEventListener('click', () => {
+        removeActivePopup();
+        // pushUserChangesToObj(true);
+        // calendarObject[selectedItem].currentUser[weekDifference] = []
+        // generateCalendar();
+        // interactiveCells(weekDifference);
     });
 }
 
@@ -587,13 +599,15 @@ function interactiveCells() {
 };
 
 function sharedButtonsClick () {
+    document.getElementById('washing-machine-btn').classList.add("hover-class")
     const sharedButtons = document.querySelectorAll('.shared-items-btn');
     sharedButtons.forEach(sharedButton => {
         sharedButton.addEventListener('click', () => {
             switch (sharedButton.id) {
                 case 'washing-machine-btn':
                     document.getElementById('selected-header').innerText = 'Vaskerum'
-                    sharedButtonsCase(0)
+                    
+                    sharedButtonsCase(0,'washing-machine-btn', sharedButtons)
                     break; //early return so no need to write else
                     
                     // if (calendarObject[selectedItem].currentUser[weekDifference].length === 0) {
@@ -604,22 +618,35 @@ function sharedButtonsClick () {
                     alert('YOU ARE TROLLING')
                 case 'party-room-btn':
                     document.getElementById('selected-header').innerText = 'Festlokale'
-                    sharedButtonsCase(1)
+                    sharedButtonsCase(1,'party-room-btn', sharedButtons)
                     break;
                 case 'drill-btn':
                     document.getElementById('selected-header').innerText = 'Boremaskine'
-                    sharedButtonsCase(2)
+                    sharedButtonsCase(2,'drill-btn', sharedButtons)
                     break;
                 case 'vacumn-cleaner-btn':
                     document.getElementById('selected-header').innerText = 'Støvsuger'
-                    sharedButtonsCase(3)
+                    sharedButtonsCase(3,'vacumn-cleaner-btn', sharedButtons)
                     break;
             }
         });
     });
 }
+// pushUserChangesToObj(); //+1 because it needs to save the current week, not the one we are going to
+// weekDifference--;
+// generateCalendar();
+// interactiveCells();
 
-function sharedButtonsCase(index) {
+function sharedButtonsCase(index, caseString, sharedButtons) {
+    sharedButtons.forEach(sharedButton => {
+        sharedButton.classList.remove("hover-class")
+    })
+    
+    
+    document.getElementById(caseString).classList.add("hover-class")
+
+    currentDate.setDate(currentDate.getDate() - parseInt(weekDifference*7)) //parseint makes me be able to do math with getDate idk
+    weekDifference = 0;
     pushUserChangesToObj();
     selectedItem = selectedItemArray[index];
     generateCalendar();
@@ -660,10 +687,6 @@ function navBtnsEventlistener() {
                 case 'feedback-btn':
                     document.getElementById('feedback-div').classList.remove('display-none'); // Remove display-none class
                     activePopup.feedback = true;
-                    break;
-                case 'support-btn':
-                    document.getElementById('support-div').classList.remove('display-none'); // Remove display-none class
-                    activePopup.support = true;
                     break;
                 case 'cancel-btn':
                     document.getElementById('cancel-div').classList.remove('display-none');
@@ -883,4 +906,23 @@ function removeChekmark() {
 
 function showHistory() {
     document.getElementById('popup').classList.toggle ('display-none');
+}
+
+function submitFeedback() {
+    // let message = document.getElementById("message-box").value;
+    // console.log("Feedback Message:", message);
+    removeActivePopup();
+    document.getElementById("message-box").value = "";
+    let popupMessage = document.getElementById("popup-message");
+    popupMessage.classList.toggle('display-none');
+    popupMessage.style.display = "block";
+    // popupMessage.textContent = "Tak for din feedback!";
+    
+
+    setTimeout(function(){
+        popupMessage.style.display = "none";
+    }, 3000); 
+    
+    document.getElementById("message-box").value = "";
+    document.getElementById('popup-message').classList.toggle('display-none');
 }
