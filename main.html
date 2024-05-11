@@ -6,7 +6,7 @@
     <link rel="icon" type="image/x-icon" href="logo-white.png">
     <script defer src="mainscript.js"></script>
 </head>
-<body id="farve">
+<body class="farve">
     <div class="hidden-popup-div">
         <button class="exit-popup"></button>
         <button class="exit-popup " data-popup="budget-div"></button>
@@ -17,6 +17,9 @@
             <input type="number" id="monthly-budget" placeholder="Indtast beløb">
             <button class="content" onclick="setBudget()">Indstil</button>
             <span id="check-mark" style="display:none;">✔️</span>
+            <button onclick="nulstilCba()" id="nulstil-knap">Nulstil budget</button>
+
+
 
             <h4 class="content">Nuværende saldo: <span id="current-balance">72</span> Kr.</h4>
             <h4 class="content">Sidste måned: <span id="last-period">110</span> Kr.</h4>
@@ -40,23 +43,21 @@
         </div>
         <button class="exit-popup " data-popup="settings-div"></button>
         <div class="display-none" id="settings-div">
-            <h1 class="content">Settings</h1>
-            <h3 class="content">Her finder du indstillinger:</h3>
-            <h1>lærkes ting her</h1>
+            <h1 class="content">Indstillinger</h1>
+            <h2 class="content">Vælg tema</h2>
             <form class="color-picker" action="">
                 <fieldset>
                     <legend>Vælg tema</legend>
-                    <label for="tema">lys</label>
-                    <input type="radio" name="tema"id="lys"checked>
+                    <label for="tema" style="margin-left: 6px;">lys</label>
+                    <input type="radio" name="tema"id="lys"checked onclick="lightMode()">
 
                     <label for="tema">mørk</label>
-                    <input type="radio" name="tema"id="mørk">
+                    <input type="radio" name="tema"id="mørk" onclick="darkMode()">
 
 
                 </fieldset>
             </form>
                     
-            <button></button>
         </div>
     
         <button class="exit-popup " data-popup="feedback-div"></button>
@@ -115,7 +116,7 @@
             <button class="nav-btn" id="logout-btn">Log ud</button>
         </div> -->
 
-        <nav>
+        <nav class="farve" id="farve-nav">
             <img src="logo.png">
             <ul>
                 <div class="nav-left">

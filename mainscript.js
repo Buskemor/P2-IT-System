@@ -927,7 +927,30 @@ function submitFeedback() {
     document.getElementById('popup-message').classList.toggle('display-none');
 }
 
-darkmode()
-function darkmode() {
-    document.getElementId('farve').classList.add("mørk")
+function darkMode() {
+    const farveElem= document.querySelectorAll('.hidden-popup-div')
+    farveElem.forEach(element => {
+        element.classList.add("popup-mørk")
+    })
+    document.getElementById("farve-nav").classList.add("nav-mørk")
+
+    document.querySelector('.farve').classList.add("mørk")
+
+    document.getElementById("selected-header").classList.add("popup-mørk")
+}
+
+function lightMode() {
+    const farveElem= document.querySelectorAll('.hidden-popup-div')
+    farveElem.forEach(element => {
+        element.classList.remove("popup-mørk")
+    })
+    document.getElementById("farve-nav").classList.remove("nav-mørk")
+
+    document.querySelector('.farve').classList.remove("mørk")
+
+    document.getElementById("selected-header").classList.remove("popup-mørk")
+}
+
+function nulstilCba() {
+    document.getElementById("monthly-budget").value=""
 }

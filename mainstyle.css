@@ -593,10 +593,26 @@ footer{
     margin-inline: auto;
     }
     
-    :root:has(#mørk:checked){
-        background-color:#2b2b2b;
-    }
 
 .mørk{
-    background-color:#000000
+    background-color:#353535;
+}
+
+.popup-mørk{
+    background-color:#353535;
+    color:white;
+}
+
+.nav-mørk{
+    background-color:#131313
+}
+
+#nulstil-knap {
+    position: absolute;
+    top: 56.5%;
+    left: 50%;
+    transform: translate(-50%, -10%);
+    background-color: #d8d8d8;;
+    border: 2px solid;
+    cursor: pointer;
 }
