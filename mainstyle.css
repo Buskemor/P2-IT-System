@@ -588,3 +588,15 @@ footer{
     padding: 0;
 }
 
+
+.color-picker > fieldset   {
+    margin-inline: auto;
+    }
+    
+    :root:has(#mørk:checked){
+        background-color:#2b2b2b;
+    }
+
+.mørk{
+    background-color:#000000
+}

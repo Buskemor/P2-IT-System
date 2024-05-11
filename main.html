@@ -6,7 +6,7 @@
     <link rel="icon" type="image/x-icon" href="logo-white.png">
     <script defer src="mainscript.js"></script>
 </head>
-<body>
+<body id="farve">
     <div class="hidden-popup-div">
         <button class="exit-popup"></button>
         <button class="exit-popup " data-popup="budget-div"></button>
@@ -39,7 +39,25 @@
             </div>
         </div>
         <button class="exit-popup " data-popup="settings-div"></button>
-        <div class="display-none" id="settings-div">Settings div</div>
+        <div class="display-none" id="settings-div">
+            <h1 class="content">Settings</h1>
+            <h3 class="content">Her finder du indstillinger:</h3>
+            <h1>lærkes ting her</h1>
+            <form class="color-picker" action="">
+                <fieldset>
+                    <legend>Vælg tema</legend>
+                    <label for="tema">lys</label>
+                    <input type="radio" name="tema"id="lys"checked>
+
+                    <label for="tema">mørk</label>
+                    <input type="radio" name="tema"id="mørk">
+
+
+                </fieldset>
+            </form>
+                    
+            <button></button>
+        </div>
     
         <button class="exit-popup " data-popup="feedback-div"></button>
         <div class="display-none" id="feedback-div">

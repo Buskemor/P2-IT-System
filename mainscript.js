@@ -926,3 +926,8 @@ function submitFeedback() {
     document.getElementById("message-box").value = "";
     document.getElementById('popup-message').classList.toggle('display-none');
 }
+
+darkmode()
+function darkmode() {
+    document.getElementId('farve').classList.add("mørk")
+}
