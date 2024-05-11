@@ -14,7 +14,7 @@ const calendarObject = {
         },
         currentUserLocked: {
             0: {
-                Mandag: [0,7,14,21],
+                Mandag: [],
                 Tirsdag: [],
                 Onsdag: [],
                 Torsdag: [],
@@ -237,7 +237,6 @@ const displayCancelledTimesElem = document.getElementById('display-cancelled-tim
 navBtnsEventlistener()
 invisiblePopupExitListener()
 exitButtonListener();
-sharedButtonsClick();
 document.getElementById("prev-week").addEventListener("click", () => {
     updateCalendarPreviousWeek()
 });
@@ -248,6 +247,11 @@ generateCalendar();
 interactiveCells();
 pushUserChangesToObj();
 confirmOrder()
+sharedButtonsClick();
+// document.addEventListener("DOMContentLoaded", () => {
+    
+// });
+
 
 function orderTimes() {
     const displayOrderedTimes = document.getElementById('display-ordered-times')
@@ -270,9 +274,13 @@ function orderTimes() {
     for (let i = 0; i < calendarObject[selectedItem].currentUser[weekDifference].length; ++i) {
         selectedTimes[weeks[convertIndexToCoord(calendarObject[selectedItem].currentUser[weekDifference][i]).x]].push(convertIndexToCoord(calendarObject[selectedItem].currentUser[weekDifference][i]).y)
     }
+    
     for (let weekDay in selectedTimes) {
         if (selectedTimes[weekDay].length !== 0) {
-            displayString += `<div>${weekDay + ' (' + translateSharedItems(selectedItem) + ')'}:</div>`
+            const dateTemp = new Date();
+            dateTemp.setDate(13)
+            const dateDisplay = (dateTemp.getDate()+convertWeekDayToIndex(weekDay)+parseInt(weekDifference*7) + '/0' + (dateTemp.getMonth()+1))
+            displayString += `<div style="margin-left: 10px">${weekDay + ' ' + dateDisplay +' (' + translateSharedItems(selectedItem) + ')'}:</div>`
             for (let i = 0; i < selectedTimes[weekDay].length; i++) {
                 if (selectedTimes[weekDay][i] <= 9) {
                     selectedTimes[weekDay][i] = '   0' + selectedTimes[weekDay][i] + ':00';
@@ -280,10 +288,14 @@ function orderTimes() {
                     selectedTimes[weekDay][i] = '   '+ selectedTimes[weekDay][i] + ':00';
                 }
             }
-            displayString += `<div>${selectedTimes[weekDay]}</div>`;
+            displayString += `<div style="margin-left: 10px">${selectedTimes[weekDay]}</div>`;
         }
     }
     displayOrderedTimes.innerHTML = displayString
+
+
+
+    
 }
 
 function translateSharedItems(sharedItem) {
@@ -363,54 +375,73 @@ function cancelTimes () {
                     for (let weekDay in calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys]) {
                         if (cancelWeekDayButton.id == `${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay}-cancel-btn`) {
                             cancelWeekDayButton.disabled = true;
-                            document.querySelectorAll(`.f${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => { //the f is there because it can't start with a number
-                                textDisplayElement.classList.add('line-through')
-                            })
-                            
-                            for (let i = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].length - 1; i >= 0; i--) {
-                                if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay][i]).x == convertWeekDayToIndex(weekDay)) {
-                                    calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].splice(i, 1)
-                                }
-                            }
-            
-                            for (let i = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].length - 1; i >= 0 ; i--) {
-                                if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][i]).x == convertWeekDayToIndex(weekDay)) {
-                                    calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys].splice(i, 1)
-                                }
-                            }
-                            generateCalendar()
-                            interactiveCells()
+                            cancelWeekDayButton.innerHTML = 'Aflyst'
+                            removeLockedCells(weekDifferenceKeys, sharedItem, weekDay)
                         }
                     }
                 }
             }
         });
     })
+}
 
-    function convertWeekDayToIndex(weekDay) {
-        switch(weekDay) {
-            case 'Mandag':
-                return 0;
-                break;
-            case 'Tirsdag':
-                return 1;
-                break;
-            case 'Onsdag':
-                return 2;
-                break;
-            case 'Torsdag':
-                return 3;
-                break;
-            case 'Fredag':
-                return 4;
-                break;
-            case 'Lørdag':
-                return 5;
-                break;
-            case 'Søndag':
-                return 6;
-                break;
+function cancelAllTimes () {
+    for (let sharedItem in calendarObject) {
+        for (let weekDifferenceKeys in calendarObject[sharedItem].currentUserLocked) {
+            for (let weekDay in calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys]) {
+                document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
+                    cancelWeekDayButton.disabled = true;
+                    cancelWeekDayButton.innerHTML = 'Aflyst'
+                })
+                removeLockedCells(weekDifferenceKeys, sharedItem, weekDay)
+            }
         }
+    }
+}
+
+function removeLockedCells(weekDifferenceKeys, sharedItem, weekDay) {
+    document.querySelectorAll(`.f${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => { //the f is there because it can't start with a number
+        textDisplayElement.classList.add('line-through')
+    })
+    
+    for (let i = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].length - 1; i >= 0; i--) {
+        if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay][i]).x == convertWeekDayToIndex(weekDay)) {
+            calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].splice(i, 1)
+        }
+    }
+
+    for (let i = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].length - 1; i >= 0 ; i--) {
+        if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][i]).x == convertWeekDayToIndex(weekDay)) {
+            calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys].splice(i, 1)
+        }
+    }
+    generateCalendar()
+    interactiveCells()
+}
+
+function convertWeekDayToIndex(weekDay) {
+    switch(weekDay) {
+        case 'Mandag':
+            return 0;
+            break;
+        case 'Tirsdag':
+            return 1;
+            break;
+        case 'Onsdag':
+            return 2;
+            break;
+        case 'Torsdag':
+            return 3;
+            break;
+        case 'Fredag':
+            return 4;
+            break;
+        case 'Lørdag':
+            return 5;
+            break;
+        case 'Søndag':
+            return 6;
+            break;
     }
 }
 
@@ -434,20 +465,14 @@ function generateCalendar() {
    
     const timeHeader = document.getElementById("cal-start").appendChild(document.createElement("div"));
     timeHeader.className = "time-header";
+    timeHeader.textContent = "Dato/Tid"
     
-    setWeekHeaderHtml(timeHeader);
     let hoursArray = generateHoursArray();
     setHoursOfDayHtml(hoursArray);
     setCellsHtml();
     setDayHeadersHtml();
 }
 
-function setWeekHeaderHtml(timeHeader) {
-    const firstDayOfYear = new Date(currentDate.getFullYear(), 0, 1);
-    const pastDaysOfYear = (currentDate - firstDayOfYear) / 86400000; // 86400000 is how many milliseconds in a day
-    const currentWeek = Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
-    timeHeader.textContent = "Uge " + currentWeek;
-}
 
 function generateHoursArray() {
     const lessThanTen = 9;
@@ -567,15 +592,26 @@ function sharedButtonsClick () {
         sharedButton.addEventListener('click', () => {
             switch (sharedButton.id) {
                 case 'washing-machine-btn':
+                    document.getElementById('selected-header').innerText = 'Vaskerum'
                     sharedButtonsCase(0)
-                    break;
+                    break; //early return so no need to write else
+                    
+                    // if (calendarObject[selectedItem].currentUser[weekDifference].length === 0) {
+                    //     // document.getElementById('washing-machine-btn').style = 'background-color: red'
+                    //     sharedButtonsCase(0)
+                    //     break; //early return so no need to write else
+                    // }
+                    alert('YOU ARE TROLLING')
                 case 'party-room-btn':
+                    document.getElementById('selected-header').innerText = 'Festlokale'
                     sharedButtonsCase(1)
                     break;
                 case 'drill-btn':
+                    document.getElementById('selected-header').innerText = 'Boremaskine'
                     sharedButtonsCase(2)
                     break;
                 case 'vacumn-cleaner-btn':
+                    document.getElementById('selected-header').innerText = 'Støvsuger'
                     sharedButtonsCase(3)
                     break;
             }
@@ -598,6 +634,19 @@ function navBtnsEventlistener() {
                 case 'order-btn':
                     document.getElementById('order-div').classList.remove('display-none');
                     activePopup.order = true;
+                    let tutorialString = `<div style="margin-left: 10px">Du har ikke valgt nogle tider. Tryk på de grønne celler i kalenderen for at vælge tidspunkter.</div>"` + `<img style="margin-left: 10px"src="tutorialGIF.gif">.`
+                    document.getElementById('order-div').classList.remove('display-none');
+                    pushUserChangesToObj();
+                    // console.log(weekDifferenceAndFullCells[selectedItem])
+                    if (calendarObject[selectedItem].currentUser[weekDifference].length === 0) {
+                        document.getElementById('display-ordered-times').innerHTML = tutorialString
+                        activePopup.order = true;
+                        break;
+                    } else {
+                        activePopup.order = true;
+                        orderTimes();
+                        break;
+                    }
                     orderTimes();
                     break;
                 case 'budget-btn':

@@ -78,13 +78,14 @@
             </div>
         </div>
         <div class="display-none" id="order-div">
-            <h1>Se og aflys tider</h1>
+            <h1 style="margin-left: 10px;">Bekræft valgte tider</h1>
             <div id="display-ordered-times"></div>
             <button class="confirm-btn" id="confirm-btn-id">Bekræft tider</button>
         </div>
         <div class="display-none" id ="cancel-div">
-            <h1>AFLYS DET HELE</h1>
+            <h1 style="margin-left: 10px">Dine tider</h1>
             <div id="display-cancelled-times"></div>
+            <button id="cancel-all" onclick="cancelAllTimes()">Aflys alle tider</button>
         </div>
     </div>
     <div class="exit-popup invisible-exit"></div>
@@ -107,7 +108,7 @@
                     <li><button class="nav-btn" id="settings-btn">Settings</button></li>
                     <li><button class="nav-btn" id="feedback-btn">Feedback</button></li>
                     <li><button class="nav-btn" id="support-btn">Support</button></li>
-                    <li><button class="nav-btn" id="cancel-btn">Aflys tider</button></li>
+                    <li><button class="nav-btn" id="cancel-btn">Dine tider</button></li>
                 </div>
                 <div class="nav-right">
                     <li><button class="nav-btn" id="logout-btn">Log ud</button></li>
@@ -117,11 +118,12 @@
 
         <div class="main-section-container">
             <div class="container-left">
+                <h1 id="selected-header">Vaskerum</h1>
                 <div class="calendar-grid" id="cal-start"></div>
                 <div class="button-container">
                     <button class="arrow" id="prev-week">◄</button>
                     <button class="arrow" id="next-week">►</button>
-                    <button class="nav-btn" id="order-btn">Tilføj tidspunkter</button>
+                    <button class="nav-btn" id="order-btn">Tilføj tider</button>
                 </div>
             </div>
             <div class="container-right">

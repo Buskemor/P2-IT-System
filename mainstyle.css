@@ -371,6 +371,25 @@ p#Skriv-til-visevaerter{
     cursor: pointer;
 }
 
+#cancel-all {
+    position: absolute;
+    top: 15%;
+    left: 85%;
+    transform: translate(-50%, -50%);
+    background-color: #a1352a;
+    color: white;
+    border: 2px solid;
+    width: 100px;
+    height: 35px;
+    cursor: pointer;
+}
+#cancel-all:hover {
+    transition: 250ms;
+    color:#a1352a;
+    background-color: white;
+}
+
+
 .red-button {
     background-color: red;
     color: white;
@@ -459,10 +478,13 @@ nav ul li button:hover{
     justify-content: center;
     margin-top: 100px;
     }
-
+#selected-header {
+    margin-top: -60px;
+    margin-bottom: 5px;
+}
 
 .container-left{
-    margin-right: 30px;
+    margin-right: 0px;
 }
 
 .button-container{
