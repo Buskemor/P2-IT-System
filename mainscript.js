@@ -155,7 +155,7 @@ const calendarObject = {
             },
         }
     },
-    vacumnCleaner: {
+    vacuumCleaner: {
         otherUsers: {
             0: [45, 52, 59, 62, 65, 72, 84, 95, 97, 101, 102, 107, 109, 113, 116, 119, 140, 144, 149, 152, 155, 157, 162],
             1: [90, 94, 97, 100, 103, 106],
@@ -212,7 +212,7 @@ const currentDate = new Date()
 currentDate.setDate(13)
 const weeks = ['Mandag', 'Tirsdag', 'Onsdag', 'Torsdag', 'Fredag', 'Lørdag', 'Søndag'];
 let weekDifference = 0; //+1 is one week ahead. -1 is one week behind. 0 is current week.
-let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacumnCleaner'] //notice it uses the same names as calendarObject
+let selectedItemArray = ['washingMachine', 'partyRoom', 'drill', 'vacuumCleaner'] //notice it uses the same names as calendarObject
 let selectedItem = selectedItemArray[0]
 const blurElements = document.querySelectorAll('.can-blur');
 const popupDivs = document.querySelectorAll('.hidden-popup-div');
@@ -383,6 +383,22 @@ function weekButtonsListener() {
     });
 }
 
+function updateCalendarPreviousWeek() {
+    currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
+    pushUserChangesToObj(); //+1 because it needs to save the current week, not the one we are going to
+    weekDifference--;
+    generateCalendar();
+    interactiveCellsListener();
+}
+
+function updateCalendarNextWeek() {
+    currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
+    pushUserChangesToObj() //-1 because it needs to save the current week, not the one we are going to
+    weekDifference++;
+    generateCalendar();
+    interactiveCellsListener();
+}
+
 function popupButtonsEventlistener() {
     const navButtons = document.querySelectorAll('.nav-btn');
     navButtons.forEach(navButton => {
@@ -484,28 +500,10 @@ function translateSharedItems(sharedItem) {
         case 'drill':
             return 'Boremaskine';
             break;
-        case 'vacumnCleaner':
+        case 'vacuumCleaner':
             return 'Støvsuger';
             break;
     }
-}
-
-function confirmOrderListener() {
-    const confirmBtn = document.getElementById('confirm-btn-id')
-    confirmBtn.addEventListener('click', () => {
-        removeActivePopup();
-        pushUserChangesToObj(true);
-        calendarObject[selectedItem].currentUser[weekDifference] = []
-        generateCalendar();
-        interactiveCellsListener(weekDifference);
-    });
-}
-
-function closeCancelListener() {
-    const closeCancelBtn = document.getElementById('close-cancel')
-    closeCancelBtn.addEventListener('click', () => {
-        removeActivePopup();
-    });
 }
 
 function cancelTimes () {
@@ -620,20 +618,22 @@ function convertWeekDayToIndex(weekDay) {
     }
 }
 
-function updateCalendarPreviousWeek() {
-    currentDate.setDate(currentDate.getDate() - 7); //change the date of currentDate to what last week would look like (hence -7)
-    pushUserChangesToObj(); //+1 because it needs to save the current week, not the one we are going to
-    weekDifference--;
-    generateCalendar();
-    interactiveCellsListener();
+function confirmOrderListener() {
+    const confirmBtn = document.getElementById('confirm-btn-id')
+    confirmBtn.addEventListener('click', () => {
+        removeActivePopup();
+        pushUserChangesToObj(true);
+        calendarObject[selectedItem].currentUser[weekDifference] = []
+        generateCalendar();
+        interactiveCellsListener(weekDifference);
+    });
 }
 
-function updateCalendarNextWeek() {
-    currentDate.setDate(currentDate.getDate() + 7); //change the date of currentDate to what next week would look like (hence +7)
-    pushUserChangesToObj() //-1 because it needs to save the current week, not the one we are going to
-    weekDifference++;
-    generateCalendar();
-    interactiveCellsListener();
+function closeCancelListener() {
+    const closeCancelBtn = document.getElementById('close-cancel')
+    closeCancelBtn.addEventListener('click', () => {
+        removeActivePopup();
+    });
 }
 
 function sharedItemsButtonsListener () {
@@ -654,28 +654,23 @@ function sharedItemsButtonsListener () {
                     document.getElementById('selected-header').innerText = 'Boremaskine'
                     sharedButtonsCase(2,'drill-btn', sharedButtons)
                     break;
-                case 'vacumn-cleaner-btn':
+                case 'vacuum-cleaner-btn':
                     document.getElementById('selected-header').innerText = 'Støvsuger'
-                    sharedButtonsCase(3,'vacumn-cleaner-btn', sharedButtons)
+                    sharedButtonsCase(3,'vacuum-cleaner-btn', sharedButtons)
                     break;
             }
         });
     });
 }
-// pushUserChangesToObj(); //+1 because it needs to save the current week, not the one we are going to
-// weekDifference--;
-// generateCalendar();
-// interactiveCellsListener();
 
 function sharedButtonsCase(index, caseString, sharedButtons) {
     sharedButtons.forEach(sharedButton => {
         sharedButton.classList.remove("hover-class")
     })
     
-    
-    document.getElementById(caseString).classList.add("hover-class")
+    document.getElementById(caseString).classList.add("hover-class") //it's a string of one of the selected items like 'washingMachine'
 
-    currentDate.setDate(currentDate.getDate() - parseInt(weekDifference*7)) //parseint makes me be able to do math with getDate idk
+    currentDate.setDate(currentDate.getDate() - parseInt(weekDifference*7)) //parseint makes me be able to do math with getDate
     weekDifference = 0;
     pushUserChangesToObj();
     selectedItem = selectedItemArray[index];
