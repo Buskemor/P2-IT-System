@@ -286,29 +286,28 @@ function setHoursOfDayHtml(hoursArray) {
 
 function setCellsHtml() {
     const fullCellsArrayOtherUsers = calendarObject[selectedItem].otherUsers[weekDifference];
-    const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
+    // const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
     const fullCellsArrayCurrentUserLocked = concatCalendarUserLocked()
     const timeElements = document.querySelectorAll(".time");
 
     timeElements.forEach((timeElement, index) => {
-        for (let i = weeks.length -1; i >= 0; i--) { //reversed so the x coordinate is easier to read for us humans (it goes from left to right now)
-            //dont actually know why exactly it works :I
-            const dayCell = document.createElement("div");
-            dayCell.className = "cell";
-            addLockedOrFullCells(fullCellsArrayCurrentUser, 'full', i, index, dayCell) //not using this currently
-            addLockedOrFullCells(fullCellsArrayCurrentUserLocked, 'self-locked', i, index, dayCell) //for the user times
-            addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked', i, index, dayCell) //important: we know whether or not to lock them because we know everything in the array needs to be locked (thats the point of the  array)
-            timeElement.parentNode.insertBefore(dayCell, timeElement.nextSibling);
+        for (let i = weeks.length -1; i >= 0; i--) { //reversed so the x coordinate is easier to read for us (it goes from left to right now)
+            const createCell = document.createElement("div");
+            createCell.className = "cell";
+            // addLockedOrFullCells(fullCellsArrayCurrentUser, 'full', i, index, createCell) //not using this currently
+            addLockedOrFullCells(fullCellsArrayCurrentUserLocked, 'self-locked', i, index, createCell) //for the users times
+            addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked', i, index, createCell) //important: we know whether or not to lock them because we know everything in the array needs to be locked (thats the point of the  array)
+            timeElement.parentNode.insertBefore(createCell, timeElement.nextSibling);
         }
     });
 }
 
-function addLockedOrFullCells(fullCellsArray, lockedOrFull, i, index, dayCell) {
+function addLockedOrFullCells(fullCellsArray, lockedOrFull, i, index, createCell) {
     if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
         for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
             if (i == convertIndexToCoord(fullCellsArray[j]).x && index == convertIndexToCoord(fullCellsArray[j]).y) { //checks if a specific cell should be locked
                 //i is weeks, j is the nodeList and index is the index of a timeElement (e.g 00:00, 12:00, 20:00)
-                dayCell.classList.add(lockedOrFull); //for more context find the function convertIndexToCoord()
+                createCell.classList.add(lockedOrFull); //for more context find the function convertIndexToCoord()
             }
         }
     }
@@ -410,7 +409,6 @@ function popupButtonsEventlistener() {
                     let tutorialString = `<div style="margin-left: 10px">Du har ikke valgt nogle tider. Tryk på de grønne celler i kalenderen for at vælge tidspunkter.</div>"` + `<img style="margin-left: 10px"src="tutorialGIF.gif">.`
                     document.getElementById('order-div').classList.remove('display-none');
                     pushUserChangesToObj();
-                    // console.log(weekDifferenceAndFullCells[selectedItem])
                     if (calendarObject[selectedItem].currentUser[weekDifference].length === 0) {
                         document.getElementById('display-ordered-times').innerHTML = tutorialString
                         activePopup.order = true;
@@ -422,15 +420,15 @@ function popupButtonsEventlistener() {
                     }
                     break;
                 case 'budget-btn':
-                    document.getElementById('budget-div').classList.remove('display-none'); // Remove display-none class
+                    document.getElementById('budget-div').classList.remove('display-none');
                     activePopup.budget = true;
                     break;
                 case 'settings-btn':
-                    document.getElementById('settings-div').classList.remove('display-none'); // Remove display-none class
+                    document.getElementById('settings-div').classList.remove('display-none');
                     activePopup.settings = true;
                     break;
                 case 'feedback-btn':
-                    document.getElementById('feedback-div').classList.remove('display-none'); // Remove display-none class
+                    document.getElementById('feedback-div').classList.remove('display-none');
                     activePopup.feedback = true;
                     break;
                 case 'cancel-btn':
@@ -515,31 +513,35 @@ function cancelTimes () {
             
             for (let weekDay in selectedTimeTemp) {
                 if (selectedTimeTemp[weekDay].length !== 0) {
-                    function displayHours() {
-                        let hoursArray = [];
-                        for (let i = 0; i < selectedTimeTemp[weekDay].length; i++) {
-                            if (i <= 10) {
-                                hoursArray[i] = ' 0' + convertIndexToCoord(selectedTimeTemp[weekDay][i]).y + ':00';
-                            } else {
-                                hoursArray[i] = convertIndexToCoord(selectedTimeTemp[weekDay][i]).y + ':00 ';
-                            }
-                        }
-                        return hoursArray;
-                    }
                     const lineThroughCSSclass = `class="f${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay+'-can-line-through'}"` //the f is there because it can't start with a number
                     const buttonCancelCSSclassid = `class="cancel-weekday-btn" id="${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay+'-cancel-btn'}`
                     const dateTemp = new Date();
                     dateTemp.setDate(13)
                     const dateDisplay = (dateTemp.getDate()+convertWeekDayToIndex(weekDay)+parseInt(weekDifferenceKeys*7) + '/0' + (dateTemp.getMonth()+1))
                     displayString += `<div ${lineThroughCSSclass}">${weekDay + ' ' + dateDisplay + ' (' + translateSharedItems(sharedItem) + '):'}</div>`; 
-                    displayString += `<div ${lineThroughCSSclass}}">${displayHours(selectedTimeTemp)}</div>`
+                    displayString += `<div ${lineThroughCSSclass}}">${displayHours(selectedTimeTemp, weekDay)}</div>`
                     displayString += `<button ${buttonCancelCSSclassid}">Aflys</button> <br></br>` //washingMachine-Mandag-cancel-btn
                 }
                 displayCancelledTimesElem.innerHTML = displayString
             }
         }
     }
-    
+    findLockedCellsToRemove()
+}
+
+function displayHours(selectedTimeTemp, weekDay) {
+    let hoursArray = [];
+    for (let i = 0; i < selectedTimeTemp[weekDay].length; i++) {
+        if (i <= 10) {
+            hoursArray[i] = ' 0' + convertIndexToCoord(selectedTimeTemp[weekDay][i]).y + ':00';
+        } else {
+            hoursArray[i] = convertIndexToCoord(selectedTimeTemp[weekDay][i]).y + ':00 ';
+        }
+    }
+    return hoursArray;
+}
+
+function findLockedCellsToRemove() {
     // i would prefer not making the same for loops as earlier, but for some reason i couldn't find a solution that worked while up there
     document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
         cancelWeekDayButton.addEventListener('click', () => {
@@ -681,8 +683,6 @@ function sharedButtonsCase(index, caseString, sharedButtons) {
 function removeActivePopup() {
     for (let key in activePopup) {
         if (activePopup[key] === true) {
-            const navButtonId = key + '-btn';
-            const navButton = document.getElementById(navButtonId);
             document.getElementById(`${key}-div`).classList.add('display-none');
             activePopup[key] = false;
         }
