@@ -1,8 +1,8 @@
 const calendarObject = {
     washingMachine: {
         otherUsers: {
-            0: [50,57,60,63,67,70,86,93,94,99,101,105,106,110,112,117,143,147,148,150,153,154,155,160],
-            1: [92,93,98,99,100,105],
+            0: [50,57,60,63,67,70,86,93,94,99,101,105,106,110,112,117,143,147,148,150,153,154,155,160], //default
+            1: [92,93,98,99,100,105], //defualt
             2: [],
             3: [],
         },
@@ -286,7 +286,7 @@ function setHoursOfDayHtml(hoursArray) {
 
 function setCellsHtml() {
     const fullCellsArrayOtherUsers = calendarObject[selectedItem].otherUsers[weekDifference];
-    // const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
+    const fullCellsArrayCurrentUser = calendarObject[selectedItem].currentUser[weekDifference];
     const fullCellsArrayCurrentUserLocked = concatCalendarUserLocked()
     const timeElements = document.querySelectorAll(".time");
 
@@ -294,21 +294,19 @@ function setCellsHtml() {
         for (let i = weeks.length -1; i >= 0; i--) { //reversed so the x coordinate is easier to read for us (it goes from left to right now)
             const createCell = document.createElement("div");
             createCell.className = "cell";
-            // addLockedOrFullCells(fullCellsArrayCurrentUser, 'full', i, index, createCell) //not using this currently
-            addLockedOrFullCells(fullCellsArrayCurrentUserLocked, 'self-locked', i, index, createCell) //for the users times
-            addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked', i, index, createCell) //important: we know whether or not to lock them because we know everything in the array needs to be locked (thats the point of the  array)
+            addLockedOrFullCells(fullCellsArrayCurrentUser, 'full', i, index, createCell)
+            addLockedOrFullCells(fullCellsArrayCurrentUserLocked, 'self-locked', i, index, createCell)
+            addLockedOrFullCells(fullCellsArrayOtherUsers, 'locked', i, index, createCell)
             timeElement.parentNode.insertBefore(createCell, timeElement.nextSibling);
         }
     });
 }
 
 function addLockedOrFullCells(fullCellsArray, lockedOrFull, i, index, createCell) {
-    if (fullCellsArray) { //only runs if there are cells in the array. Not actually sure if it works or if we need it
-        for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
-            if (i == convertIndexToCoord(fullCellsArray[j]).x && index == convertIndexToCoord(fullCellsArray[j]).y) { //checks if a specific cell should be locked
-                //i is weeks, j is the nodeList and index is the index of a timeElement (e.g 00:00, 12:00, 20:00)
-                createCell.classList.add(lockedOrFull); //for more context find the function convertIndexToCoord()
-            }
+    for (let j = 0; j < fullCellsArray.length; j++) { //running through all the cells in the array 
+        if (i == convertIndexToCoord(fullCellsArray[j]).x && index == convertIndexToCoord(fullCellsArray[j]).y) { //checks if a specific cell should be locked
+            //i is weeks, j is the nodeList and index is the index of a timeElement (e.g 00:00, 12:00, 20:00)
+            createCell.classList.add(lockedOrFull); //for more context find the function convertIndexToCoord()
         }
     }
 }
@@ -509,18 +507,16 @@ function cancelTimes () {
     for (let sharedItem in calendarObject) {
         for (let weekDifferenceKeys in calendarObject[sharedItem].currentUserLocked) {
             let selectedTimesLocked = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys]
-            const selectedTimeTemp = structuredClone(selectedTimesLocked)
-            
-            for (let weekDay in selectedTimeTemp) {
-                if (selectedTimeTemp[weekDay].length !== 0) {
-                    const lineThroughCSSclass = `class="f${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay+'-can-line-through'}"` //the f is there because it can't start with a number
+            for (let weekDay in selectedTimesLocked) {
+                if (selectedTimesLocked[weekDay].length !== 0) {
+                    const lineThroughCSSclass = `class="${sharedItem+'-'+weekDifferenceKeys+'-'+weekDay+'-can-line-through'}"`
                     const buttonCancelCSSclassid = `class="cancel-weekday-btn" id="${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay+'-cancel-btn'}`
                     const dateTemp = new Date();
-                    dateTemp.setDate(13)
+                    dateTemp.setDate(13) // 13/05 monday.
                     const dateDisplay = (dateTemp.getDate()+convertWeekDayToIndex(weekDay)+parseInt(weekDifferenceKeys*7) + '/0' + (dateTemp.getMonth()+1))
                     displayString += `<div ${lineThroughCSSclass}">${weekDay + ' ' + dateDisplay + ' (' + translateSharedItems(sharedItem) + '):'}</div>`; 
-                    displayString += `<div ${lineThroughCSSclass}}">${displayHours(selectedTimeTemp, weekDay)}</div>`
-                    displayString += `<button ${buttonCancelCSSclassid}">Aflys</button> <br></br>` //washingMachine-Mandag-cancel-btn
+                    displayString += `<div ${lineThroughCSSclass}}">${displayHours(selectedTimesLocked, weekDay)}</div>`
+                    displayString += `<button ${buttonCancelCSSclassid}">Aflys</button> <br></br>`
                 }
                 displayCancelledTimesElem.innerHTML = displayString
             }
@@ -529,13 +525,13 @@ function cancelTimes () {
     findLockedCellsToRemove()
 }
 
-function displayHours(selectedTimeTemp, weekDay) {
+function displayHours(selectedTimesLocked, weekDay) {
     let hoursArray = [];
-    for (let i = 0; i < selectedTimeTemp[weekDay].length; i++) {
+    for (let i = 0; i < selectedTimesLocked[weekDay].length; i++) {
         if (i <= 10) {
-            hoursArray[i] = ' 0' + convertIndexToCoord(selectedTimeTemp[weekDay][i]).y + ':00';
+            hoursArray[i] = ' 0' + convertIndexToCoord(selectedTimesLocked[weekDay][i]).y + ':00';
         } else {
-            hoursArray[i] = convertIndexToCoord(selectedTimeTemp[weekDay][i]).y + ':00 ';
+            hoursArray[i] = convertIndexToCoord(selectedTimesLocked[weekDay][i]).y + ':00 ';
         }
     }
     return hoursArray;
@@ -575,7 +571,7 @@ function cancelAllTimes () {
 }
 
 function removeLockedCells(weekDifferenceKeys, sharedItem, weekDay) {
-    document.querySelectorAll(`.f${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => { //the f is there because it can't start with a number
+    document.querySelectorAll(`.${sharedItem+'-'+weekDifferenceKeys+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => { //the f is there because it can't start with a number
         textDisplayElement.classList.add('line-through')
     })
     
