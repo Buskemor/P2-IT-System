@@ -522,7 +522,7 @@ function cancelTimes () {
             }
         }
     }
-    findLockedCellsToRemove()
+    findAndRemoveLockedCells()
 }
 
 function displayHours(selectedTimesLocked, weekDay) {
@@ -537,8 +537,8 @@ function displayHours(selectedTimesLocked, weekDay) {
     return hoursArray;
 }
 
-function findLockedCellsToRemove() {
-    // i would prefer not making the same for loops as earlier, but for some reason i couldn't find a solution that worked while up there
+function findAndRemoveLockedCells() {
+    // i would prefer not making the same for loops as earlier, but i couldn't find a solution that worked 
     document.querySelectorAll('.cancel-weekday-btn').forEach(cancelWeekDayButton => {
         cancelWeekDayButton.addEventListener('click', () => {
             for (let sharedItem in calendarObject) {
@@ -547,6 +547,9 @@ function findLockedCellsToRemove() {
                         if (cancelWeekDayButton.id == `${weekDifferenceKeys+'-'+sharedItem+'-'+weekDay}-cancel-btn`) {
                             cancelWeekDayButton.disabled = true;
                             cancelWeekDayButton.innerHTML = 'Aflyst'
+                            document.querySelectorAll(`.${sharedItem+'-'+weekDifferenceKeys+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => {
+                                textDisplayElement.classList.add('line-through')
+                            })
                             removeLockedCells(weekDifferenceKeys, sharedItem, weekDay)
                         }
                     }
@@ -571,19 +574,10 @@ function cancelAllTimes () {
 }
 
 function removeLockedCells(weekDifferenceKeys, sharedItem, weekDay) {
-    document.querySelectorAll(`.${sharedItem+'-'+weekDifferenceKeys+'-'+weekDay}-can-line-through`).forEach(textDisplayElement => { //the f is there because it can't start with a number
-        textDisplayElement.classList.add('line-through')
-    })
-    
     for (let i = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].length - 1; i >= 0; i--) {
         if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay][i]).x == convertWeekDayToIndex(weekDay)) {
+            console.log(weekDay)
             calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].splice(i, 1)
-        }
-    }
-
-    for (let i = calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][weekDay].length - 1; i >= 0 ; i--) {
-        if (convertIndexToCoord(calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys][i]).x == convertWeekDayToIndex(weekDay)) {
-            calendarObject[sharedItem].currentUserLocked[weekDifferenceKeys].splice(i, 1)
         }
     }
     generateCalendar()
