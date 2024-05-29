@@ -1,6 +1,6 @@
 * {
     font-family: 'Montserrat', sans-serif;
-    box-sizing: border-box; /* Ensure padding and border are included in the element's total width and height */
+    box-sizing: border-box;
 }
 
 body {
@@ -14,12 +14,12 @@ body {
 }
 
 .page-container {
-    position: relative; /* Relative positioning for child elements */
+    position: relative;
 }
 
 .main-container {
-    width: 100%; /* Full width */
-    max-width: 500px; /* Limit maximum width */
+    width: 100%;
+    max-width: 500px;
     padding: 20px;
     background-color: rgba(255, 255, 255, 0);
     border-radius: 10px;
@@ -71,8 +71,8 @@ body {
 }
 
 #loginBtn:focus {
-    outline: none; /* Remove default focus outline */
-    background-color: #6848b2; /* Adjust color for focus state */
+    outline: none;
+    background-color: #6848b2;
 }
 
 .dark-blue {
