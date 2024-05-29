@@ -34,16 +34,16 @@ function areTextBoxesFilled() {
     });
 }
 
-function isCombinationValid() {
-    const text1 = usernameElem.value.toLowerCase().trim();
-    const text2 = passwordElem.value.toLowerCase().trim();
+// function isCombinationValid() {
+//     const text1 = usernameElem.value.toLowerCase().trim();
+//     const text2 = passwordElem.value.toLowerCase().trim();
 
-    return combinations.some(({ text1: word1, text2: word2 }) => {
-        const word1Found = text1.includes(word1);
-        const word2Found = text2.includes(word2);
-        return word1Found && word2Found;
-    });
-}
+//     return combinations.some(({ text1: word1, text2: word2 }) => {
+//         const word1Found = text1.includes(word1);
+//         const word2Found = text2.includes(word2);
+//         return word1Found && word2Found;
+//     });
+// }
 
 usernameElem.addEventListener("keydown", function(event) {
     if (event.key === 'Enter') {
